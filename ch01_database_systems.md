@@ -14,7 +14,7 @@ paginate: true
 - **Information** is about adding context to reveal the meaning of data
 - **Knowledge** is about how to use the information
 - **Wisdom** is about when to take action
-![bg right:40% w:500 DIKW Pyramid](https://cdn.goconqr.com/uploads/media/image/17322876/desktop_976d9df3-92c0-41a9-939b-2fe6a63e1dcb.png)
+![bg right:50% w:600 DIKW Pyramid](https://miro.medium.com/v2/resize:fit:2000/format:webp/1*s5EFf2e8t0wqCAnSglUt_Q.png)
 
 ---
 # Data versus Information
