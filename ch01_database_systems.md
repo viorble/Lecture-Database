@@ -81,3 +81,42 @@ Defines and regulates the collection, storage, management, and use of data withi
 - Data
 
 ![bg right:55% w:700 database application environment](restricted/CFig01_10.jpg)
+
+---
+# DBMS Functions
+- Data dictionary management to store definitions of data elements and their relationships
+- Data storage management
+- Security management
+- Transaction management and concurrent control
+- Backup and recovery management
+- Data integrity management
+- SQL languages (structured query language)
+- Database communication API (application programming interfaces)
+![bg right:30% w:300 data dictionary](files/image/fig_data_dictionary.png)
+
+---
+# Disadvantages of DBMS
+- Increased costs
+- Management complexity
+- Maintaining currency (operation expertise and man power)
+- Vendor dependency (vendor lock-in)
+- Frequent upgrade/replacement cycles
+
+---
+# Database Professional Career
+
+Job Title|Description|Sample Skills Required
+---------|-----------|----------------------
+Developer | Develop application | Programming, SQL
+DBA| Design, manage DBMS | DBMS fundamentals, SQL
+Data Architect | Design data models | Domain knowledge, data modeling, DBMS fundamentals, SQL
+Data Security Officer | Enforce data security rules| DBMS fundamentals, data security
+Data Analyst / Data Scientist | Analyze varied data to generate insights and prediction | Data analysis, statistics, SQL / programming, ML / AI, data visualization
+
+---
+# Review Questions
+- What is a database 
+- What is a DBMS
+- What is a Database Application Environment
+- Explain DIKW model
+- Which database professional career you are interested in?
