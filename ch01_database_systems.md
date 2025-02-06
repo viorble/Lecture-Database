@@ -114,6 +114,13 @@ Data Security Officer | Enforce data security rules| DBMS fundamentals, data sec
 Data Analyst / Data Scientist | Analyze varied data to generate insights and prediction | Data analysis, statistics, SQL / programming, ML / AI, data visualization
 
 ---
+# When Not to Use a DBMS
+- WHen costs can not be justified: H/W, S/W, operations  
+- When a DBMS may be unnecessary: simple applications, limited users
+- When a DBMS may be infeasible: embedded systems
+- When no DBMS may suffice: real-time requests, complexity of data, special operation
+
+---
 # Review Questions
 - What is a database 
 - What is a DBMS
