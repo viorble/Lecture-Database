@@ -3,6 +3,11 @@ marp: true
 theme: default
 paginate: true
 ---
+# Chapter 1: Database Systems
+- Organizations use data to keep track of their day-to-day operations. Such data is used to generate information, which in turn is the basis for good decisions. 
+- Data is likely to be managed most efficiently when it is stored in a database.
+
+---
 # Why Database
 - Databases evolved from the need to manage **large amounts** of data in an **organized and efficient** manner
 - Databases is everywhere
@@ -109,7 +114,7 @@ Job Title|Description|Sample Skills Required
 ---------|-----------|----------------------
 Developer | Develop application | Programming, SQL
 DBA| Design, manage DBMS | DBMS fundamentals, SQL
-Data Architect | Design data models | Domain knowledge, data modeling, DBMS fundamentals, SQL
+Database Designer | Design data models | Domain knowledge, data modeling, DBMS fundamentals, SQL
 Data Security Officer | Enforce data security rules| DBMS fundamentals, data security
 Data Analyst / Data Scientist | Analyze varied data to generate insights and prediction | Data analysis, statistics, SQL / programming, ML / AI, data visualization
 

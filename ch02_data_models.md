@@ -3,6 +3,13 @@ marp: true
 theme: default
 paginate: true
 ---
+# Chapter 2: Data Models
+- Data modeling is to build data models, which is the first step in the database design journey, serving as a bridge between real-world objects and the computer database.
+- One big problem of database design is that designers, programmers, and end users see data in different ways, which introduce misunderstanding and increase communication cost.
+- Database designers must obtain a precise description (data model) of the data's nature and environments within the organization.
+- **Data modeling clarifies such communication by reducing the complexities of database design to more easily understood abstractions that define entities, relations, and data transformations.**
+
+---
 # Data Modeling and Data Models
 - Data modeling refers to the **process** of creating a specific data model for a determined problem domain (mini-world). Data modeling is an iterative, progressive process.
 - A data model is a relatively simple representation of more complex real-world data structures
@@ -148,6 +155,29 @@ Constraints|	Cardinality in ER Diagram|	Primary/Foreign keys, SQL constraints
 Conversion|	Converted to Relational Model|	Implemented in DBMS
 
 ---
+# Object-Oriented Model
+In the object-oriented data model (OODM), both data and its relationship are contained in a single structure known as an object
+- **Object**: an abstraction of a real-world entity
+- **Attributes**: describe the properties of an object
+- **Method**: represents a real-world action
+- **Class**: a collection of similar objects with shared structure and behavior
+- **Inheritance**: an object within the *class hierarchy* to inherit the attributes and methods of the classes above it. (class EMPLOYEE and CUSTOMER can be created as subclasses inherit from the class PERSON)
+- OODM are typically depicted using Unified Modeling Language (UML) class diagrams
+
+---
+# OODM Diagram
+
+<div class="grid">
+    <img src="restricted/CFig02_04.jpg" alt="Comparison of OO, UML, ER">
+    <img src="files/image/UML_class_diagram.png" alt="A UML class diagram">
+</div>
+
+---
+# ERDM and O/R DBMS
+- The extended relational data model (ERDM) adds many of the OO model’s features within the simpler relational database structure
+- A DBMS based on the ERDM is an object/relational database management system (O/R DBMS)
+
+---
 # Emerging Data Models: Big Data and NoSQL
 - **Big Data** refers to a movement to find new and better ways to manage large amounts which DBMS can not manage
 - Big Data characteristics (3 Vs) : volume, velocity, and variety
@@ -175,6 +205,52 @@ Conversion|	Converted to Relational Model|	Implemented in DBMS
 |SQL server, Oracle, mySQL|MongoDB, HBase, Cassandra
 |SQL language|Solution-specific method
 
+---
+# Degrees of Data Abstraction
+- External, Conceptual, Internal and Physical levels
+  ![bg right:50% w:600 data abstraction levels](restricted/CFig02_06.jpg)
+
+---
+# External Model
+- The end users’ view of the data environment
+- Use ER diagrams to represent the external model
+- The external views represent subsets of the database
+  - Easy to **scope** specific data required to support each business unit
+  - Easy to **communicate** the model’s adequacy with targeted end users
+  - Ensure **security** constraints in the database design
+  ![bg right:40% w:500 external model](restricted/CFig02_07.jpg)
+
+---
+# Conceptual Model
+- A global view of the entire database by the entire organization
+- Use ER diagrams to represent the conceptual model
+- The basis for the identification and high-level description of the main data objects
+- Independent of both software and hardware
+- The term **logical design** refers to creating a conceptual data model 
+  ![bg right:40% w:500 conceptual model](restricted/CFig02_08.jpg)
+
+---
+# Internal Model
+- Use the database constructs of the chosen DBMS to match the conceptual model’s characteristics and constraints to build the internal model
+- Software dependent and hardware independent
+![bg right:40% w:500 internal model](restricted/CFig02_09.jpg)
+
+---
+# Physical Model
+- Operates at the lowest level of abstraction, describing which physical storage device the data is saved and how to access the data
+- Both software and hardware dependent
+
+---
+# Levels of Data Abstraction 
+![bg right:65% w:800 internal model](restricted/CTable02_04.jpg)
+
+---
+# Review Questions
+- Why data models are important?
+- What are the data model basic building blocks
+- How the major data models evolved
+- Explain NoSQL characteristics
+- What are the four levels of data abstraction
 
 
 
