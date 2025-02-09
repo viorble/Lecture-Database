@@ -207,3 +207,15 @@ PRODUCT -> SELECT -> PROJECT
 # Relational Set Operators (DIVIDE)
 The DIVIDE operator is used to answer questions about one set of data being associated with all values of data in another set of data
 ![bg right:60% w:800 divide](restricted/CFig03_16.jpg)
+
+---
+# Data Dictionary and the System Catalog
+- **Data dictionary** describes all tables in the DB created by the user and designer
+- **System catalog** describes all objects within the database
+- Homonym – same name is used to label different attributes 
+- Synonym – different names are used to describe the same attribute 
+![bg right:40% w:90% data dictionary](restricted/CTable03_06.jpg)
+ 
+---
+# Relationships within the Relational Database 
+ 
