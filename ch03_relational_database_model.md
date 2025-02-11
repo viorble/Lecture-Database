@@ -1,38 +1,63 @@
 ---
 marp: true
 theme: default
+class: invert
+size: 16:9
 paginate: true
+footer: 國立陽明交通大學 電子與光子學士學位學程
+headingDivider: 1
+style: |
+  section::after {
+    content: attr(data-marpit-pagination) '/' attr(data-marpit-pagination-total);
+  }
+  
+  .columns {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+  }
+  .columns img {
+    width: 50%;
+  }
+
+  .red-text {
+    color: red;
+  }
+  
+  .blue-text {
+    color: blue;  
+  }
+
+  .small-text {
+    font-size: 0.50rem;
+  }
 ---
 # Chapter3: The Relational Database Model
 - Learn about the **relational model's logical structure** and about how entity relationship diagrams (ERDs) can be used to design a relational database. 
 - Learn how the relational database's basic data components into a logical construct known as a table, and how tables within a database can related to one another.
 - Learn about tables, their components, and their relationships, and basic table design.
 
----
 # A Logical View of Data
 - Logical simplicity tends to yield simple and effective database design methodologies
 - Provide systematical and visual way to design data model
 
----
 # Tables and Their Characteristics
-- A **table** (relation) is a two-dimensional structure composed of rows and columns
-- Each **row** (tuple) represents a single entity occurrence within the entity set
-- Each **column** represents an attribute, and each column has a distinct column name
-- Each intersection of a row and column represents a single **data value**
-- All values in a column must conform to the same **data format**
-- Each column has a specific allowable values known as the **attribute domain**
-- Each table must have an attribute or combination of attributes (**primary key PK**) that uniquely identifies each row
-- A **foreign key (FK)** is a primary key of one table that has been placed in another table to illustrate the relationship among tables
+- A <span class="blue-text">table (relation)</span> is a two-dimensional structure composed of rows and columns
+- Each <span class="blue-text">row (tuple)</span> represents a single entity occurrence within the entity set
+- Each <span class="blue-text">column</span> represents an attribute, and each column has a distinct column name
+- Each intersection of a row and column represents a single <span class="blue-text">data value</span>
+- All values in a column must conform to the same <span class="blue-text">data format</span>
+- Each column has a specific allowable values known as the <span class="blue-text">attribute domain</span>
+- Each table must have an attribute or combination of attributes (<span class="blue-text">primary key PK</span>) that uniquely identifies each row
+- A <span class="blue-text">foreign key (FK)</span> is a primary key of one table that has been placed in another table to illustrate the relationship among tables
 - The order of the rows and columns is immaterial to the DBMS
 
----
 # Keys
 - A key consists of one or more attributes that determine other attributes (invoice# determines invoice date and customer name)
 - Key are used to ensure that each row in a table is uniquely identifiable (PK)
 - Key are also used to establish relationships among tables and to ensure the integrity of the data (FK)
 ![bg right:50% w:600 table characteristics](restricted/CFig03_01.jpg)
 
----
 # Dependencies
 - **Functional dependence** means that the value of one or more attributes determines the value of one or more other attributes
 - In relational database theory, a functional dependency is the following constraint between two attribute sets in a relation: 
@@ -40,14 +65,12 @@ paginate: true
   - The attribute X whose value determines another is called the **determinant** or the key
   - The attribute Y whose value is determined by the other is called the **dependent** 
   
----
 # Example 1 of Functional Dependence
 ![bg right:40% w:400 example of FD](files/image/functional_dependency_example.png)
 
-- Whenever two rows in this table having the same StudentID, they also necessarily have the same Semester values. This basic fact can be expressed by a functional dependency: **StudentID → Semester**.
+- Whenever two rows in this table having the same StudentID, they also necessarily have the same Semester values. This basic fact can be expressed by a <span class="blue-text">functional dependency</span>: **StudentID → Semester**.
 - If a row was added where the student had a different value of semester, then the functional dependency FD would no longer exist. This means that the FD is implied by the data as it is possible to be destroyed.
 
----
 # Example 2 of Functional Dependence
 ![bg right:50% w:600 FD in textbook](restricted/CFig03_01.jpg)
 - STU_NUM → STU_LNAME
@@ -56,15 +79,12 @@ paginate: true
 - STU_NUM → STU_GPA
 - (STU_NUM, STU_LNAME) → STU_GPA 
 
-
----
 # Full Functional Dependence and Partial Functional Dependence
 - Full functional dependence is used to refer to functional dependencies in which the **entire collection of attributes** in the determinant is **necessary** for the relationship
 - Simply put, if A fully determines B without any proper subset of A giving full cause to B, then A is said to fully depend on B. In other words, you cannot derive B from a smaller part of A.
   - Full functional dependence: STU_NUM → STU_GPA
   - Partial functional dependence(STU_NUM, STU_LNAME) → STU_GPA   
 
----
 # Types of Keys (Primary Key)
 - A **composite key** is a key that is composed of more than one attribute
 - An attribute that is part of a key is called a **key attribute**
@@ -76,7 +96,6 @@ paginate: true
   - A known, but missing, attribute value
   - A “not applicable” condition
 
----
 # Example of Keys
 ![bg right:50% w:600 keys](restricted/CFig03_01.jpg)
 - Keys are determinants in functional dependence
@@ -84,7 +103,6 @@ paginate: true
 - Superkey: STU_NUM, (STU_NUM, STU_LNAME), (STU_FNAME, STU_LNAME, STU_INIT)
 - Candidate key: STU_NUM
 
----
 # Type of Keys (Foreign Key and Secondary Key)
 - A **foreign key** (FK) is a primary key of one table that has been placed in another table
 - **Referential integrity** is a condition by which a dependent table’s foreign key entry must have either a null entry or a matching entry in the primary key of the related table
@@ -92,11 +110,9 @@ paginate: true
   - not require a functional dependency. one X value may get more Y values
   - (CUS_LNAME, CUS_PHONE) can be a secondary key to serve data retrieval purposes when CUS_NUM is the primary key
 
----
 # Example of a Simple Relational Database
 ![bg right:60% w:800 relational DB](restricted/CFig03_02.jpg)
 
----
 # Relational Database Keys Comparison
 Key Type| Definition
 --------|-----------
@@ -106,18 +122,15 @@ Primary key| A candidate key selected to uniquely identify any given row; cannot
 Foreign key | An attribute or combination of attributes in one table whose values must either match the primary key in another table or be null
 Secondary key | An attribute or combination of attributes used for data retrieval purposes 
 
----
 # Integrity Rules
 - **Entity integrity**: all primary key entries are unique, and no part of a primary key may be null. 
   - No invoice can have a duplicate number, nor can it be null
 - **Referential Integrity**: foreign key value allow null and every non-null foreign key value must reference an existing primary key value. 
   - A customer might not yet have an assigned sales representative (allow null), but it will be impossible to have an invalid sales representative (must reference).
 
----
 # Illustration of Integrity Rules
 ![bg right:60% w:800 relational DB](restricted/CFig03_03.jpg)
 
----
 # Relational Algebra
 - **Relational algebra** is a set of mathematical principles that form the basis for manipulating relational table contents
 - The following are the eight main functions: SELECT, PROJECT, JOIN, INTERSECT, UNION, DIFFERENCE, PRODUCT, and DIVIDE
@@ -128,37 +141,30 @@ Secondary key | An attribute or combination of attributes used for data retrieva
     - The heading contains the names of the attributes
     - The body contains the relation
 
----
 # Relational Set Operators (SELECT)
 SELECT is an operator used to select a subset of rows
 ![bg right:60% w:800 select table](restricted/CFig03_04.jpg)
 
----
 # Relational Set Operators (PROJECT)
 PROJECT is an operator used to select a subset of columns
 ![bg right:60% w:800 project table](restricted/CFig03_05.jpg)
 
----
 # Relational Set Operators (UNION)
 UNION is an operator used to merge two tables into a new table, dropping duplicate rows
 ![bg right:60% w:800 union table](restricted/CFig03_06.jpg)
 
----
 # Relational Set Operators (INTERSECT)
 INTERSECT is an operator used to yield only the rows that are common to two union-compatible tables
 ![bg right:60% w:800 intersect table](restricted/CFig03_07.jpg)
 
----
 # Relational Set Operators (DIFFERENCE)
 DIFFERENCE is an operator used to yield all rows from one table that are not found in another union-compatible table
 ![bg right:60% w:800 difference table](restricted/CFig03_08.jpg)
 
----
 # Relational Set Operators (PRODUCT)
 PRODUCT is an operator used to yield all possible pairs of rows from two tables
 ![bg right:60% w:800 product table](restricted/CFig03_09.jpg)
 
----
 # Relational Set Operators (JOIN)
 JOIN allows information to be intelligently combined from two or more tables
 - Natural join links tables by selecting only the rows with common values in their common attributes
@@ -168,7 +174,6 @@ JOIN allows information to be intelligently combined from two or more tables
 - **Left outer join**: yields all of the rows in the first table, including those that do not have a matching value in the second table 
 - Right outer join: yields all of the rows in the second table, including those that do not have matching values in the first table
 
----
 # Natural Join
 PRODUCT -> SELECT -> PROJECT
 <style>
@@ -189,26 +194,22 @@ PRODUCT -> SELECT -> PROJECT
     <img src="restricted/CFig03_13.jpg" alt="project">
 </div>
 
----
 # Left Outer Join
 <div class="grid">
     <img src="restricted/CFig03_10.jpg" alt="two tables">
     <img src="restricted/CFig03_14.jpg" alt="left outer join">
 </div>
 
----
 # Right Outer Join
 <div class="grid">
     <img src="restricted/CFig03_10.jpg" alt="two tables">
     <img src="restricted/CFig03_15.jpg" alt="right outer join">
 </div>
 
----
 # Relational Set Operators (DIVIDE)
 The DIVIDE operator is used to answer questions about one set of data being associated with all values of data in another set of data
 ![bg right:60% w:800 divide](restricted/CFig03_16.jpg)
 
----
 # Data Dictionary and the System Catalog
 - **Data dictionary** describes all tables in the DB created by the user and designer
 - **System catalog** describes all objects within the database
@@ -216,6 +217,64 @@ The DIVIDE operator is used to answer questions about one set of data being asso
 - Synonym – different names are used to describe the same attribute 
 ![bg right:40% w:90% data dictionary](restricted/CTable03_06.jpg)
  
----
 # Relationships within the Relational Database 
- 
+- The one-to-many (1:M) relationship is the norm for relational databases 
+- In the one-to-one (1:1) relationship, one entity can be related to only one other entity and vice versa 
+- The many-to-many (M:N) relationship can be implemented by creating a new entity in 1:M relationships with the original entities
+
+# 1:M Relationship
+<div class="grid">
+    <img src="restricted/CFig03_17.jpg" alt="paint diagram">
+    <img src="restricted/CFig03_18.jpg" alt="paint table">
+    <img src="restricted/CFig03_19.jpg" alt="course diagram">
+    <img src="restricted/CFig03_20.jpg" alt="course table">
+</div>
+
+# 1:1 Relationship
+- 1:1 a professor only chair one department
+- 1:M a department employee many professors
+<div class="grid">
+    <img src="restricted/CFig03_21.jpg" alt="paint diagram">
+    <img src="restricted/CFig03_22.jpg" alt="paint table">
+</div>
+
+# M:N Relationship
+- A M:N relationship is not supported directly in the relational environment.
+- M:N relationship can be implemented by creating a new entity in 1:M relationships with the original entities
+- In Fig 3.22, the tables create many data redundancies and relational operation become complex and less efficiency  
+- <div class="grid">
+    <img src="restricted/CFig03_23.jpg" alt="paint diagram">
+    <img src="restricted/CFig03_24.jpg" alt="paint table">
+</div>
+
+# Introduce Composite Entry into M:N Relationship
+Table ENROLL is a composite entry (bridge entry, associative entry, link table) to help convert M:N to 1:M
+- <div class="grid">
+    <img src="restricted/CFig03_25.jpg" alt="">
+    <img src="restricted/CFig03_26.jpg" alt="">
+</div>
+
+# Data Redundancy Revisited
+- The relational database control of data redundancies through use of foreign keys
+- Data redundancy should be controlled except performance and historical data
+<div class="grid">
+    <img src="restricted/CFig03_29.jpg" alt="">
+    <img src="restricted/CFig03_30.jpg" alt="">
+</div>
+
+# Index to Increase Performance
+- An index is an orderly arrangement to logically access rows in a table
+- The index key is the reference point that leads to data location identified by the key
+- A table can have many indexes, but each index is associated with only one table
+- The index key can have multiple attributes
+
+<div class="grid">
+    <img src="restricted/CFig03_31.jpg" alt="">
+</div>
+
+# Review Questions
+- What is the difference between a database and a table?
+- Describe relational database operators to manipulate relational table contents
+- Describe the relational model’s basic components and explain the structure, contents, and characteristics of a relational table
+- Describe the relationships among the entities in the relational database model
+- Explain the purpose of indexing in a relational database
