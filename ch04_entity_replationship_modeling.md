@@ -96,3 +96,38 @@ style: |
 </div>
 
 # Existence Dependence
+- An entity represents a real-world object in a database. The classification into strong and weak depends on whether the entity can exist independently or not.
+- An entity is said to be <span class="blue-text">existence-dependent</span> if it can exist in the database only when it is associated with another related entity occurrence. That is, if it has a mandatory foreign key
+- If an entity can exist apart from all of its related entities, it is <span class="blue-text">existence-independent</span> (strong entity or regular entity)
+- Relationship 'EMPLOYEE claims DEPENDENT', the DEPENDENT entity is existence dependent on the EMPLOYEE entity 
+
+# Relationship Strength
+- <span class="blue-text"> Weak (Non-identifying) Relationships </span>: if the primary key of the related entity does not contain a primary key component of the parent entity
+- <span class="blue-text">Strong (Identifying) Relationships</span>: when the primary key of the related entity contains a primary key component of the parent entity
+<div class="middle-grid">
+    <img src="restricted/CFig04_09.jpg" alt="">
+    <img src="restricted/CFig04_10.jpg" alt="">
+</div> 
+
+# Weak Entities
+- A weak entity is existence-dependent and strong relationship
+- A strong entity is existence-independent
+<div class="middle-grid">
+    <img src="restricted/CFig04_11.jpg" alt="">
+    <img src="restricted/CFig04_12.jpg" alt="">
+</div> 
+
+# Strong Entity
+  A strong entity (or existence-independent entity) is an entity that can exist without depending on any other entity.
+	-	It has a primary key (PK) that uniquely identifies each instance of the entity.
+	-	Strong entities are self-sufficient in terms of identity.
+  - EMPLOYEE(EMPLOYEE_ID, NAME, AGE)
+
+# Weak Entity
+A weak entity is an entity that cannot exist without being associated with another entity.
+Considering entities: EMPLOYEE (strong) and DEPENDENT (weak)
+- DEPENDENT (DEPENDENT_NAME, EMPLOYEE_ID, RELATIONSHIP) 
+- DEPENDENT have not a single attribute to build sufficient primary key of its own.
+- DEPENDENT relies on a strong entity (EMPLOYEE) to form a composite primary key: foreign key (FK, EMPLOYEE_ID) + its own partial key (DEPENDENT_NAME)
+- A weak entity is always associated with a strong entity through an identifying (strong) relationship.
+
