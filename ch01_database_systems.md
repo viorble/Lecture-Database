@@ -57,10 +57,10 @@ style: |
 ![bg right:60% w:600 Database is everywhere](restricted/CFig01_01.jpg)
 
 # DIKW Pyramid
-- **Data** consists of raw facts
-- **Information** is about adding context to reveal the meaning of data
-- **Knowledge** is about how to use the information
-- **Wisdom** is about when to take action
+- **Data** consists of **raw facts**
+- **Information** is about adding context to reveal the **meaning of data**
+- **Knowledge** is about **how to use** the information
+- **Wisdom** is about **when to take** action
 ![bg right:50% w:600 DIKW Pyramid](https://miro.medium.com/v2/resize:fit:2000/format:webp/1*s5EFf2e8t0wqCAnSglUt_Q.png)
 
 # Data versus Information
@@ -73,7 +73,7 @@ style: |
   - represent a **mini-world** to reflect some aspect of the real world
   - **logically coherent** collection of data with some inherent meaning
   - is designed, built, and populated with data for **a specific purpose**
-- A **database management system (DBMS)** is a collection of programs that manages the database structure and controls access to the data stored in the database. Here, the database refers to a shared, integrated computer structure.
+- A **database management system (DBMS)** is a collection of programs that manages the database **structure** and **controls access** to the data stored in the database. Here, the database refers to a **shared, integrated** computer structure.
 - Examples of DBMS: MySQL, Microsoft SQL Server, Oracle Database, MongoDB, Cassandra, Neo4j, ...
 
 # Role and Advantages of DBMS

@@ -77,7 +77,7 @@ style: |
 </div>
 <div>
 
-## 資材系
+## 資財系
 - 林思圻 lulubbyg.mg13@nycu.edu.tw
 - 林宸絨 nycuiim20020611@gmail.com
 </div>
@@ -133,7 +133,7 @@ style: |
 # 授課大綱
 [113下學期](https://timetable.nycu.edu.tw/?r=main/crsoutline&Acy=113&Sem=2&CrsNo=520015&lang=zh-tw)
 
-# Database Design Process≠≠≠≠≠
+# Database Design Process
 ![bg right 70% w 100%](files/image/database_design_process.jpg)
 
 # Software We Use in Class
