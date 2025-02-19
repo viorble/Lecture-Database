@@ -73,7 +73,6 @@ style: |
 
 ## 電子與光子學程
 - 黃千晏 so3355589@gmail.com
-- 謝勵維 hsiehliwe.sc12@nycu.edu.tw
 </div>
 <div>
 
@@ -110,7 +109,7 @@ style: |
 - Mid-term exam (20%): closed-book exam
 - Final-term exam (20%): closed-book exam
 - Project (30%): 
-  - group by 3 ~ 6 members
+  - 電子與光子學程: group by 3 ~ 6 members, 資財系: group by 5 ~ 6 members
   - form team by week 3
   - hand-in progress report by week 9
   - selective groups presentation in week 15
