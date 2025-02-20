@@ -111,3 +111,21 @@ An entity supertype is a generic entity type related to one or more entity subty
 ![bg right:50% w:100% key types](files/image/Types_of_Keys.jpg)
 
 # Design Case 1: Implementing 1:1 Relationships
+- Foreign keys work with primary keys to properly implement relationships in the relational model
+- The basic rule is to put the primary key of the parent entity on the dependent entity as a foreign key
+- Options for selecting and placing the foreign key include the following:
+  - Place a foreign key in both entities
+  - Place a foreign key in one of the entities 
+
+# Design Case 1: Illustration
+A 1:1 relationship:
+- An EMPLOYEE manages zero or one DEPARTMENT
+- Each DEPARTMENT is managed by one EMPLOYEE
+![bg right:40% w:90% employy manager relationship](files/image/employee_manager.jpg)
+
+Design comparison
+- Fig 1: proper design
+- Fig 2: generate many null values
+- Fig 3: duplicated work
+
+# Design Case 2: Maintaining History of Time-Variant Data
