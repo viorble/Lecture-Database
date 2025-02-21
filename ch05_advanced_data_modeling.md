@@ -36,7 +36,7 @@ style: |
   }
 
   .small-text {
-    font-size: 0.50rem;
+    font-size: 0.80rem;
   }
 ---
 # Chapter5: Advanced Data Modeling
@@ -103,7 +103,7 @@ An entity supertype is a generic entity type related to one or more entity subty
 - As identifiers of composite entities, in which each primary key combination is allowed once in M:N relationship
 - As identifiers of weak entities, in which the weak entity has a strong identifying relationship with the parent entity
 
-![bg right:50% w:100% CFig05_06](restricted/CFig05_07.jpg)
+![bg right:50% w:100% CFig05_07](restricted/CFig05_07.jpg)
 
 # When to Use Surrogate Primary Keys (代理鍵)
 - A surrogate key is a primary key created by the database designer to simplify the identification of entity instances 
@@ -128,4 +128,43 @@ Design comparison
 - Fig 2: generate many null values
 - Fig 3: duplicated work
 
-# Design Case 2: Maintaining History of Time-Variant Data
+# Design Case 2: Maintaining Salary History of Time-Variant Data
+- <span class="small-text">Time-variant data refers to data whose values change over time and the data changes must be retained</span>
+- <span class="small-text">Modeling time-variant data, need a new entity with 1:M relationship to the original entity </span>
+- <span class="small-text">This new entity contains the new value, the date of the change, and any other pertinent attribute</span>
+- <span class="small-text">Question: What is (1) current salary and (2) salary raise history of an employee within a time period</span>
+![bg right:40% w:100% CFig05_09](restricted/CFig05_09.jpg)
+
+# Design Case 2: Maintaining Manager History
+![bg right:40% w:100% CFig05_10](restricted/CFig05_10.jpg)
+- Question: Who manage the dept (DEPT_ID) now and who ever lead the dept?
+- Discuss
+  - <span class="small-text">is the 'manages' relationship redundant?</span>
+  - <span class="small-text">any design difference between "an employee is the manager of a dept only once" and "the same employee to be the manager of the same dept but on different dates"</span>   
+
+# Design Case 2: Maintaining Job History
+![bg right:40% w:100% CFig05_11](restricted/CFig05_11.jpg)
+- Combine salary history and job history together
+- It is worth emphasizing that the 'manages' and 'employs' relationships are theoretically optional and redundant in practice. But, considering the performance if we want to find out where each employee works 
+
+# Design Case 3: Fan Traps
+- A design trap occurs when a relationship is improperly or incompletely identified, which is not consistent with the real world
+  - The most common design trap is known as a fan trap. A fan trap occurs when you have one entity in two 1:M relationships to other entities
+  - It produces an association among other entities not expressed in the model
+  ![bg right:40% w:100% CFig05_12](restricted/CFig05_12.jpg)
+- Question: Which team the player Jordan belongs to ? 
+
+# Illustration of Design Case 3
+![bg right:40% w:100% CFig05_13](restricted/CFig05_13.jpg)
+Exists a **transitive** relationship between DIVISION and PLAYER via the TEAM entity
+
+# Design Case 4:  Redundant Relationships
+- Redundant relationships occur when there are multiple relationship paths between related entities
+- The main concern is that they remain consistent across the model
+- Some designs use redundant relationships as a way to simplify the design
+![bg right:40% w:100% CFig05_14](restricted/CFig05_14.jpg)
+
+# Review Questions
+- What is an entity supertype, and why is it used?
+- What is the most common design trap, and how does it occur?
+- Describe the characteristics of good primary keys and how to select them
