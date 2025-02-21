@@ -116,4 +116,7 @@ Example
 - the dependency X → Z is a transitive dependency because X determines the value of Z via Y. 
 - Y → Z signals that a transitive dependency exists because Y is not a PK.
 
+# NormalizationWhy Do We Carry out Database Normalization?
+![bg right:70% w:100%](https://cdn.hackr.io/uploads/posts/attachments/1666888816mdnYlrMoEE.png)
+
 # Conversion to First Normal Form (1NF) 
