@@ -43,6 +43,10 @@ style: |
     color: blue;  
   }
 
+  .brown-text {
+    color: brown;  
+  }
+
   .small-text {
     font-size: 0.75rem;
   }
@@ -98,15 +102,21 @@ style: |
 
 ![bg right:50% w:600 poor database design](restricted/CFig01_05.jpg)
 
-# Database Design Process
-- Requirements & Analysis: discover users requirements, analyze what data should be maintained
-- Conceptual model: create a model that represents mini-world objects and their relationships.
-- **Choice of a DBMS**
-- Logical model: adapts the conceptual model to a specific DBMS implementation model.
-- Physical model: create database keys, constraints, indexes, and other RDBMS features
-- Implementation: realize physical model on running environment and optimize performance
+# Database System Design Process
+- <span class="brown-text">Requirements & Analysis</span>
+ <span class="small-text">Discover users requirements, analyze what data should be maintained</span>
+- <span class="brown-text">Database design</span>
+  - <span class="small-text">Conceptual model</span>
+  - <span class="small-text">Choice of a DBMS</span>
+  - <span class="small-text">Logical model</span>
+  - <span class="small-text">Physical model</span>
+- <span class="brown-text">System design</span>: <span class="small-text">design system functionality and user interface</span>
+- <span class="brown-text">Implementation</span>: <span class="small-text">realize physical model on running environment and optimize performance</span>
 
-![bg right:30% w:400 database design process](https://techforumugm.files.wordpress.com/2020/03/dd01.png?w=816&h=352&crop=1)
+![bg right:30% w:400](https://techforumugm.files.wordpress.com/2020/03/dd01.png?w=816&h=352&crop=1)
+
+# Database Design Process
+![bg right:60% w:90%](restricted/database_design_process.jpg)
 
 # A Good Database Design Following Database Design Process
 ![bg right:50% w:600 poor database design](restricted/CFig01_06.jpg)
@@ -162,6 +172,4 @@ Data Analyst / Data Scientist| Analyze varied data to generate insights and pred
 # Review Questions
 - What is a database 
 - What is a DBMS
-- What is a Database System Environment
-- Explain DIKW model
 - Which database professional career you are interested in?

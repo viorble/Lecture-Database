@@ -43,63 +43,64 @@ style: |
     color: blue;  
   }
 
+  .brown-text {
+    color: brown;  
+  }
+
   .small-text {
     font-size: 0.50rem;
   }
 ---
 # Chapter 2: Data Models
-- Data modeling is to build data models, which is the first step in the database design journey, serving as a bridge between real-world objects and the computer database.
-- One big problem of database design is that designers, programmers, and end users see data in different ways, which introduce misunderstanding and increase communication cost.
-- Database designers must obtain a precise description (data model) of the data's nature and environments within the organization.
-- **Data modeling clarifies such communication by reducing the complexities of database design to more easily understood abstractions that define entities, relations, and data transformations.**
+- Data modeling is to build data models, which is the first step in the database design journey, <span class="brown-text">serving as a bridge</span> between real-world objects and the computer database.
+- One big problem of database design is that designers, programmers, and end users see data in different ways, which introduce <span class="brown-text">misunderstanding</span> and increase communication cost.
+- <span class="brown-text">Database designers </span>must obtain a precise description (<span class="brown-text">data model</span>) of the data's nature and environments within the organization to reduce communication efforts.
 
 # Data Modeling and Data Models
-- Data modeling refers to the **process** of creating a specific data model for a determined problem domain (mini-world). Data modeling is an iterative, progressive process.
-- A data model is a relatively simple representation of more complex real-world data structures
-  - Entity
-  - Attribute
-  - Relationship
+- Data modeling refers to the <span class="brown-text">process</span> of creating a specific data model for a determined problem domain (mini-world). 
+- Data modeling is an iterative, progressive process.
+- A <span class="brown-text">data model</span> is a relatively simple representation of more complex real-world objects
+  - Entity (table)
+  - Attribute (column)
+  - Relationship (linkage between tables)
   - Constrain
 
 # The Importance of Data Models
-- Data models are a communication tool
+- Data models are a <span class="brown-text">communication tool</span>
   - End users know the business rule running in real world
   - Developers develop aps to manage data and transform data into information
-  - But data is viewed in different ways by different people
+  - People view data in different ways
     - Managers want a universal view of data
     - Staffs need details of data
-- A good database application environment requires an overall database blueprint based on an appropriate data model
-- When a good database blueprint is available, it does not matter that an applications developers' view of the data is different from that of the manager or the staff
-- No appropriate data model, no good database application environment
+- A good database system environment requires an overall database design based on an appropriate data model
+- No appropriate data model, no good database system environment
 
 # Data Model Basic Building Blocks
-- An **entity** is a person, place, thing, concept, or event about which data will be collected and stored
-- An **attribute** is a characteristic (attribute or field) of an entity
-- A **relationship** describes an association among entities
-  - One-to-many (1:M or 1..*) relationship *PAINTER paints PAINTING*
-  - Many-to-many (M:N or \*..\*) relationship *EMPLOYEE learn SKILL*
-  - One-to-one (1:1 or 1..1) relationship *EMPLOYEE manage STORE*
-- A **constraint** is a restriction placed on the data to help data integrity
-  - An employee’s salary must have values that are between 6,000 and 350,000
-  - A student’s GPA must be between 0.00 and 4.00
+- An <span class="brown-text">entity</span> is a person, thing or event about which data will be collected and stored
+- An <span class="brown-text">attribute</span> is a characteristic (property) of an entity
+- A <span class="brown-text">relationship</span> describes an association among entities
+  - One-to-many (1:M or 1..*): PAINTER paints PAINTING
+  - Many-to-many (M:N or \*..\*): EMPLOYEE learn SKILL
+  - One-to-one (1:1 or 1..1): EMPLOYEE manage STORE
+- A <span class="brown-text">constraint</span> is a restriction placed on the data to help data integrity
+  - An employee’s salary must have values between 6,000 and 350,000
   - Each class must have one and only one teacher
 
 # Business Rules
 - A **business rule** is a brief, precise, and unambiguous description of a policy, procedure, or principle within a specific organization
-- The main sources of business rules are company managers, policy makers, department managers, and written documentation such as company procedures
-- Business rules are used to define entities, attributes, relationships, and constraints
-- The business rule 'A customer may generate many invoices' may be translated into data model building blocks
-  - Customer and invoice are objects of interest and should be represented by respective *entities*
-  - There is a generate *relationship* between customer and invoice
-  - The generate relationship is *one-to-many (1:M)*
+  - made from company managers, policy makers, department managers, and written procedures
+  - used to define entities, attributes, relationships, and constraints
+- Example: A customer may generate many invoices' may be translated into data model
+  - Customer and invoice are objects of interest and should be represented by respective <span class="brown-text">entities</span>
+  - There is a generate <span class="brown-text">relationship</span> between customer and invoice
+  - The generate relationship is one-to-many (1:M)
 
 # Naming Conventions
 - Names should be descriptive and familiar to the users
 - A good naming convention can 
-  - Make less confusion and misinterpretation
-  - Reduce errors and time lost
+  - Make less confusion and reduce errors
   - Promote code consistently and readability 
-- Follow organization practice or develop your owns at the start of project
+- Follow organization practice or develop at the start of project by considering
   - Should table name and column name be singular or plural? (student or students)
   - Should prefix tables or columns? (name or prod_name)
   - Should use capital letters for naming? (cap_cap, capCap or CapCap)
