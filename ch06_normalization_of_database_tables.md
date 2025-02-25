@@ -73,10 +73,10 @@ style: |
 - Normalization uses the concept of functional dependencies to identify which attribute determines other attributes
 
 # The Normalization Process
-The objective of normalization is to ensure that each table has the following characteristics:
+The objective of normalization is to ensure:
 - Each table represents a single subject
 - Each row/column intersection contains only one value and not a group of values
-- No data item will be unnecessarily stored in more than one table
+- No data item will be unnecessarily stored in more than one table. Data is updated in only one place
 - All non-prime attributes in a table are dependent on the primary key
 - Each table has no insertion, update, or deletion anomalies
 - Ensure that all tables are in at least in 3NF in business environment
@@ -116,7 +116,7 @@ Example
 - the dependency X → Z is a transitive dependency because X determines the value of Z via Y. 
 - Y → Z signals that a transitive dependency exists because Y is not a PK.
 
-# NormalizationWhy Do We Carry out Database Normalization?
+# Why Do We Do Database Normalization?
 ![bg right:70% w:100%](https://cdn.hackr.io/uploads/posts/attachments/1666888816mdnYlrMoEE.png)
 
 # Conversion to First Normal Form (1NF) 
