@@ -92,7 +92,7 @@ style: |
   - used to define entities, attributes, relationships, and constraints
 - Example: A customer may generate many invoices' may be translated into data model
   - Customer and invoice are objects of interest and should be represented by respective <span class="brown-text">entities</span>
-  - There is a generate <span class="brown-text">relationship</span> between customer and invoice
+  - There is a **'generate'** <span class="brown-text">relationship</span> between customer and invoice
   - The generate relationship is one-to-many (1:M)
 
 # Naming Conventions
