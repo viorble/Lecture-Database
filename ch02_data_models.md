@@ -48,7 +48,7 @@ style: |
   }
 
   .small-text {
-    font-size: 0.50rem;
+    font-size: 0.75rem;
   }
 ---
 # Chapter 2: Data Models
@@ -197,27 +197,43 @@ In the object-oriented data model (OODM), both data and its relationship are con
 - OODM are typically depicted using Unified Modeling Language (UML) class diagrams
 
 # OODM Diagram
-
-<div class="grid">
-    <img src="restricted/CFig02_04.jpg" alt="Comparison of OO, UML, ER">
-    <img src="files/image/UML_class_diagram.png" alt="A UML class diagram">
-</div>
+![bg right:70% w:100%](restricted/CFig02_04.jpg)
 
 # ERDM and O/R DBMS
 - The extended relational data model (ERDM) adds many of the OO model’s features within the simpler relational database structure
 - A DBMS based on the ERDM is an object/relational database management system (O/R DBMS)
 
+# Comparison of RDBMS, OODBMS and O/R DBMS
+<style scoped>
+table {
+  font-size: 20px;
+}
+</style>
+Feature	|RDBMS|	OODBMS|	O/R DBMS
+--------|------------------|--------------------------|-------------------
+Tables & SQL	|✅ Yes	|❌ No|	✅ Yes
+Objects & Classes	|❌ No	|✅ Yes|	✅ Yes
+User-Defined Data Types (UDTs)	|❌ No|	✅ Yes|	✅ Yes
+Inheritance	|❌ No|	✅ Yes|	✅ Yes
+Encapsulation (Methods in DB)|	❌ No|	✅ Yes|	✅ Yes
+Complex Data Types	|❌ No|	✅ Yes|	✅ Yes
+
+Products of O/R DBMS
+- <span class="small-text">PostgreSQL (Most commonly used O/R DBMS)</span>
+-	<span class="small-text">Oracle Database (With Object-Relational Features)</span>
+- <span class="small-text">Microsoft SQL Server (Limited O/R capabilities)</span>
+
 # Emerging Data Models: Big Data and NoSQL
 - **Big Data** refers to a movement to find new and better ways to manage large amounts which DBMS can not manage
 - Big Data characteristics (3 Vs) : volume, velocity, and variety
 - Most frequently used Big Data technologies
-  - Hadoop: an ecosystem provides distributed storage and computing framework
+  - Hadoop: an **ecosystem** provides a collection of softwares to operate big data
   - Hadoop Distributed File System (HDFS) is a fault-tolerant file storage system
   - MapReduce is an distributed computational framework
   - NoSQL database is a large-scale distributed database system that stores unstructured and semi-structured data in efficient ways
 
 # NoSQL Databases
-- Schemaless, 
+- Schemaless
 - Horizontal scalability
 - Distributed data store
 - Lower cost
@@ -239,28 +255,29 @@ In the object-oriented data model (OODM), both data and its relationship are con
 
 # External Model
 - The end users’ view of the data environment
-- Use ER diagrams to represent the external model
-- The external views represent subsets of the database
-  - Easy to **scope** specific data required to support each business unit
-  - Easy to **communicate** the model’s adequacy with targeted end users
+- Use **ER diagrams** to represent the external model
+- The external views represent **subsets** of the database
+  - Easy to scope and communicate specific data required to support targeted end users
   - Ensure **security** constraints in the database design
   ![bg right:40% w:500 external model](restricted/CFig02_07.jpg)
 
 # Conceptual Model
-- A global view of the entire database by the entire organization
-- Use ER diagrams to represent the conceptual model
-- The basis for the identification and high-level description of the main data objects
+- A **global view** of the entire database by the entire organization
+- Use **ER diagrams** to represent the conceptual model
+- Identify and high-level describe main data objects
 - Independent of both software and hardware
-- The term **logical design** refers to creating a conceptual data model 
+- The term **conceptual design** refers to creating a conceptual data model by ER diagrams
   ![bg right:40% w:500 conceptual model](restricted/CFig02_08.jpg)
 
 # Internal Model
 - Use the database constructs of the chosen DBMS to match the conceptual model’s characteristics and constraints to build the internal model
+- The term **logical design** refers to creating a logical data model by a set of SQL statements
 - Software dependent and hardware independent
 ![bg right:40% w:500 internal model](restricted/CFig02_09.jpg)
 
 # Physical Model
 - Operates at the lowest level of abstraction, describing which physical storage device the data is saved and how to access the data
+- The term **physical design** refers to define data storage organization, security control, performance measure
 - Both software and hardware dependent
 
 # Levels of Data Abstraction 
@@ -269,10 +286,9 @@ In the object-oriented data model (OODM), both data and its relationship are con
 # Review Questions
 - Why data models are important?
 - What are the data model basic building blocks
-- How the major data models evolved
+- How have the major data models evolved
 - Explain NoSQL characteristics
 - What are the four levels of data abstraction
-
 
 
 
