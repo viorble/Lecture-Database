@@ -123,9 +123,9 @@ Data models represent a lot of thought as to what a database is, what it should 
 ![bg right:50% w:600 network model](https://www.myreadingroom.co.in/images/stories/docs/dbms/Network%20Data%20Model.JPG)
 
 # Database Concepts Inherited from Network Model
-- The **schema** is the conceptual organization of the entire database, essentially the structural definition of a whole database. Once you claim the schema of a database, it must now no longer be modified often because it will distort the data organization inside the Database. 
-- The **data manipulation language (DML)** defines the environment in which data can be managed and is used to work with the data in the database (insert, read, update, delete data)
-- A **schema data definition language (DDL)** enables the database administrator to define the schema components (create, drop, alter table, create index or trigger)
+- The <span class="brown-text">**schema**</span> is the conceptual and structural definition of a whole database. Once you claim the schema of a database, it must now no longer be modified often because it will distort the data organization inside the Database. 
+- The <span class="brown-text">**data manipulation language (DML)**</span> defines the way to insert, read, update, delete data in database
+- A <span class="brown-text">**schema data definition language (DDL)**</span> enables the DBA to define the schema components (create, drop, alter table, create index or trigger)
 
 # Relational Model
 The relational model’s foundation is a mathematical concept known as a relation, which is introduced by Edgar F. Codd in 1969.
@@ -154,12 +154,17 @@ The relational model’s foundation is a mathematical concept known as a relatio
 </div>
 
 # Supplement of Relational Model
+- Relation schema
+- Relational database schema
+- Degree of a relation
+- Cardinality of a relation
+- Relation state (or relation instance)
 [Relational model terminology](https://youtu.be/Q45sr5p_NmQ?si=cr53etNXoX1BIpLf)
 
 # Entity Relationship Model
 - Although the relational model was a vast improvement over the hierarchical and network models, it still lacked the features that would make it an effective database design tool.
 - Database designers prefer to use a graphical tool in which entities and their relationships are pictured.
-- The **entity relationship model (ERM)** using *graphical representations* to model database components has become a widely accepted standard for data modeling.
+- The <span class="brown-text">**entity relationship model (ERM)**</span> using *graphical representations* to model database components has become a widely accepted standard for data modeling.
 - The relational data model and ERM combined to provide the foundation for tightly structured database design
 
 # Entity Relationship Model Notation
