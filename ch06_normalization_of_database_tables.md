@@ -35,6 +35,10 @@ style: |
     color: blue;  
   }
 
+  .brown-text {
+    color: brown;  
+  }
+
   .small-text {
     font-size: 0.80rem;
   }
@@ -45,7 +49,7 @@ style: |
 - The process that yields such desirable results is known as **normalization**.
 
 # Database Tables and Normalization
-- <span class="blue-text">**Normalization**</span> is a process for evaluating and correcting table structures to **minimize data redundancies** 
+- <span class="blue-text">**Normalization**</span> is a process for evaluating and correcting table structures to <span class="brown-text">**minimize data redundancies**</span> 
   - Reduce data anomalies
   - Assigns attributes to tables based on determination
 - Normalization works through a series of stages called normal forms
@@ -119,4 +123,102 @@ Example
 # Why Do We Do Database Normalization?
 ![bg right:70% w:100%](https://cdn.hackr.io/uploads/posts/attachments/1666888816mdnYlrMoEE.png)
 
-# Conversion to First Normal Form (1NF) 
+# Conversion to First Normal Form (1NF)
+A table in the first normal form means
+- All key attributes are defined
+- There are no repeating groups in the table
+- All attributes are dependent on the primary key
+
+Converting to 1NF starts with three steps
+1. Eliminate the repeating groups 
+2. Identify the primary key 
+3. Identify all dependencies
+
+# 1NF Step1 - Eliminate Repeating Groups
+Repeating group: a group of entries existing for a single key value
+
+<div class="grid">
+    <img src="restricted/CFig06_01.jpg" alt="">
+    <img src="restricted/CFig06_02.jpg" alt="">
+</div> 
+
+# 1NF Step2 - Identify PK 
+PK: an identifier composed of one or more attributes that uniquely identifies a row
+<span class="brown-text">PROJ_NUM + EMP_NUM</span>
+
+![bg right:70% w:100%](restricted/CFig06_02.jpg)
+
+# 1NF Step3 - Identify all Dependencies
+- According to PK, a dependency exist
+  - PROJ_NUM, EMP_NUM → PROJ_NAME, EMP_NAME, JOB_CLASS, CHG_HOUR, HOURS
+  - *PROJ_NAME, EMP_NAME, JOB_CLASS, CHG_HOUR, HOURS* depends on **PROJ_NUM, EMP_NUM**
+- (partial dependency) PROJ_NUM → PROJ_NAME
+- (partial dependency) EMP_NUM → EMP_NAME, JOB_CLASS, CHG_HOUR, <span class="brown-text">(not HOURS)</span>
+- (transitive dependency) JOB_CLASS → CHG_HOUR
+
+# Dependency Diagram
+Dependency diagram shows all dependencies found within given table structure
+![bg right:70% w:90%](restricted/CFig06_03.jpg)
+
+# After 1NF
+- All relational tables satisfy 1NF requirements
+  - All key attributes are defined
+  - There are no repeating groups in the table
+  - All attributes are dependent on the primary key
+- Some tables may contain partial and transitive dependencies
+
+# Conversion to Second Normal Form (2NF)
+A table in the second normal form means
+- it is in 1NF
+- it does not include partial dependencies
+
+Conversion to 2NF occurs only when the 1NF has a composite primary key
+- If the 1NF has a single-attribute primary key, then the table is automatically in 2NF
+
+Converting to 2NF starts with two steps
+1. Make new tables to eliminate partial dependencies
+2. Reassign corresponding dependent attributes
+
+# 2NF Step1 Make New Tables to Eliminate Partial Dependencies
+- Separate composite PK (PROJ_NUM + EMP_NUM) into different PKs
+  - PK1: PROJ_NUM
+  - PK2: EMP_NUM
+  - PK3: PROJ_NUM + EMP_NUM
+- Create tables based on new PK
+  - Table1: PROJECT, PK is PROJ_NUM
+  - Table2: EMPLOYEE, PK is EMP_NUM
+  - Table3: ASSIGNMENT, PK is PROJ_NUM + EMP_NUM
+
+# 2NF Step2 Reassign Corresponding Dependent Attributes
+- Table PROJECT(**PROJ_NUM**, PROJ_NAME)
+- Table EMPLOYEE(**EMP_NUM**, EMP_NAME, JOB_CLASS, CHG_HOUR)
+- Table ASSIGNMENT(**PROJ_NUM**, **EMP_NUM**, <span class="brown-text">ASSIGN_HOUR</span>)
+(any attributes that are not dependent in partial dependency will remain in the original table)
+
+# Dependency Diagram
+![bg right:70% w:90%](restricted/CFig06_04.jpg)
+
+# After 2NF
+- All relational tables satisfy 2NF requirements
+  - it is in 1NF
+  - it does not include partial dependencies
+  - If the 1NF has a single-attribute primary key, then the table is automatically in 2NF
+- Some tables may contain transitive dependencies
+
+# Conversion to Third Normal Form (3NF)
+A table in the third normal form means
+- it is in 2NF
+- it does not include transitive dependencies
+
+Converting to 3NF starts with two steps
+1. Make new tables to eliminate transitive dependencies 
+2. Reassign corresponding dependent attributes
+
+# 3NF Step1 Make New Tables to Eliminate Transitive Dependencies
+- Write a copy of its determinant as a PK for a new table
+- Example: JOB_CLASS → CHG_HOUR (transitive dependency)
+  - PK: JOB_CLASS
+  - 
+  - Table JOB(**JOB_CLASS**, CHG_HOUR) 
+
+# 3NF Step2 Reassign corresponding dependent attributes
