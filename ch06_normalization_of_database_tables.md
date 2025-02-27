@@ -215,10 +215,125 @@ Converting to 3NF starts with two steps
 2. Reassign corresponding dependent attributes
 
 # 3NF Step1 Make New Tables to Eliminate Transitive Dependencies
-- Write a copy of its determinant as a PK for a new table
-- Example: JOB_CLASS → CHG_HOUR (transitive dependency)
-  - PK: JOB_CLASS
-  - 
-  - Table JOB(**JOB_CLASS**, CHG_HOUR) 
+A transitive dependency: JOB_CLASS → CHG_HOUR 
+- Make determinant (JOB_CLASS) as a PK of a new table
+- Create tables based on new PK
+  - Table JOB(**JOB_CLASS**, CHG_HOUR)
 
 # 3NF Step2 Reassign corresponding dependent attributes
+- Table EMPLOYEE(**EMP_NUM**, EMP_NAME, JOB_CLASS)
+- Table JOB(**JOB_CLASS**, CHG_HOUR)
+- Table PROJECT(**PROJ_NUM**, PROJ_NAME)
+- Table ASSIGNMENT(**PROJ_NUM**, **EMP_NUM**, ASSIGN_HOUR)
+
+# Dependency Diagram
+![bg right:70% w:90%](restricted/CFig06_05.jpg)
+
+# After 3NF
+- it is in 2NF
+- it does not include transitive dependencies
+
+# Improving the design
+- Normalization form only focus on avoiding data redundancy
+- Beyond normalization, there are still various issues we need to address
+  1. Minimize data entry errors
+  2. Evaluate naming conventions
+  3. Refine attribute atomicity
+  4. Identify new attributes
+  5. Identify new relationships
+  6. Refine primary keys as required for data granularity
+  7. Maintain historical accuracy
+  8. Evaluate using derived attributes
+
+# The Completed Database After Design Improvement
+<div class="grid">
+    <img src="restricted/CFig06_06a.jpg" alt="">
+    <img src="restricted/CFig06_06b.jpg" alt="">
+</div> 
+
+# Minimize data entry errors
+- When a new database designer on board, we need insert a record in EMPLOYEE table. Thus, we enter data into JOB_CLASS. 
+- However, sometime we may enter either Database Designer, DB Designer or database designer. It easily makes data entry errors
+- Reduce the data enter errors by adding a <span class="brown-text">surrogate key</span> JOB_CODE <br>   JOB_CODE → JOB_CLASS, CHG_HOUR 
+- Surrogate key is an artificial key introduced by DB designer
+  - simplify PK design
+  - usually numeric
+  - often generated automatically by DBMS
+
+# Evaluate Naming Conventions
+- CHG_HOUR changed to JOB_CHG_HOUR
+- JOB_CLASS changed to JOB_DESCRIPTION
+- HOURS changed to ASSIGN_HOURS
+
+# Refine Attribute atomicity
+- Atomicity: not being able to be divided into small units
+- An atomic attribute is an attribute that cannot be further subdivided
+- EMP_NAME divided into EMP_LNAME, EMP_FNAME, EMP_INITIAL
+
+# Identify New attributes
+- Consider if any other attributes could be added into table
+- Social Security Number, Hire Date,....
+
+# Identify New Relationships
+- Add EMP_NUM attribute into PROJECT as a foreign key to keep project manager information
+
+# Refine PKs as Required for Data Granularity (1/3)
+- How often an employee reports hours work on a project and at what level of granularity (many times per day, once a day, once a week, at the end of project)
+- <span class="brown-text">Granularity</span> refers to the level of detail represented by the values stored in a table’s row
+
+
+- After 3NF
+  ASSIGNMENT(**PROJ_NUM**, **EMP_NUM**, ASSIGN_HOUR)
+<style scoped>
+table {
+  font-size: 25px;
+}
+</style>
+PROJ_NUM|EMP_NUM|ASSIGN_HOUR
+--------|-------|-----------
+15|103|2.6
+18|118|1.4
+
+Report hours at the end of project
+
+# Refine PKs as Required for Data Granularity (2/3)
+
+- Add ASSIGN_DATE attribute
+  ASSIGNMENT(**PROJ_NUM**, **EMP_NUM**, **ASSIGN_DATE**, ASSIGN_HOUR)
+
+<style scoped>
+table {
+  font-size: 25px;
+}
+</style>
+PROJ_NUM|EMP_NUM|ASSIGN_DATE|ASSIGN_HOUR
+--------|-------|-----------|-----------
+15|103|06-Mar-22|2.6
+18|118|06-Mar-22|1.4
+
+Report hours once a day
+
+# Refine PKs as Required for Data Granularity (3/3)
+- Add ASSIGN_NUM as a surrogate key
+  ASSIGNMENT(**ASSIGN_NUM**, PROJ_NUM, EMP_NUM, ASSIGN_DATE, ASSIGN_HOUR)
+
+<style scoped>
+table {
+  font-size: 25px;
+}
+</style>
+ASSIGN_NUM|PROJ_NUM|EMP_NUM|ASSIGN_DATE|ASSIGN_HOUR
+--------|--------|-------|-----------|-----------
+1001|15|103|06-Mar-22|2.6
+1002|18|118|06-Mar-22|1.4
+
+- Report hours anytime
+- Lower granularity yields greater flexibility
+
+# Maintain historical accuracy
+- Add jog charge per hour (ASSIGN_CHG_HOUR) into ASSIGNMENT table is important to maintain historical accuracy of the data
+- JOB_CHG_HOUR in JOB and ASSIGN_CHG_HOUR in ASSIGNMENT. they may the same in a time period. 
+- Due to salary raise, JOB_CHG_HOUR will be changed
+- ASSIGN_CHG_HOUR keep historical data and only reflect the charge hour whey employee report hours
+
+# Evaluate Using Derived Attributes
