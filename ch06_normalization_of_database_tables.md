@@ -337,3 +337,59 @@ ASSIGN_NUM|PROJ_NUM|EMP_NUM|ASSIGN_DATE|ASSIGN_HOUR
 - ASSIGN_CHG_HOUR keep historical data and only reflect the charge hour whey employee report hours
 
 # Evaluate Using Derived Attributes
+- For simplify coding or improve performance, database designer will introduce derived attributes
+- The derived attribute ASSIGN_CHARGE comes from a transitive dependency
+- (ASSIGN_HOURS + ASSIGN_CHG_HOUR) → ASSIGN_CHARGE
+
+# The Completed Database After Design Improvement
+<div class="grid">
+    <img src="restricted/CFig06_06a.jpg" alt="">
+    <img src="restricted/CFig06_06b.jpg" alt="">
+</div> 
+
+# Surrogate Key Considerations
+- Surrogate keys are used by designers when the primary key is considered to be unsuitable
+- A surrogate key is a system-defined attribute generally created and managed via the DBMS
+- Usually it is a numeric value which is automatically incremented for each new row
+
+# Higher-Level Normal Forms
+- Tables in 3NF will perform suitably for business transactional databases
+- Higher normal forms are sometimes useful for theoretical interest or statistical research
+- Higher-level normal forms: Boyce-Codd normal form (BCNF), 4NF and 5NF
+
+# Normalization and Database Design
+- Normalization should be part of the design process
+- Proposed entities must meet the required normal form before table structures are created
+- Principles and normalization procedures to be understood to redesign and modify databases
+- ERD should be updated through the iterative process
+
+# Homework: Contracting Company
+1. Read section 6-7 content
+2. Design database schemas for Contracting Company, including but not limited to
+  - Business rules
+  - Evolving history of ER diagram in terms of normal forms
+  - 1NF, 2NF, 3NF conversion, dependency diagram and reason
+  - At least 3 sample records of each table to illustrate PK and FK among tables to demonstrate their relationships.
+  - Check your design by Table 6.7 Data Modeling Checklist
+
+# Denormalization
+- Important database design goals include the following:
+  - Creation of normalized relations 
+  - Considering processing requirements and speed
+- A problem with normalization is that joining a larger number of tables takes additional input/output (I/O) operations, thereby reducing system speed
+- Defects in unnormalized tables include the following:
+  - Data updates are less efficient because tables are larger
+  - Indexing is more cumbersome
+  - lead to data redundancy
+
+# Examples of Denormalization
+![bg right:70% w:100%](restricted/CTable06_06.jpg)
+
+# Data Modeling Checklist
+![bg right:70% w:70%](restricted/CTable06_07.jpg)
+
+# Review Questions
+- What is normalization
+- When is a table in 1NF
+- When is a table in 2NF
+- When is a table in 3NF
