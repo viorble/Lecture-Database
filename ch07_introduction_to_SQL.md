@@ -54,7 +54,6 @@ style: |
   -  execute data administration
   -  query the database to extract useful information.
 - All RDBMS supports SQL, and many software vendors have developed extensions to the basic SQL command set.
-- The ability to retrieve data from a database to satisfy business require is one of the most critical skills for database professionals.
 
 # SQL Basics
 - Described in ANSI/ISO SQL
@@ -68,13 +67,13 @@ style: |
 - SQL is a nonprocedural language
 
 # SQL Data Manipulation Commands
-![bg right:70% w:90%](restricted/CTable07_01.jpg)
+![bg right:65% w:90%](restricted/CTable07_01.jpg)
 
 # SQL Data Definition Commands
-![bg right:70% w:90%](restricted/CTable07_02.jpg)
+![bg right:65% w:90%](restricted/CTable07_02.jpg)
 
-# Basic Data Types
-- Numeric, Character, Date
+# Data Types
+- Basic: numeric, character, date
 - MySQL data types
   - SMALLINT, INT
   - FLOAT, DOUBLE
@@ -85,7 +84,7 @@ style: |
 # Steps to Develop Database
 1. Design ER model (Fig 7.1 or Fig 8.1)
 2. Create database 
-3. Create database schema (a logical group of database objects, like tables and indexes)
+3. Create database **schema** (a logical group of database objects, like tables and indexes)
 4. Insert sample data for verification
 
 # Step1: Analyze Biz Rules to Design ER Model
@@ -97,13 +96,16 @@ one invoice.
 - If a product is vendor-supplied, it is supplied by only a single vendor.
 - Some products are not supplied by a vendor.
 
-# Deliverable of Step1: ER Diagram
+# Step1: Deliver ER Diagram
 ![bg right:65% w:90%](restricted/CFig07_01.jpg)
 
-# Step2: Create Database
-- Database name is CH07_SALECO
-- Database stores database schema
-- CREATE DATABASE CH07_SALECO;
+# Step2: Create Database (CH07_SALECO)
+- Database stores database schema, a group of database objects
+- Command
+  - CREATE DATABASE CH07_SALECO;
+  - CREATE DATABASE IF NOT EXISTS CH07_SALECO;
+  - SHOW DATABASES;
+  - USE CH07_SALECO;
 
 # Step3: Create Database Tables
 
@@ -112,15 +114,16 @@ one invoice.
 
 ## VENDOR table
 ```sql
-CREATE TABLE VENDOR (
-  V_CODE 		  INTEGER,
-  V_NAME 		  VARCHAR(35) NOT NULL,
-  V_CONTACT 	VARCHAR(15) NOT NULL,
-  V_AREACODE 	CHAR(3) NOT NULL,
-  V_PHONE 	  CHAR(8) NOT NULL,
-  V_STATE 	  CHAR(2) NOT NULL,
-  V_ORDER 	  CHAR(1) NOT NULL,
-  PRIMARY KEY (V_CODE));
+CREATE TABLE IF NOT EXISTS VENDOR (
+  V_CODE INTEGER,
+  V_NAME VARCHAR(35) NOT NULL,
+  V_CONTACT VARCHAR(15) NOT NULL,
+  V_AREACODE CHAR(3) NOT NULL,
+  V_PHONE CHAR(8) NOT NULL,
+  V_STATE CHAR(2) NOT NULL,
+  V_ORDER CHAR(1) NOT NULL,
+  PRIMARY KEY (V_CODE)
+);
 ```  
 </div>
 
@@ -128,22 +131,69 @@ CREATE TABLE VENDOR (
 
 ## PRODUCT table
 ```sql
-CREATE TABLE PRODUCT (
-  P_CODE 	    VARCHAR(10) PRIMARY KEY,
-  P_DESCRIPT 	VARCHAR(35) NOT NULL,
-  P_INDATE 	  DATETIME NOT NULL,
-  P_QOH 	    INTEGER NOT NULL,
-  P_MIN 		  INTEGER NOT NULL,
-  P_PRICE 	  NUMERIC(8,2) NOT NULL,
-  P_DISCOUNT 	NUMERIC(4,2) NOT NULL,
-  V_CODE 		  INTEGER,
-  CONSTRAINT PRODUCT_V_CODE_FK FOREIGN KEY (V_CODE) REFERENCES VENDOR (V_CODE));
+CREATE TABLE IF NOT EXISTS PRODUCT (
+  P_CODE VARCHAR(10),
+  P_DESCRIPT VARCHAR(35) NOT NULL,
+  P_INDATE DATETIME NOT NULL,
+  P_QOH INTEGER NOT NULL,
+  P_MIN INTEGER NOT NULL,
+  P_PRICE NUMERIC(8,2) NOT NULL,
+  P_DISCOUNT NUMERIC(4,2) NOT NULL,
+  V_CODE INTEGER,
+  PRIMARY KEY (P_CODE),
+  FOREIGN KEY (V_CODE) REFERENCES VENDOR (V_CODE));
 ```
 </div>
 
 </div>
 
+# STEP4: Insert Sample Data
+<div class="columns">
+<div>
 
+## VENDOR table
+```sql
+/* VENDOR rows */
+INSERT INTO VENDOR VALUES(21225,'Bryson, Inc.'    ,'Smithson','615','223-3234','TN','Y');
+INSERT INTO VENDOR VALUES(21226,'SuperLoo, Inc.'  ,'Flushing','904','215-8995','FL','N');
+INSERT INTO VENDOR VALUES(21231,'D&E Supply'      ,'Singh'   ,'615','228-3245','TN','Y');
+INSERT INTO VENDOR VALUES(21344,'Gomez Bros.'     ,'Ortega'  ,'615','889-2546','KY','N');
+INSERT INTO VENDOR VALUES(22567,'Dome Supply'     ,'Smith'   ,'901','678-1419','GA','N');
+INSERT INTO VENDOR VALUES(23119,'Randsets Ltd.'   ,'Anderson','901','678-3998','GA','Y');
+INSERT INTO VENDOR VALUES(24004,'Brackman Bros.'  ,'Browning','615','228-1410','TN','N');
+INSERT INTO VENDOR VALUES(24288,'ORDVA, Inc.'     ,'Hakford' ,'615','898-1234','TN','Y');
+INSERT INTO VENDOR VALUES(25443,'B&K, Inc.'       ,'Smith'   ,'904','227-0093','FL','N');
+INSERT INTO VENDOR VALUES(25501,'Damal Supplies'  ,'Smythe'  ,'615','890-3529','TN','N');
+INSERT INTO VENDOR VALUES(25595,'Rubicon Systems' ,'Orton'   ,'904','456-0092','FL','Y');
+```  
+</div>
+
+<div>
+
+## PRODUCT table
+```sql
+/* PRODUCT rows						*/
+INSERT INTO PRODUCT VALUES('11QER/31','Power painter, 15 psi., 3-nozzle'     ,'2021-11-03',  8,  5,109.99,0.00,25595);
+INSERT INTO PRODUCT VALUES('13-Q2/P2','7.25-in. pwr. saw blade'              ,'2021-12-13', 32, 15, 14.99,0.05,21344);
+INSERT INTO PRODUCT VALUES('14-Q1/L3','9.00-in. pwr. saw blade'              ,'2021-11-13', 18, 12, 17.49,0.00,21344);
+INSERT INTO PRODUCT VALUES('1546-QQ2','Hrd. cloth, 1/4-in., 2x50'            ,'2022-01-15', 15,  8, 39.95,0.00,23119);
+INSERT INTO PRODUCT VALUES('1558-QW1','Hrd. cloth, 1/2-in., 3x50'            ,'2022-01-15', 23,  5, 43.99,0.00,23119);
+INSERT INTO PRODUCT VALUES('2232/QTY','B&D jigsaw, 12-in. blade'             ,'2021-12-30',  8,  5,109.92,0.05,24288);
+INSERT INTO PRODUCT VALUES('2232/QWE','B&D jigsaw, 8-in. blade'              ,'2021-12-24',  6,  5, 99.87,0.05,24288);
+INSERT INTO PRODUCT VALUES('2238/QPD','B&D cordless drill, 1/2-in.'          ,'2022-01-20', 12,  5, 38.95,0.05,25595);
+INSERT INTO PRODUCT VALUES('23109-HB','Claw hammer'                          ,'2022-01-20', 23, 10,  9.95,0.10,21225);
+INSERT INTO PRODUCT VALUES('23114-AA','Sledge hammer, 12 lb.'                ,'2022-01-02',  8,  5, 14.40,0.05,NULL);
+INSERT INTO PRODUCT VALUES('54778-2T','Rat-tail file, 1/8-in. fine'          ,'2021-12-15', 43, 20,  4.99,0.00,21344);
+INSERT INTO PRODUCT VALUES('89-WRE-Q','Hicut chain saw, 16 in.'              ,'2022-02-07', 11,  5,256.99,0.05,24288);
+INSERT INTO PRODUCT VALUES('PVC23DRT','PVC pipe, 3.5-in., 8-ft'              ,'2022-02-20',188, 75,  5.87,0.00,NULL);
+INSERT INTO PRODUCT VALUES('SM-18277','1.25-in. metal screw, 25'             ,'2022-03-01',172, 75,  6.99,0.00,21225);
+INSERT INTO PRODUCT VALUES('SW-23116','2.5-in. wd. screw, 50'                ,'2022-02-24',237,100,  8.45,0.00,21231);
+INSERT INTO PRODUCT VALUES('WR3/TT3' ,'Steel matting, 4''x8''x1/6", .5" mesh','2022-01-17', 18,  5,119.95,0.10,25595);
+
+```
+</div>
+
+</div>
 
 
 # SQL Queries
