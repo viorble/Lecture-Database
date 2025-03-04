@@ -213,24 +213,23 @@ Feature	|RDBMS|	OODBMS|	O/R DBMS
 --------|------------------|--------------------------|-------------------
 Tables & SQL	|✅ Yes	|❌ No|	✅ Yes
 Objects & Classes	|❌ No	|✅ Yes|	✅ Yes
-User-Defined Data Types (UDTs)	|❌ No|	✅ Yes|	✅ Yes
 Inheritance	|❌ No|	✅ Yes|	✅ Yes
 Encapsulation (Methods in DB)|	❌ No|	✅ Yes|	✅ Yes
 Complex Data Types	|❌ No|	✅ Yes|	✅ Yes
 
 Products of O/R DBMS
-- <span class="small-text">PostgreSQL (Most commonly used O/R DBMS)</span>
--	<span class="small-text">Oracle Database (With Object-Relational Features)</span>
-- <span class="small-text">Microsoft SQL Server (Limited O/R capabilities)</span>
+- <span class="small-text">PostgreSQL (most commonly used O/R DBMS)</span>
+-	<span class="small-text">Oracle Database (with Object-Relational Features)</span>
+- <span class="small-text">Microsoft SQL Server (limited Object-Relational capabilities)</span>
 
 # Emerging Data Models: Big Data and NoSQL
 - **Big Data** refers to a movement to find new and better ways to manage large amounts which DBMS can not manage
 - Big Data characteristics (3 Vs) : volume, velocity, and variety
 - Most frequently used Big Data technologies
   - Hadoop: an **ecosystem** provides a collection of softwares to operate big data
-  - Hadoop Distributed File System (HDFS) is a fault-tolerant file storage system
-  - MapReduce is an distributed computational framework
-  - NoSQL database is a large-scale distributed database system that stores unstructured and semi-structured data in efficient ways
+  - Hadoop Distributed File System (HDFS) is a fault-tolerant **file storage** system
+  - MapReduce is an distributed **computational framework**
+  - NoSQL database is a large-scale distributed **database system** that stores unstructured and semi-structured data in efficient ways
 
 # NoSQL Databases
 - Schemaless
@@ -290,5 +289,6 @@ Products of O/R DBMS
 - Explain NoSQL characteristics
 - What are the four levels of data abstraction
 
-
+# Homework #1
+資料庫課程作業(A)
 
