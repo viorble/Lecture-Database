@@ -25,7 +25,7 @@ style: |
   }
   
   .blue-text {
-    color: blue;  
+    color: LightSkyBlue ;  
   }
 
   .small-text {
@@ -33,82 +33,64 @@ style: |
   }
 ---
 # Chapter3: The Relational Database Model
-- Learn about the **relational model's logical structure** and about how entity relationship diagrams (ERDs) can be used to design a relational database. 
-- Learn how the relational database's basic data components into a logical construct known as a table, and how tables within a database can related to one another.
-- Learn about tables, their components, and their relationships, and basic table design.
-
-# A Logical View of Data
-- Logical simplicity tends to yield simple and effective database design methodologies
-- Provide systematical and visual way to design data model
+- Learn about relational database structures like tables, attributes, primary key, foreign key and relationships.
+- Learn about how **entity relationship diagrams (ERDs)** can be used to put relational database structures together.
 
 # Tables and Their Characteristics
 - A <span class="blue-text">table (relation)</span> is a two-dimensional structure composed of rows and columns
 - Each <span class="blue-text">row (tuple)</span> represents a single entity occurrence within the entity set
-- Each <span class="blue-text">column</span> represents an attribute, and each column has a distinct column name
+- Each <span class="blue-text">column (attribute) </span> has a distinct column name
 - Each intersection of a row and column represents a single <span class="blue-text">data value</span>
 - All values in a column must conform to the same <span class="blue-text">data format</span>
 - Each column has a specific allowable values known as the <span class="blue-text">attribute domain</span>
-- Each table must have an attribute or combination of attributes (<span class="blue-text">primary key PK</span>) that uniquely identifies each row
+- Each table must have <span class="blue-text">primary key (PK) </span> that uniquely identifies each row
 - A <span class="blue-text">foreign key (FK)</span> is a primary key of one table that has been placed in another table to illustrate the relationship among tables
-- The order of the rows and columns is immaterial to the DBMS
+- The order of the rows and columns is meaningless
 
-# Keys
-- A key consists of one or more attributes that determine other attributes (invoice# determines invoice date and customer name)
-- Key are used to ensure that each row in a table is uniquely identifiable (PK)
-- Key are also used to establish relationships among tables and to ensure the integrity of the data (FK)
-![bg right:50% w:600 table characteristics](restricted/CFig03_01.jpg)
-
-# Dependencies
+# Relational Database Theory - Functional Dependencies 
 - **Functional dependence** means that the value of one or more attributes determines the value of one or more other attributes
-- In relational database theory, a functional dependency is the following constraint between two attribute sets in a relation: 
-  - Given a relation R and attribute sets X, Y ⊆ R , X is said to functionally determine Y (written X → Y) if each X value is associated with precisely one Y value. R is then said to satisfy the functional dependency X → Y. 
-  - The attribute X whose value determines another is called the **determinant** or the key
-  - The attribute Y whose value is determined by the other is called the **dependent** 
+- Definition in relational database theory 
+  - Given a relation R and attribute sets X, Y ⊆ R , X is said to functionally determine Y (written X → Y) if each X value is associated with precisely one Y value. 
+  - X is called the **determinant** or **the key**
+  - Y is called the **dependent** 
   
 # Example 1 of Functional Dependence
 ![bg right:40% w:400 example of FD](files/image/functional_dependency_example.png)
 
-- Whenever two rows in this table having the same StudentID, they also necessarily have the same Semester values. This basic fact can be expressed by a <span class="blue-text">functional dependency</span>: **StudentID → Semester**.
-- If a row was added where the student had a different value of semester, then the functional dependency FD would no longer exist. This means that the FD is implied by the data as it is possible to be destroyed.
+- StudentID value determinate Semester values. The fact can be expressed by a functional dependency:
+**StudentID → Semester**.
+- If a row was added (StudentID = 1234 and Semester = 5), then the functional dependency would no longer exist.
 
 # Example 2 of Functional Dependence
-![bg right:50% w:600 FD in textbook](restricted/CFig03_01.jpg)
+![bg right:40% w:600 FD in textbook](restricted/CFig03_01.jpg)
 - STU_NUM → STU_LNAME
 - STU_NUM → (STU_LNAME, STU_FNAME, STU_GPA)
 - (STU_FNAME, STU_LNAME, STU_INIT, STU_PHONE) → (STU_DOB, STU_HRS, STU_GPA)
 - STU_NUM → STU_GPA
-- (STU_NUM, STU_LNAME) → STU_GPA 
+- (STU_NUM, STU_LNAME) → STU_GPA
 
-# Full Functional Dependence and Partial Functional Dependence
-- Full functional dependence is used to refer to functional dependencies in which the **entire collection of attributes** in the determinant is **necessary** for the relationship
-- Simply put, if A fully determines B without any proper subset of A giving full cause to B, then A is said to fully depend on B. In other words, you cannot derive B from a smaller part of A.
-  - Full functional dependence: STU_NUM → STU_GPA
-  - Partial functional dependence(STU_NUM, STU_LNAME) → STU_GPA   
+# Full Functional Dependence
+- <span class="blue-text">Full functional dependence</span>: an attribute is functionally dependent on a composite key but not on any subset of the composite key.
+- STU_NUM → STU_GPA is a full functional dependence 
+- (STU_NUM, STU_LNAME) → STU_GPA is a functional dependence, but NOT a full functional dependence   
 
-# Types of Keys (Primary Key)
-- A **composite key** is a key that is composed of more than one attribute
-- An attribute that is part of a key is called a **key attribute**
-- A **super key** is a key that can uniquely identify any **row** in the table
-- A **candidate key** is a minimal super key; that is, a key that does not contain a subset of attributes that is itself a super key. Choice a candidate key as **primary key**
-- **Entity integrity** is the condition in which each row in the table has its own known, unique and non-null identity (primary key)
-- A **null** is the absence of any data value which is never allowed in a primary key
-  - An unknown attribute value
-  - A known, but missing, attribute value
-  - A “not applicable” condition
+# Types of Keys
+- A key consists of attribute(s) that determine other attributes. 
+  - Determinants in functional dependencies is a key.
+  - Eg. invoice number identifies all of the invoice attributes, like invoice date and customer name.
+  - Composite key: a key composed of more than one attribute
+- Key types
+  - Superkey: uniquely identify each entity
+  - Candidate key: a minimal Superkey (no extra attributes)
+  - PK: choice a candidate key as PK to ensure each row in a table is uniquely identifiable
+  - FK: establish relationships among tables
 
 # Example of Keys
 ![bg right:50% w:600 keys](restricted/CFig03_01.jpg)
-- Keys are determinants in functional dependence
-- Composite key: *(STU_FNAME, STU_LNAME, STU_INIT, STU_PHONE)* → STU_HRS
 - Superkey: STU_NUM, (STU_NUM, STU_LNAME), (STU_FNAME, STU_LNAME, STU_INIT)
 - Candidate key: STU_NUM
-
-# Type of Keys (Foreign Key and Secondary Key)
-- A **foreign key** (FK) is a primary key of one table that has been placed in another table
-- **Referential integrity** is a condition by which a dependent table’s foreign key entry must have either a null entry or a matching entry in the primary key of the related table
-- A **secondary key** is a key that is used strictly for data retrieval purposes and does not require a functional dependency
-  - not require a functional dependency. one X value may get more Y values
-  - (CUS_LNAME, CUS_PHONE) can be a secondary key to serve data retrieval purposes when CUS_NUM is the primary key
+- Primary key: STU_NUM
+- FK: DEPT_CODE, PROF_NUM 
 
 # Example of a Simple Relational Database
 ![bg right:60% w:800 relational DB](restricted/CFig03_02.jpg)
@@ -116,30 +98,23 @@ style: |
 # Relational Database Keys Comparison
 Key Type| Definition
 --------|-----------
-Super key|An attribute or combination of attributes that uniquely identifies each row
-Candidate key|A minimal superkey
-Primary key| A candidate key selected to uniquely identify any given row; cannot contain null entries
-Foreign key | An attribute or combination of attributes in one table whose values must either match the primary key in another table or be null
-Secondary key | An attribute or combination of attributes used for data retrieval purposes 
+Super key|Attribute(s) that uniquely identifies each row
+Candidate key| Minimal Superkey without extra attributes
+Primary key| Select from candidate keys. Uniquely identify row and cannot be NULL
+Foreign key | Is a PK of one table that has been placed in another table to illustrate the relationship among tables
 
-# Integrity Rules
-- **Entity integrity**: all primary key entries are unique, and no part of a primary key may be null. 
-  - No invoice can have a duplicate number, nor can it be null
-- **Referential Integrity**: foreign key value allow null and every non-null foreign key value must reference an existing primary key value. 
+# Integrity Rules (完整性規則)
+- **Entity integrity**: PK values are unique, and no part of a PK is NULL. 
+  - When invoice number is a PK, duplicated invoice numbers or empty invoices number is not allowed. 
+- **Referential Integrity**: FK value is either null or every non-null FK value must reference an existing PK value. 
   - A customer might not yet have an assigned sales representative (allow null), but it will be impossible to have an invalid sales representative (must reference).
 
 # Illustration of Integrity Rules
 ![bg right:60% w:800 relational DB](restricted/CFig03_03.jpg)
 
-# Relational Algebra
-- **Relational algebra** is a set of mathematical principles that form the basis for manipulating relational table contents
-- The following are the eight main functions: SELECT, PROJECT, JOIN, INTERSECT, UNION, DIFFERENCE, PRODUCT, and DIVIDE
-- **Formal Definitions and Terminology**
-  - A relation is the data that you see in your tables
-  - A relvar (relation variable) is a variable that holds a relation. It is a container (variable) for holding a relation data, not the relation itself
-  - A relvar has the following two parts:
-    - The heading contains the names of the attributes
-    - The body contains the relation
+# Relational Database Theory - Relational Algebra
+- **Relational algebra** defines the theoretical way of manipulating table contents using relational operators.
+- Eight main relational operators: SELECT, PROJECT, JOIN, INTERSECT, UNION, DIFFERENCE, PRODUCT, and DIVIDE
 
 # Relational Set Operators (SELECT)
 SELECT is an operator used to select a subset of rows
