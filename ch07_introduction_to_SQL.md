@@ -328,3 +328,98 @@ SELECT EMP_LNAME, EMP_FNAME, EMP_INITIAL, EMP_PHONE
 FROM EMPLOYEE
 ORDER BY EMP_LNAME, EMP_FNAME, EMP_INITIAL;
 ```
+
+# WHERE Clause Options
+- Comparison operator: =, <, <=, >, >=, <> or !=
+```sql
+SELECT columnlist
+FROM tablelist
+[WHERE conditionlist ]
+[ORDER BY columnlist [ASC | DESC] ];
+```
+
+# Using Comparison Operator on Numeric Attribute 
+```sql
+SELECT P_DESCRIPT, P_INDATE, P_PRICE, V_CODE
+FROM PRODUCT
+WHERE V_CODE = 21344;
+
+SELECT P_DESCRIPT, P_QOH, P_MIN, P_PRICE
+FROM PRODUCT
+WHERE P_PRICE <= 10;
+```
+
+# Using Comparison Operator on Character Attribute  
+```sql
+SELECT P_CODE, P_DESCRIPT, P_QOH, P_MIN, P_PRICE
+FROM PRODUCT
+WHERE P_CODE < '1558-QW1';
+```
+# Using Comparison Operator on Date Attribute  
+```sql
+SELECT P_DESCRIPT, P_QOH, P_MIN, P_PRICE, P_INDATE
+FROM PRODUCT
+WHERE P_INDATE >= '2021-11-05';
+```
+# Logical Operators: AND, OR and NOT
+```sql
+SELECT P_DESCRIPT, P_INDATE, P_PRICE, V_CODE
+FROM PRODUCT
+WHERE P_PRICE < 50 AND P_INDATE > '2021-01-01';
+
+/* use parentheses and 
+compare below two select statements */
+SELECT P_DESCRIPT, P_PRICE, V_CODE
+FROM PRODUCT
+WHERE (V_CODE = 25595 OR V_CODE = 24288) AND P_PRICE > 100;
+SELECT P_DESCRIPT, P_PRICE, V_CODE
+FROM PRODUCT
+WHERE V_CODE = 25595 OR V_CODE = 24288 AND P_PRICE > 100;
+-- AND before OR --
+
+SELECT *
+FROM PRODUCT
+WHERE NOT (V_CODE = 21344);
+``` 
+
+# Special Operators in WHERE Clause
+- BETWEEN – Used to check whether an attribute value is within a range
+- IN – Used to check whether an attribute value matches any value within a value list
+- LIKE – Used to check whether an attribute value matches a given string pattern
+- IS NULL – Used to check whether an attribute value is null
+- NOT – Used to negate a condition
+
+# Illustrations of Special Operators
+```sql
+SELECT *
+FROM PRODUCT
+WHERE P_PRICE BETWEEN 50.00 AND 100.00;
+SELECT *
+FROM PRODUCT
+WHERE V_CODE IN (21344, 24288);
+SELECT V_NAME, V_CONTACT, V_AREACODE, V_PHONE
+FROM VENDOR
+WHERE V_CONTACT LIKE 'Smith%';
+-- wildcard % for zero or more chars, _ for any one char
+SELECT P_CODE, P_DESCRIPT, V_CODE
+FROM PRODUCT
+WHERE V_CODE IS NULL;
+SELECT V_NAME, V_CONTACT, V_AREACODE, V_PHONE
+FROM VENDOR
+WHERE UPPER(V_CONTACT) NOT LIKE 'SMITH%';
+```
+# JOIN Operations
+JOIN operators are used to combine data from multiple tables
+- Inner joins return only rows from the tables that match on a common value
+- Outer joins return the same matched rows as the inner join, plus unmatched rows from one table or the other
+  - Left (outer) join
+  - Right (outer) join
+  - Full (outer) join
+
+# JOIN Illustration
+<div class="grid">
+    <img src="files/image/four_join_types.jpg" alt="">
+    <img src="files/image/join_example.jpg" alt="">
+</div>
+
+# 
