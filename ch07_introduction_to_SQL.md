@@ -519,7 +519,7 @@ RIGHT JOIN VENDOR ON PRODUCT.V_CODE = VENDOR.V_CODE
 WHERE P_CODE IS NULL;
 ```
 
-# Full Outer Join
+# Full Outer Join (Not Support in MySQL)
 ```sql
 SELECT column-list
 FROM table1 FULL[OUTER] JOIN table2 ON join-condition
@@ -527,4 +527,82 @@ FROM table1 FULL[OUTER] JOIN table2 ON join-condition
 SELECT P_CODE, VENDOR.V_CODE, V_NAME
 FROM VENDOR
 FULL JOIN PRODUCT ON VENDOR.V_CODE = PRODUCT.V_CODE;
+```
+<div class="middle-grid">
+    <img src="restricted/CFig07_33.jpg" alt="">
+</div>
+
+# Cross Join
+- A cross join performs a relational product (also known as the Cartesian product) of two tables.
+- Despite the name, CROSS JOIN is not truly a join operation because it does not unite the rows of the tables based on a common attribute.
+```sql
+SELECT column-list FROM table1 CROSS JOIN table2
+
+SELECT * FROM INVOICE CROSS JOIN LINE;
+```
+
+# JOINs in MySQL
+![bg right:70% w:90%](files/image/mysql_join.jpg)
+
+# Joining Tables with an Alias
+Using a table alias allows the database programmer to improve the maintainability
+
+```sql
+SELECT P_DESCRIPT, P_PRICE, V_NAME, V_CONTACT, V_AREACODE, V_PHONE
+FROM
+PRODUCT P 
+JOIN VENDOR V ON P.V_CODE = V.V_CODE;
+```
+
+# Recursive Joins
+A query that joins a table to itself
+```sql
+SELECT E.EMP_NUM, E.EMP_LNAME, E.EMP_MGR, M.EMP_LNAME
+FROM EMP E
+JOIN EMP M ON E.EMP_MGR = M.EMP_NUM;
+```
+
+# Aggregate Processing
+SQL provides useful aggregate functions that count, find minimum and maximum values, calculate averages, etc.
+- Count
+- MIN and MAX
+- SUM and AVG
+
+# Count
+```sql
+SELECT COUNT(P_CODE)
+FROM PRODUCT;
+
+SELECT COUNT(P_PRICE)
+FROM PRODUCT
+WHERE P_PRICE < 10;
+
+-- count how many V_CODE in PRODUCT which is not NULL
+SELECT COUNT(V_CODE)
+FROM PRODUCT;
+
+-- count how many rows in the table
+SELECT COUNT(*)
+FROM PRODUCT;
+
+SELECT COUNT(DISTINCT V_CODE) AS "COUNT DISTINCT"
+FROM PRODUCT;
+```
+# MIN and MAX
+The MIN and MAX functions help you find answers to problems such as the highest and lowest (maximum and minimum) prices in the PRODUCT table.
+```sql
+SELECT MAX(P_PRICE) AS MAXPRICE, MIN(P_PRICE) as MINPRICE
+FROM PRODUCT;
+```
+
+# SUM and AVG
+```sql
+SELECT SUM(CUS_BALANCE) AS TOTAL_BALANCE
+FROM CUSTOMER;
+
+SELECT SUM(P_QOH * P_PRICE) as TOTAL_VALUE
+FROM PRODUCT;
+
+SELECT AVG(P_PRICE) AS AVG_PRICE
+FROM PRODUCT;
 ```
