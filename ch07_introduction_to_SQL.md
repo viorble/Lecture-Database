@@ -422,4 +422,109 @@ JOIN operators are used to combine data from multiple tables
     <img src="files/image/join_example.jpg" alt="">
 </div>
 
-# 
+# Three Ways to Do Inner Join (Join)
+```sql
+-- JOIN USING
+SELECT column-list FROM table1 JOIN table2 USING (common-column)
+
+-- JOIN ON
+SELECT column-list FROM table1 JOIN table2 ON join-condition
+
+-- Old-style JOIN
+SELECT column-list FROM table1, table2 WHERE table1.column = table2.column
+```
+- In practice, **JOIN ON** is typically considered as a preference.
+
+# Example of JOIN USING
+```sql
+SELECT P_CODE, P_DESCRIPT, V_CODE, V_NAME, V_AREACODE, V_PHONE
+FROM PRODUCT JOIN VENDOR USING (V_CODE);
+```
+# Example of JOIN ON
+```sql
+SELECT INVOICE.INV_NUMBER, PRODUCT.P_CODE, P_DESCRIPT, LINE_UNITS, LINE_PRICE
+FROM INVOICE
+JOIN LINE ON INVOICE.INV_NUMBER = LINE.INV_NUMBER 
+JOIN PRODUCT ON LINE.P_CODE = PRODUCT.P_CODE;
+
+-- Compare to JOIN ON
+SELECT INV_NUMBER, P_CODE, P_DESCRIPT, LINE_UNITS, LINE_PRICE
+FROM INVOICE 
+JOIN LINE USING(INV_NUMBER) 
+JOIN PRODUCT USING(P_CODE);
+```
+
+# Example of Old-Style JOIN
+```sql
+SELECT P_CODE, P_DESCRIPT, P_PRICE, V_NAME
+FROM PRODUCT, VENDOR
+WHERE PRODUCT.V_CODE = VENDOR.V_CODE;
+
+-- Compare to JOIN USING
+SELECT P_CODE, P_DESCRIPT, P_PRICE, V_NAME
+FROM PRODUCT JOIN VENDOR USING(V_CODE);
+
+-- Compare to JOIN ON
+SELECT P_CODE, P_DESCRIPT, P_PRICE, V_NAME
+FROM PRODUCT JOIN VENDOR ON PRODUCT.V_CODE = VENDOR.V_CODE;
+```
+- The task of joining the tables is split across both the FROM and WHERE which makes complex queries more difficult to maintain
+- They are susceptible to undetected errors
+
+# Illustrate Why Old-Style Join is Not Preferred
+```sql
+-- Get wrong result and easy to find no condition when join PRODUCT
+SELECT CUS_FNAME, CUS_LNAME, V_NAME
+FROM CUSTOMER
+JOIN INVOICE ON CUSTOMER.CUS_CODE = INVOICE.CUS_CODE
+JOIN LINE ON INVOICE.INV_NUMBER = LINE.INV_NUMBER
+JOIN PRODUCT
+JOIN VENDOR ON PRODUCT.V_CODE = VENDOR.V_CODE
+WHERE V_STATE = 'TN';
+
+-- Get wrong result and hard to debug
+SELECT CUS_FNAME, CUS_LNAME, V_NAME
+FROM CUSTOMER, INVOICE, LINE, PRODUCT, VENDOR
+WHERE V_STATE = 'TN' 
+AND CUSTOMER.CUS_CODE = INVOICE.CUS_CODE 
+AND INVOICE.INV_NUMBER = LINE.INV_NUMBER
+AND PRODUCT.V_CODE = VENDOR.V_CODE;
+```
+
+# Outer Joins
+Three types of outer join: Left (outer) join, Right (outer) join, Full (outer) join
+
+# Left Outer Join
+```sql
+SELECT column-list
+FROM table1 LEFT[OUTER] JOIN table2 ON join-condition
+
+SELECT P_CODE, VENDOR.V_CODE, V_NAME
+FROM VENDOR 
+LEFT JOIN PRODUCT ON VENDOR.V_CODE = PRODUCT.V_CODE;
+```
+
+# Right Outer Join
+```sql
+SELECT column-list
+FROM table1 RIGHT[OUTER] JOIN table2 ON join-condition
+
+SELECT P_CODE, VENDOR.V_CODE, V_NAME
+FROM VENDOR 
+RIGHT JOIN PRODUCT ON VENDOR.V_CODE = PRODUCT.V_CODE;
+
+SELECT VENDOR.V_CODE, V_NAME, P_CODE
+FROM PRODUCT 
+RIGHT JOIN VENDOR ON PRODUCT.V_CODE = VENDOR.V_CODE
+WHERE P_CODE IS NULL;
+```
+
+# Full Outer Join
+```sql
+SELECT column-list
+FROM table1 FULL[OUTER] JOIN table2 ON join-condition
+
+SELECT P_CODE, VENDOR.V_CODE, V_NAME
+FROM VENDOR
+FULL JOIN PRODUCT ON VENDOR.V_CODE = PRODUCT.V_CODE;
+```

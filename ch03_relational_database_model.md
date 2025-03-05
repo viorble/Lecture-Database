@@ -142,7 +142,7 @@ PRODUCT is an operator used to yield all possible pairs of rows from two tables
 
 # Relational Set Operators (JOIN)
 JOIN allows information to be intelligently combined from two or more tables
-- Natural join links tables by selecting only the rows with common values in their common attributes
+- Natural join links tables by selecting only the rows with common values in their common attributes <span class="red-text">(generally DISCOURAGED in practice)</span>
 - Equijoin – links tables on the basis of an equality condition that compares specified columns of each table
 - Theta join – links tables using an inequality comparison operator
 - **Inner join** – only returns matched records from the tables that are being joined
