@@ -44,7 +44,7 @@ style: |
   }
 
   .small-text {
-    font-size: 0.80rem;
+    font-size: 0.70rem;
   }
 ---
 # Chapter7: Introduction to Structured Query Language (SQL)
@@ -606,3 +606,196 @@ FROM PRODUCT;
 SELECT AVG(P_PRICE) AS AVG_PRICE
 FROM PRODUCT;
 ```
+# Grouping Data (1)
+```sql
+SELECT columnlist
+FROM tablelist
+[WHERE conditionlist]
+[GROUP BY columnlist]
+[ORDER BY columnlist [ASC|DESC]];
+
+SELECT V_CODE, AVG(P_PRICE) AS AVG_PRICE
+FROM PRODUCT
+GROUP BY V_CODE;
+
+SELECT VENDOR.V_CODE, V_NAME, COUNT(P_CODE) AS NUMPRODS, AVG(P_PRICE) AS AVGPRICE
+FROM PRODUCT JOIN VENDOR ON PRODUCT.V_CODE = VENDOR.V_CODE
+GROUP BY V_CODE
+ORDER BY V_NAME;
+```
+
+# Grouping Data (2)
+```sql
+-- Get execution error
+SELECT VENDOR.V_CODE, V_NAME, P_QOH, COUNT(P_CODE) AS NUMPRODS, AVG(P_PRICE) AS AVGPRICE
+FROM PRODUCT JOIN VENDOR ON PRODUCT.V_CODE = VENDOR.V_CODE
+GROUP BY V_CODE
+ORDER BY V_NAME;
+
+-- Fixed 1: sum of P_QOH
+SELECT VENDOR.V_CODE, V_NAME, SUM(P_QOH), COUNT(P_CODE) AS NUMPRODS, AVG(P_PRICE) AS AVGPRICE
+FROM PRODUCT JOIN VENDOR ON PRODUCT.V_CODE = VENDOR.V_CODE
+GROUP BY V_CODE
+ORDER BY V_NAME;
+
+-- Fixed 2: put P_QOH into group by
+SELECT VENDOR.V_CODE, V_NAME, P_QOH, COUNT(P_CODE) AS NUMPRODS, AVG(P_PRICE) AS AVGPRICE
+FROM PRODUCT JOIN VENDOR ON PRODUCT.V_CODE = VENDOR.V_CODE
+GROUP BY V_CODE, P_QOH
+ORDER BY V_NAME;
+```
+
+# HAVING Clause
+```sql
+SELECT columnlist FROM tablelist
+[WHERE conditionlist]
+[GROUP BY columnlist]
+[HAVING conditionlist]
+[ORDER BY columnlist [ASC|DESC]];
+
+SELECT V_CODE, COUNT(P_CODE) AS NUMPRODS
+FROM PRODUCT
+GROUP BY V_CODE
+HAVING AVG(P_PRICE) < 10
+ORDER BY V_CODE;
+
+SELECT P.V_CODE, V_NAME, SUM(P_QOH * P_PRICE) AS TOTCOST
+FROM PRODUCT P JOIN VENDOR V ON P.V_CODE = V.V_CODE
+WHERE P_DISCOUNT > 0
+GROUP BY V_CODE, V_NAME
+HAVING (SUM(P_QOH * P_PRICE) > 500)
+ORDER BY SUM(P_QOH * P_PRICE) DESC;
+```
+
+# Subqueries
+We want to generate a list of vendors who do not provide products.
+```sql
+-- Right outer join
+SELECT VENDOR.V_CODE, V_NAME 
+FROM PRODUCT
+RIGHT JOIN VENDOR ON PRODUCT.V_CODE = VENDOR.V_CODE
+WHERE P_CODE IS NULL;
+
+-- Subquery
+SELECT V_CODE, V_NAME
+FROM VENDOR
+WHERE V_CODE NOT IN (
+    SELECT V_CODE FROM PRODUCT WHERE V_CODE IS NOT NULL);
+```
+
+# WHERE Subqueries
+```sql
+-- List all customers who order a claw hammer
+SELECT P_CODE, P_PRICE
+FROM PRODUCT
+WHERE P_PRICE >= 
+    (SELECT AVG(P_PRICE) FROM PRODUCT);
+
+SELECT DISTINCT CUS_CODE, CUS_LNAME, CUS_FNAME
+FROM CUSTOMER
+JOIN INVOICE USING (CUS_CODE)
+JOIN LINE USING (INV_NUMBER)
+JOIN PRODUCT USING (P_CODE)
+WHERE P_CODE = (
+    SELECT P_CODE
+    FROM PRODUCT
+    WHERE P_DESCRIPT = 'Claw hammer');
+
+SELECT DISTINCT CUSTOMER.CUS_CODE, CUS_LNAME, CUS_FNAME
+FROM CUSTOMER
+JOIN INVOICE ON CUSTOMER.CUS_CODE = INVOICE.CUS_CODE
+JOIN LINE ON INVOICE.INV_NUMBER = LINE.INV_NUMBER
+JOIN PRODUCT ON PRODUCT.P_CODE = LINE.P_CODE
+WHERE P_DESCRIPT = 'Claw hammer';    
+```
+
+# IN Subqueries
+List all customers who have purchased hammers, saws, or saw blades.
+```sql
+SELECT DISTINCT CUSTOMER.CUS_CODE, CUS_LNAME, CUS_FNAME
+FROM CUSTOMER
+JOIN INVOICE ON CUSTOMER.CUS_CODE = INVOICE.CUS_CODE
+JOIN LINE ON INVOICE.INV_NUMBER = LINE.INV_NUMBER
+JOIN PRODUCT ON LINE.P_CODE = PRODUCT.P_CODE
+WHERE PRODUCT.P_CODE IN
+  (SELECT P_CODE 
+   FROM PRODUCT
+   WHERE P_DESCRIPT LIKE '%hammer%' OR P_DESCRIPT LIKE '%saw%');
+```
+
+# HAVING Subqueries
+List all products with a total quantity sold greater than the average quantity sold
+```sql
+SELECT P_CODE, SUM(LINE_UNITS) AS TOTALUNITS
+FROM LINE
+GROUP BY P_CODE
+HAVING SUM(LINE_UNITS) > (SELECT AVG(LINE_UNITS) FROM LINE);
+```
+
+# Multirow Subquery Operators: ALL and any
+Which products cost more than all individual products provided by vendors from Florida
+```sql
+SELECT P_CODE, P_QOH * P_PRICE AS TOTALVALUE
+FROM PRODUCT
+WHERE P_QOH * P_PRICE > 
+    ALL (SELECT P_QOH * P_PRICE
+         FROM PRODUCT
+         WHERE V_CODE IN 
+         (SELECT V_CODE
+          FROM VENDOR 
+          WHERE V_STATE = 'FL'));
+```
+
+- <span class="small-text"> Greater than ALL" is equivalent to "greater than the highest product cost of the list </span>
+- <span class="small-text"> ANY operator to compare a single value to a list of values and select only the rows for which the inventory cost is greater than any value in the list</span>
+- <span class="small-text"> Use the equal to ANY operator, which would be the equivalent of the IN operator.</span>
+
+# FROM Subqueries
+List all customers who purchased both products ('13-Q2/P2', '23109-HB'), not just one.
+```sql
+SELECT DISTINCT CUSTOMER.CUS_CODE, CUSTOMER.CUS_LNAME
+FROM CUSTOMER
+JOIN
+    (SELECT INVOICE.CUS_CODE
+     FROM INVOICE
+     JOIN LINE ON INVOICE.INV_NUMBER = LINE.INV_NUMBER
+     WHERE P_CODE = '13-Q2/P2') CP1
+ON CUSTOMER.CUS_CODE = CP1.CUS_CODE
+JOIN
+    (SELECT INVOICE.CUS_CODE
+     FROM INVOICE
+     JOIN LINE ON INVOICE.INV_NUMBER = LINE.INV_NUMBER
+     WHERE P_CODE = '23109-HB') CP2
+ON CP1.CUS_CODE = CP2.CUS_CODE;
+```
+
+# Attribute List Subqueries (1)
+List the difference between each product's price and the average product price
+```sql
+SELECT 
+  P_CODE, P_PRICE,
+  (SELECT AVG(P_PRICE) FROM PRODUCT) AS AVGPRICE,
+  P_PRICE - (SELECT AVG(P_PRICE) FROM PRODUCT) AS DIFF
+FROM PRODUCT;
+```
+
+# Attribute List Subqueries (2)
+List the product code, the total sales by product, and the contribution by employee of each product's sales.
+```sql
+SELECT
+P_CODE, 
+SUM(LINE_UNITS * LINE_PRICE) AS SALES,
+(SELECT COUNT(*) FROM EMPLOYEE) AS ECOUNT,
+SUM(LINE_UNITS * LINE_PRICE)/(SELECT COUNT(*) FROM EMPLOYEE) AS CONTRIB
+FROM LINE
+GROUP BY P_CODE;
+
+SELECT P_CODE, SALES, ECOUNT, SALES/ECOUNT AS CONTRIB
+FROM (SELECT P_CODE, 
+             SUM(LINE_UNITS * LINE_PRICE) AS SALES,
+             (SELECT COUNT(*) FROM EMPLOYEE) AS ECOUNT 
+      FROM LINE
+      GROUP BY P_CODE) AS T;
+```
+
+# Correlated Subqueries
