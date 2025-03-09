@@ -36,7 +36,7 @@ style: |
   }
   
   .blue-text {
-    color: blue;  
+    color: lightskyblue;  
   }
 
   .brown-text {
@@ -408,6 +408,33 @@ SELECT V_NAME, V_CONTACT, V_AREACODE, V_PHONE
 FROM VENDOR
 WHERE UPPER(V_CONTACT) NOT LIKE 'SMITH%';
 ```
+
+# MySQL Comparison Operators
+Symbol or keyword(s) | Description
+---------------------|-------------
+=, !=, <> | Equal, Not equal
+\>, >=, <, <= | Great / Less than or equal to
+is null, is not null | check null or not
+between and, not between and | within a range
+in, not in | match a value in a list
+like, not like | match a pattern
+
+# MySQL Booleans or Conditions
+Conditions: not, and, or
+Booleans
+```sql
+create table bachelor (name	varchar(100), employed_flag bool);
+	
+insert into bachelor(name, employed_flag)
+values ('Hector Handsome', true),('Frank Freeloader', false);
+select * from bachelor where employed_flag is true;
+select * from bachelor where employed_flag;
+select * from bachelor where employed_flag = true;
+select * from bachelor where employed_flag != false;
+select * from bachelor where employed_flag = 1;
+select * from bachelor where employed_flag != 0;
+```
+
 # JOIN Operations
 JOIN operators are used to combine data from multiple tables
 - Inner joins return only rows from the tables that match on a common value
@@ -798,4 +825,182 @@ FROM (SELECT P_CODE,
       GROUP BY P_CODE) AS T;
 ```
 
-# Correlated Subqueries
+# Correlated Subqueries (Definition)
+- <span class="blue-text">Inner subquery</span>
+  - Inner subqueries execute independently. 
+  - The inner sub-query executes first; its **output** is used by the outer query, which then executes until the
+last outer query finishes (the first SQL statement in the code).
+- <span class="blue-text">Correalted subquery</span>
+  -  A subquery that executes once for each row in the outer query.
+  -  The inner query is related to the outer query
+  -  The inner query references a column of the outer subquery.
+  1. It initiates the outer query.
+  2. For each row of the outer query result set, it executes the inner query by passing the outer row to the inner query.
+
+# Correlated Subqueries (Example)
+List all product sales in which the units sold value is greater than the average units sold value for that product (as opposed to the average for all products).
+1. Compute the average units sold for a product.
+2. Compare the average computed in Step 1 to the units sold in each sale row, and then select only the rows in which the number of units sold is greater.
+
+# Correlated Subqueries (SQL)
+```sql
+SELECT INV_NUMBER, P_CODE, LINE_UNITS
+FROM LINE LS
+WHERE LS.LINE_UNITS > (SELECT AVG(LINE_UNITS)
+                       FROM LINE LA
+                       WHERE LA.P_CODE = LS.P_CODE);
+
+SELECT INV_NUMBER, P_CODE, LINE_UNITS, (SELECT AVG(LINE_UNITS)
+                                        FROM LINE LX
+                                        WHERE LX.P_CODE = LS.P_CODE) AS AVG
+FROM LINE LS
+WHERE LS.LINE_UNITS > (SELECT AVG(LINE_UNITS)
+                       FROM LINE LA
+                       WHERE LA.P_CODE = LS.P_CODE);                            
+```
+# Correlated Subqueries (Exists)
+```sql
+-- list all vendors, but only if there are products to order.
+SELECT *
+FROM VENDOR
+WHERE EXISTS (SELECT * FROM PRODUCT WHERE P_QOH <= P_MIN * 2);
+
+-- list the names of all customers who have placed an order lately.
+SELECT CUS_CODE, CUS_LNAME, CUS_FNAME
+FROM CUSTOMER
+WHERE EXISTS (SELECT CUS_CODE 
+              FROM INVOICE
+              WHERE INVOICE.CUS_CODE = CUSTOMER.CUS_CODE);
+```
+
+# Correlated Subqueries (Example of Exists)
+Suppose that you want to know what vendors you must contact to order products that are approaching the minimum quantity-on-hand value that is less than double the minimum quantity.
+
+```sql
+SELECT V_CODE, V_NAME
+FROM VENDOR
+WHERE EXISTS (SELECT *
+              FROM PRODUCT
+              WHERE P_QOH < P_MIN * 2 AND VENDOR.V_CODE = PRODUCT.V_CODE);
+```
+
+# Built-in SQL Functions
+- Basic Functions
+```sql
+SELECT pi();
+SELECT UPPER("hello world");
+SELECT ROUND(2.71828);
+SELECT ROUND(2.71828, 2);
+SELECT ROUND(PI());
+SELECT NOW();
+SELECT CURDATE();
+SELECT CURTIME();
+```
+- Aggregate Functions: count(), max(), min(), sum(), avg()
+
+# MySQL String Functions
+```sql
+SELECT CONCAT(EMP_FNAME, " ", EMP_LNAME)
+FROM EMP;
+SELECT FORMAT(P_QOH * P_PRICE, 0) as Total_Value
+FROM PRODUCT
+-- LEFT and RIGHT
+SELECT LEFT(EMP_LNAME, 3)
+FROM EMP;
+-- UPPER and LOWER
+SELECT UPPER(LEFT(EMP_LNAME, 3))
+FROM EMP;
+-- Others: SUBSTRING, TRIM, LTRIM, RTRIM
+```
+# MySQL Date/Time Functions
+<div class="middle-grid">
+    <img src="restricted/CTable07_10a.jpg" alt="">
+    <img src="restricted/CTable07_10b.jpg" alt="">
+</div>
+
+# MySQL Numeric Functions
+<div class="middle-grid">
+    <img src="restricted/CTable07_11.jpg" alt="">
+</div>
+
+# MySQL Conversion Functions
+<div class="middle-grid">
+    <img src="restricted/CTable07_13a.jpg" alt="">
+    <img src="restricted/CTable07_13b.jpg" alt="">
+</div>
+
+# Relational Set Operators (UNION)
+```sql
+SELECT CUS_LNAME, CUS_FNAME, CUS_INITIAL, CUS_AREACODE, CUS_PHONE
+FROM CUSTOMER
+UNION
+SELECT CUS_LNAME, CUS_FNAME, CUS_INITIAL, CUS_AREACODE, CUS_PHONE
+FROM CUSTOMER_2;
+```
+<div class="middle-grid">
+    <img src="restricted/CFig07_61.jpg" alt="">
+</div>
+
+# Relational Set Operators (UNION ALL)
+```sql
+SELECT CUS_LNAME, CUS_FNAME, CUS_INITIAL, CUS_AREACODE, CUS_PHONE
+FROM CUSTOMER
+UNION ALL
+SELECT CUS_LNAME, CUS_FNAME, CUS_INITIAL, CUS_AREACODE, CUS_PHONE
+FROM CUSTOMER_2;
+```
+<div class="middle-grid">
+    <img src="restricted/CFig07_62.jpg" alt="">
+</div>
+
+# Relational Set Operators (INTERSECT)
+List the customer codes for all customers who are in area code 615 and who have made purchases. (If a customer has made a purchase, there must be an invoice record for that customer.)
+
+```sql
+-- MySQL does not support INTERSECT
+SELECT CUS_CODE FROM CUSTOMER WHERE CUS_AREACODE = "615"
+INTERSECT
+SELECT DISTINCT CUS_CODE FROM INVOICE;
+
+-- Use Join instead of
+SELECT DISTINCT C.CUS_CODE
+FROM CUSTOMER C
+INNER JOIN INVOICE I ON C.CUS_CODE = I.CUS_CODE
+WHERE C.CUS_AREACODE = '615';
+```
+# Relational Set Operators (MINUS / EXCEPT)
+```sql
+-- MySQL does not support MINUS
+SELECT CUS_LNAME, CUS_FNAME, CUS_INITIAL, CUS_AREACODE, CUS_PHONE
+FROM CUSTOMER
+MINUS
+SELECT CUS_LNAME, CUS_FNAME, CUS_INITIAL, CUS_AREACODE, CUS_PHONE
+FROM CUSTOMER_2;
+
+-- Use Join instead of
+SELECT C.CUS_LNAME, C.CUS_FNAME, C.CUS_INITIAL, C.CUS_AREACODE, C.CUS_PHONE
+FROM CUSTOMER C
+LEFT JOIN CUSTOMER_2 C2 
+ON C.CUS_LNAME = C2.CUS_LNAME 
+AND C.CUS_FNAME = C2.CUS_FNAME
+AND C.CUS_INITIAL = C2.CUS_INITIAL
+AND C.CUS_AREACODE = C2.CUS_AREACODE
+AND C.CUS_PHONE = C2.CUS_PHONE
+WHERE C2.CUS_LNAME IS NULL;
+```
+
+# Crafting SELECT Queries
+- Know Your Data: the importance of understanding the data model that you are working in cannot be overstated
+- Know the Problem: understand the question you are attempting to answer
+- Build clauses in the following order
+  - FROM
+  - WHERE
+  - GROUP BY
+  - HAVING
+  - SELECT
+  - ORDER BY
+
+# Review Questions
+- Explain the difference between an ORDER BY clause and a GROUP BY clause.
+- What three join types are included in the OUTER JOIN classification? 
+- What are the four categories of SQL functions
