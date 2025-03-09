@@ -342,27 +342,24 @@ VALUES (CUS_CODE_SEQ.NEXTVAL, 'Connery', 'Sean', NULL, '615', '898-2007', 0.00);
 ```
 
 # Procedural SQL
-- Procedural SQL is an extension of SQL that adds procedural programming capabilities, such as variables and logical flow control, to SQL and is designed to run inside the database
-- The procedural code is executed as a unit by the DBMS when it is invoked by the end user
+- <span class="blue-text">Procedural SQL </span>is an extension of SQL that adds procedural programming capabilities (variables, if, loop) to SQL and is designed to run inside the database
+- Procedural code is executed as a unit by the DBMS when it is invoked by the end user
 - End users can use procedural SQL to create the following:
+  - Stored function
   - Stored procedures
   - Triggers
+```sql
+BEGIN
+INSERT INTO VENDOR
+VALUES (25678, 'Microsoft Corp.', 'Bill Gates', '765', '546-8484', 'WA', 'N');
+END;
+```
 
-# Stored Procedures
-- A stored procedure is a named collection of procedural and SQL statements
-  - They are stored in the database
-  - A major advantage of stored procedures is that they can be used to encapsulate and represent business transactions
-- Using stored procedures offers the following advantages:
-  - Stored procedures substantially reduce network traffic and increase performance
-  - Stored procedures help reduce code duplication by means of code isolation and code sharing 
-
-# Table Population for Store Procedure
+# State_Population Table
 ```sql
 create database population;
 use population;
-create table state_population
-	(state       varchar(100),
-   population  int);
+create table state_population(state varchar(100), population  int);
 insert into state_population values ('New York',	19299981);
 insert into state_population values ('Texas',			29730311);
 insert into state_population values ('California',39613493);
@@ -372,38 +369,78 @@ insert into state_population values ('Massachusetts' 6893000);
 insert into state_population values ('Rhode Island', 1097379);
 ```
 
-# Use Store Procedure
-
+# Procedural SQL Used in Stored Function 
 ```sql
 use population;
 drop function if exists f_get_state_population;
 delimiter //
-create function f_get_state_population (
-  state_param    varchar(100)
-)
-returns int
-deterministic reads sql data
+create function f_get_state_population(state_param varchar(100))
+returns int  -- returns an integer: population
+deterministic reads sql data 
+-- always return the same output for the same input (important for caching and optimization)
+-- read data from the database, not modify it
 begin
-  declare population_var int;
-
+  declare population_var int; -- local variable to store the retrieved population.
   select  population
   into    population_var
   from    state_population
   where   state = state_param;
-
   return(population_var);
-
 end//
-
 delimiter ;
-
--- Call the f_get_state_population() function
+-- Call function
 select f_get_state_population('New York');
 
--- Call the f_get_state_population() function from a WHERE clause
+-- Call function from a WHERE clause
 select  *
 from    state_population
 where   population > f_get_state_population('New York');
-
 ```
+
+# Stored Procedures
+- A stored procedure is a named collection of procedural and SQL statements
+- Stored procedures substantially reduce network traffic and increase performance
+- Stored procedures help reduce code duplication by means of code isolation and code sharing 
+
+# Country_Population Table
+```sql
+create table county_population (state char(50), county varchar(100), population int);
+
+insert into county_population values ('New York',	'Kings',		2736074);
+insert into county_population values ('New York',	'Queens',		2405464);
+insert into county_population values ('New York',	'New York',		1694251);
+insert into county_population values ('New York',	'Suffolk',		1525920);
+insert into county_population values ('New York',	'Bronx',		1472654);
+insert into county_population values ('New York',	'Nassau',		1395774);
+insert into county_population values ('New York',	'Westchester',	1004457);
+```
+
+# Procedural SQL Used in Stored Procedures
+```sql
+use population;
+drop procedure if exists p_set_and_show_state_population;
+delimiter //
+create procedure p_set_and_show_state_population(in state_param varchar(100))
+begin
+    declare population_var int;
+    delete from state_population
+    where state = state_param;
+   
+    select sum(population)
+    into   population_var
+    from   county_population
+    where  state = state_param;
+
+    insert into state_population(state,population)
+    values(state_param, population_var);
+    
+    select concat('Setting the population for ', state_param, ' of ', population_var);
+end//
+delimiter ;
+-- Call the p_set_and_show_state_population() procedure
+call p_set_and_show_state_population('New York');
+```
+
+# Conditional Execution
+
 
