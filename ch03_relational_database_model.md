@@ -104,10 +104,21 @@ Primary key| Select from candidate keys. Uniquely identify row and cannot be NUL
 Foreign key | Is a PK of one table that has been placed in another table to illustrate the relationship among tables
 
 # Integrity Rules (完整性規則)
-- **Entity integrity**: PK values are unique, and no part of a PK is NULL. 
-  - When invoice number is a PK, duplicated invoice numbers or empty invoices number is not allowed. 
-- **Referential Integrity**: FK value is either null or every non-null FK value must reference an existing PK value. 
-  - A customer might not yet have an assigned sales representative (allow null), but it will be impossible to have an invalid sales representative (must reference).
+RDBMS rely on integrity rules to ensure data consistency, accuracy, and reliability to prevent errors and enforce business constraints.
+- **Entity integrity**
+- **Referential Integrity** 
+  
+# Integrity Rules - Entity Integrity
+- Rule: Every table must have a PK, and its value cannot be NULL.
+- Reason: Ensures that each row in a table is uniquely identifiable, preventing duplicate or missing records.
+- Impact w/o it: A db with missing or duplicate keys could lead to data inconsistency.
+- Example: When invoice number is a PK, duplicated invoice numbers or empty invoices number is not allowed. 
+
+# Integrity Rules - Referential Integrity
+- Rule: A FK must reference a valid PK in another table.
+- Reason: Maintains valid relationships between tables and prevents orphaned records.
+- Impact w/o it: If a referenced record is deleted without checking dependencies, it can lead to dangling references.
+- Example:  A customer might not yet have an assigned sales representative (allow null), but it will be impossible to have an invalid sales representative (must reference).
 
 # Illustration of Integrity Rules
 ![bg right:60% w:800 relational DB](restricted/CFig03_03.jpg)
@@ -142,10 +153,10 @@ PRODUCT is an operator used to yield all possible pairs of rows from two tables
 
 # Relational Set Operators (JOIN)
 JOIN allows information to be intelligently combined from two or more tables
-- Natural join links tables by selecting only the rows with common values in their common attributes <span class="red-text">(generally DISCOURAGED in practice)</span>
-- Equijoin – links tables on the basis of an equality condition that compares specified columns of each table
-- Theta join – links tables using an inequality comparison operator
 - **Inner join** – only returns matched records from the tables that are being joined
+  - Natural join links tables by selecting only the rows with common values in their common attributes <span class="red-text">(generally DISCOURAGED in practice)</span>
+  - Equijoin – links tables on the basis of an equality condition that compares specified columns of each table
+  - Theta join – links tables using an inequality comparison operator
 - **Left outer join**: yields all of the rows in the first table, including those that do not have a matching value in the second table 
 - Right outer join: yields all of the rows in the second table, including those that do not have matching values in the first table
 
@@ -183,18 +194,21 @@ PRODUCT -> SELECT -> PROJECT
 
 # Relational Set Operators (DIVIDE)
 The DIVIDE operator is used to answer questions about one set of data being associated with all values of data in another set of data
-![bg right:60% w:800 divide](restricted/CFig03_16.jpg)
+- Determine which customers (on the left), if any, purchased every product shown in P_CODE table (in the middle).
+<div class="grid">
+    <img src="restricted/CFig03_16.jpg">
 
 # Data Dictionary and the System Catalog
 - **Data dictionary** describes all tables in the DB created by the user and designer
 - **System catalog** describes all objects within the database
-- Homonym – same name is used to label different attributes 
-- Synonym – different names are used to describe the same attribute 
+  - Homonym – same name is used to label different attributes 
+  - Synonym – different names are used to describe the same attribute. 
+  - Both homonym and synonym should be avoided whenever possible 
 ![bg right:40% w:90% data dictionary](restricted/CTable03_06.jpg)
  
 # Relationships within the Relational Database 
 - The one-to-many (1:M) relationship is the norm for relational databases 
-- In the one-to-one (1:1) relationship, one entity can be related to only one other entity and vice versa 
+- In the one-to-one (1:1) relationship, one entity can be related to one and only one other entity and vice versa 
 - The many-to-many (M:N) relationship can be implemented by creating a new entity in 1:M relationships with the original entities
 
 # 1:M Relationship
@@ -216,7 +230,7 @@ The DIVIDE operator is used to answer questions about one set of data being asso
 # M:N Relationship
 - A M:N relationship is not supported directly in the relational environment.
 - M:N relationship can be implemented by creating a new entity in 1:M relationships with the original entities
-- In Fig 3.22, the tables create many data redundancies and relational operation become complex and less efficiency  
+- In Fig 3.24, the tables create many data redundancies and relational operation become complex and less efficiency  
 - <div class="grid">
     <img src="restricted/CFig03_23.jpg" alt="paint diagram">
     <img src="restricted/CFig03_24.jpg" alt="paint table">
@@ -248,8 +262,6 @@ Table ENROLL is a composite entry (bridge entry, associative entry, link table) 
 </div>
 
 # Review Questions
-- What is the difference between a database and a table?
-- Describe relational database operators to manipulate relational table contents
-- Describe the relational model’s basic components and explain the structure, contents, and characteristics of a relational table
-- Describe the relationships among the entities in the relational database model
-- Explain the purpose of indexing in a relational database
+- What is the integrity rules in RDBMS?
+- Describe relational database operators to manipulate relational table contents.
+- Describe how to deal with M:N relationship.
