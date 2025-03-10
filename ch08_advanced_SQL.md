@@ -345,7 +345,7 @@ VALUES (CUS_CODE_SEQ.NEXTVAL, 'Connery', 'Sean', NULL, '615', '898-2007', 0.00);
 - <span class="blue-text">Procedural SQL </span>is an extension of SQL that adds procedural programming capabilities (variables, if, loop) to SQL and is designed to run inside the database
 - Procedural code is executed as a unit by the DBMS when it is invoked by the end user
 - End users can use procedural SQL to create the following:
-  - Stored function
+  - Stored function (or user defined function)
   - Stored procedures
   - Triggers
 ```sql
@@ -369,7 +369,7 @@ insert into state_population values ('Massachusetts' 6893000);
 insert into state_population values ('Rhode Island', 1097379);
 ```
 
-# Procedural SQL Used in Stored Function 
+# Procedural SQL Used in Stored Function
 ```sql
 use population;
 drop function if exists f_get_state_population;
@@ -502,3 +502,61 @@ call p_more_sensible_loop();
 ```
 
 # SELECT Processing with Cursors
+- A cursor is a special construct used to hold data rows returned by a SQL query
+- To create an explicit cursor, you use the following syntax:
+  DECLARE cursor_name CURSOR FOR select-query;
+- Cursor-style processing involves retrieving data from the cursor one row at a time and copied to variables
+
+# Cursor Example (p_split_big_ny_counties.sql)
+```sql
+create procedure p_split_big_ny_counties()
+begin
+  declare  v_state       varchar(100);
+  declare  v_county      varchar(100);
+  declare  v_population  int;
+  declare done bool default false;
+  declare county_cursor cursor for 
+    select  state, county, population
+    from    county_population
+    where   state = 'New York' and population > 2000000;
+  declare continue handler for not found set done = true;   
+  open county_cursor;
+  fetch_loop: loop
+    fetch county_cursor into v_state, v_county, v_population;
+    if done then
+      leave fetch_loop;
+    end if;
+    set @cnt = 1;
+    split_loop: loop
+      insert into county_population
+      (state, county, population)
+      values
+      (v_state,concat(v_county,'-',@cnt), round(v_population/2));
+      set @cnt = @cnt + 1;
+      if @cnt > 2 then
+        leave split_loop;
+      end if;
+    end loop split_loop;
+    -- delete the original county
+    delete from county_population where state = v_state and county = v_county;
+  end loop fetch_loop;
+  close county_cursor;
+end;
+//
+```
+# Stored Procedures with Parameters
+- One of the most valuable features of working with stored procedures is their ability to use parameters
+- A parameter is a value that is provided to the program at the time of execution
+<div class="middle-grid">
+    <img src="restricted/CFig08_21.jpg" alt="">
+</div>
+
+# Procedural SQL Used in Triggers
+- A trigger is a procedural SQL code automatically invoked by the relational DBMS when a data manipulation event occurs
+  - A trigger is invoked before or after a data row is inserted, updated, or deleted
+  - A trigger is associated with a database table
+  - Each database table may have one or more triggers
+  - A trigger is executed as part of the transaction that triggered it
+  - Triggers are critical to proper database operation and management
+
+
