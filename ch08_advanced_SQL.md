@@ -440,7 +440,65 @@ delimiter ;
 -- Call the p_set_and_show_state_population() procedure
 call p_set_and_show_state_population('New York');
 ```
+# Compare Stored Function and Stored Procedure
+Use Case | Stored Procedure | Stored Function
+---------|------------------------|----------------------
+Modify data (INSERT, UPDATE, DELETE)?|Yes|No (only SELECT)
+Return value?|Out parameters|Return statement
+Use inside a SELECT statement?|No|Yes
+Handle errors with DECLARE HANDLER?|Yes|No
+Invocation| CALL statement |within SQL statements
 
 # Conditional Execution
+```sql
+use population;
+drop procedure if exists p_compare_population;
+delimiter //
+create procedure p_compare_population(in state_param varchar(100))
+begin
+    declare state_population_var int;
+    declare county_population_var int;
 
+    select  population
+    into    state_population_var
+    from    state_population
+    where   state = state_param;
+    
+    select sum(population)
+    into   county_population_var
+    from   county_population
+    where  state = state_param;
+    if (state_population_var = county_population_var) then
+       select 'The population values match';
+    else
+       select 'The population values are different';
+    end if;
+-- If you want to display one of THREE messages, use the if/elseif/else
+end//
+delimiter ;
+-- Call the p_compare_population() procedure
+call p_compare_population('New York');
+```
 
+# Iteration or Looping
+```sql
+delimiter //
+create procedure p_more_sensible_loop()
+begin
+ declare cnt int default 0;
+ msl: loop
+  select concat('Looping Again ', cnt);
+    set cnt = cnt + 1;
+  if cnt = 10 then 
+    leave msl;
+  end if;
+end loop msl;
+end;
+//
+delimiter ;
+
+-- Call the procedure p_more_sensible_loop()
+call p_more_sensible_loop();
+```
+
+# SELECT Processing with Cursors
