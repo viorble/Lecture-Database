@@ -32,7 +32,7 @@ style: |
   }
   
   .blue-text {
-    color: blue;  
+    color: lightskyblue;  
   }
 
   .small-text {
@@ -48,7 +48,8 @@ style: |
 
 # Entity Relationship Model
 - The entity relationship model (ERM) forms the basis of an ERD
-- The ERD represents the <span class="blue-text">conceptual database</span> as viewed by the end user
+- The ERD represents the <span class="blue-text">external model</span> as viewed by end users
+- The ERD represents the <span class="blue-text">conceptual model</span> as viewed by database designer
 - ERDs depict the database’s main components:
   - Entities
   - Attributes
@@ -57,28 +58,47 @@ style: |
 
 # Entity
 - An entity is an object of interest to the end user
-- An entity refers to the entity set and not to a single entity occurrence
-- An entity in the ERM is a table, a row is an entity instance entity occurrence
+- An entity in the ERM is a table (relation), a row is an entity instance (tuple)
 - In Chen, Crow’s Foot, and UML notations, an entity is represented by a rectangle
   - contains entity name
-  - entity name is a noun usually written in all capital letters
+  - entity name is a noun usually written in all capital letters. It would depend on your naming convention
 
 # Attributes
 - **Attributes** are characteristics of entities
-- **Required attribute** and **optional attribute**
+- **Required attribute** (not null) and **optional attribute** (allow null)
 - Attributes must have a **domain**, which is the set of possible values for a given attribute
 - **Identifier** and **composite identifier** is one or more attributes that uniquely identify each row (primary key, PK)
 - **Simple attribute** (age, sex) and **composite attribute** (address, phone_number)
 - **Single-valued attribute** (emp_id) and **multi-valued attributes** (car_color)
-  - Create several new attributes to replace multi-value attribute
-  - Create an new entity
+  - Replace multi-value attribute by creating several new attributes
+  - Replace multi-value attribute by creating an new entity
 - **Derived attribute** whose value is calculated from other attributes (working_years)
+
+# Identifier and Composite identifier
+<div class="grid">
+    <img src="restricted/CFig04_02.jpg" alt="">
+</div>
+- CLASS (<u><b>CLASS_CODE</b></u>, CRS_CODE, CLASS_SECTION, CLASS_TIME,
+ROOM_CODE, PROF_NUM)
+- CLASS (<u><b>CRS_CODE, CLASS_SECTION</b></u>, CLASS_TIME, ROOM_CODE, PROF_NUM)
 
 # Entity's Notation
 <div class="grid">
     <img src="restricted/CFig04_01.jpg" alt="">
     <img src="restricted/CFig04_03.jpg" alt="">
+</div>
+
+Required attribute: bold font
+PK: in a separated cell with bold and underline font
+
+# Implementing Multi-valued Attributes
+<div class="grid">
     <img src="restricted/CFig04_04.jpg" alt="">
+    <img src="restricted/CFig04_05.jpg" alt="">
+</div>
+
+# Derived Attributes
+<div class="grid">
     <img src="restricted/CFig04_06.jpg" alt="">
 </div>
 
