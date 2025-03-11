@@ -66,7 +66,7 @@ style: |
 # Attributes
 - **Attributes** are characteristics of entities
 - **Required attribute** (not null) and **optional attribute** (allow null)
-- Attributes must have a **domain**, which is the set of possible values for a given attribute
+- Attributes must have a **domain**, the set of possible values for a given attribute
 - **Identifier** and **composite identifier** is one or more attributes that uniquely identify each row (primary key, PK)
 - **Simple attribute** (age, sex) and **composite attribute** (address, phone_number)
 - **Single-valued attribute** (emp_id) and **multi-valued attributes** (car_color)
@@ -109,27 +109,32 @@ PK: in a separated cell with bold and underline font
 - <span class="blue-text">Connectivity</span> describes the relationship classification: 1:1, 1:M, and M:N
 - <span class="blue-text">Cardinality</span> expresses the minimum and maximum number of entity occurrences associated with one occurrence of the related entity
 
-# Relationship Notation
+# Relationship's Notation
 <div class="grid">
     <img src="restricted/CFig04_07.jpg" alt="">
     <img src="restricted/CFig04_08.jpg" alt="">
 </div>
 
+- (1, 4): one professor teach at least one and no more than four classes
+- (1, 1): each class is taught by one and only one professor
+
 # Existence Dependence
-- An entity represents a real-world object in a database. The classification into strong and weak depends on whether the entity can exist independently or not.
-- An entity is said to be <span class="blue-text">existence-dependent</span> if it can exist in the database only when it is associated with another related entity occurrence. That is, if it has a mandatory foreign key
-- If an entity can exist apart from all of its related entities, it is <span class="blue-text">existence-independent</span> (strong entity or regular entity)
-- Relationship 'EMPLOYEE claims DEPENDENT', the DEPENDENT entity is existence dependent on the EMPLOYEE entity 
+- An entity represents a real-world object in a database. 
+- Entity is <span class="blue-text">strong</span> or <span class="blue-text">weak</span> depends on whether the entity can exist independently or not.
+- A strong (regular) entity can exist apart from all of its related entities, it is <span class="blue-text">existence-independent</span>
+- A weak entity is <span class="blue-text">existence-dependent</span> on another related entity occurrence. That is, it need a mandatory foreign key. 
+
+- Relationship 'EMPLOYEE claims DEPENDENT', the DEPENDENT entity is existence dependent on the EMPLOYEE entity. That is, DEPENDENT has a mandatory foreign key, EMP_NUM to link with EMPLOYEE. 
 
 # Weak Entity
 A weak entity is an entity that cannot exist independently and depends on a strong entity for its identification.
-- Does NOT have a sufficient primary key on its own.
-- Requires a foreign key (FK) from a related strong entity to form a composite primary key.
-- Always has a **total participation** (i.e., it must be related to a strong entity).
+- Does NOT have a sufficient PK on its own.
+- Requires a FK from a related strong entity to form a composite PK.
+- Always has a **total participation** (every row of the weak entity must be associated with at least one row of another strong entity).
 - The relationship between a weak entity and its strong entity is called an **identifying relationship**.
 
 # Illustrate Weak Entities
-- A weak entity is existence-dependent and strong relationship
+- A weak entity is existence-dependent on a strong entity with a strong (identifying) relationship
 - A strong entity is existence-independent
 <div class="middle-grid">
     <img src="restricted/CFig04_11.jpg" alt="">
@@ -137,16 +142,15 @@ A weak entity is an entity that cannot exist independently and depends on a stro
 </div> 
 
 # Strong Entity
-A strong entity (or existence-independent entity) is an entity that can exist independently in the database. It has a primary key that uniquely identifies each record without depending on any other entity.
--	Has a primary key (PK) that uniquely identifies each instance.
+A strong entity (or existence-independent entity) is an entity that can exist independently. It has a primary key that uniquely identifies each record without depending on any other entity.
+-	Has a PK that uniquely identifies each instance.
 - Does not depend on any other entity for its identification.
-- Can have relationships with other entities but does not require them to define its identity.
-- STUDENT(**STUDENT_ID**, NAME, AGE, MAJOR)
+- STUDENT(<u><b>STUDENT_ID</b></u>, NAME, AGE, MAJOR)
 
 # Example of Strong and Weak Entities
 Considering two entities: EMPLOYEE (strong) and DEPENDENT (weak)
-- Entity EMPLOYEE (EMPLOYEE_ID, NAME, AGE)
-- Entity DEPENDENT (DEPENDENT_NAME, EMPLOYEE_ID, RELATIONSHIP)
+- Entity EMPLOYEE (<u><b>EMPLOYEE_ID</b></u>, NAME, AGE)
+- Entity DEPENDENT (<u><b>DEPENDENT_NAME, EMPLOYEE_ID</b></u>, RELATIONSHIP)
 - DEPENDENT_NAME alone cannot uniquely identify a dependent.
 - EMPLOYEE_ID (from entity Employee) is needed to uniquely identify each dependent.
 - PK of DEPENDENT is a combination of DEPENDENT_NAME + EMPLOYEE_ID.
@@ -161,36 +165,44 @@ table {
 Feature	|Strong Entity|	Weak Entity
 --------|-------------|------------
 Existence|Can exist independently|Cannot exist without a related strong entity
-Primary Key|Has a unique primary key|No sufficient primary key (uses foreign key + partial key)
-ER Diagram Representation (Chen)|	Single rectangle|	Double rectangle
-**Relationship Type**	|Regular relationship|Identifying relationship (double diamond)
+Primary Key|Has a unique primary key|Requires a FK from a related strong entity to form a composite PK.
+**Relationship Type**	|Regular relationship|Identifying relationship
 **Participation**	|Can be partial or total|	Always total participation
 
 # Relationship Strength
-- <span class="blue-text"> Non-identifying(weak) Relationships </span>: if the primary key of the related entity does **NOT** contain a primary key component of the parent entity
-- <span class="blue-text"> Identifying (strong) Relationships</span>: when the primary key of the related entity contains a primary key component of the parent entity
+- <u>Relationship strength</u> is based on how to define PK of a related entity. 
+- To implement a relationship, the PK of one entity (parent entity, normally on the “one” side of 1:M relationship) appears as a FK in the related entity (child entity, mostly the entity on the “many” side of 1:M relationship) to link two entities. 
+  - <span class="blue-text"> Non-identifying(weak) Relationships </span>: if the PK of the related ("M side") entity does <u>NOT</u> contain a PK of the parent ('1 side') entity
+  - <span class="blue-text"> Identifying (strong) Relationships</span>: when the PK of the related ("M side") entity contains the PK of the parent ("1 side") entity
+
+# Illustration of Relationship Strength
+
 <div class="middle-grid">
     <img src="restricted/CFig04_09.jpg" alt="">
     <img src="restricted/CFig04_10.jpg" alt="">
 </div> 
 
-# Non-Identifying Relationship
-When the related entity has its own primary key and does not depend on another entity for identification.
+- dotted line shows weak relationships; solid line shows strong relationships
+- The 'o' symbol in Fig 4.10 is related to relationship participation
+
+# Non-Identifying (Weak) Relationship
+When the related (M side) entity has its own primary key and does not depend on another entity (1 side) for identification.
 - The relationship exists between two strong entities.
-- The foreign key in the related entity is not part of the primary key of the related entity.
+- The FK in the related (M side) entity is not part of the PK of the related (1 side) entity.
 - The related entity can exist independently.
 For example:
-- COURSE(**CRS_CODE**, DEPT_CODE, CRS_DESCRIPTION, CRS_CREDIT)
-- CLASS(**CLASS_CODE**, *CRS_CODE*, CLASS_SECTION, CLASS_TIME, ROOM_CODE, PROF_NUM)
+- COURSE(<u><b>CRS_CODE</b></u>, DEPT_CODE, CRS_DESCRIPTION, CRS_CREDIT)
+- CLASS(<u><b>CLASS_CODE</u></b>, *CRS_CODE*, CLASS_SECTION, CLASS_TIME, ROOM_CODE, PROF_NUM)
 - CRS_CODE is a FK of entity CLASS
 
-# Identifying Relationship
+# Identifying (Strong) Relationship
 Exists when a weak entity depends on a strong entity for its identification.
-- The foreign key of the related strong entity is part of the composite primary key of the weak entity.
+- The FK of the related (M side, weak) entity is 
+- Part of weak (M side) entity's PK is the FK of it, which link to strong entity.
 - The weak entity cannot exist independently.
 For example:
-- COURSE(**CRS_CODE**, DEPT_CODE, CRS_DESCRIPTION, CRS_CREDIT)
-- CLASS(**CRS_CODE, CLASS_SECTION**, CLASS_TIME, ROOM_CODE, PROF_NUM)
+- COURSE(<u><b>CRS_CODE</u></b>, DEPT_CODE, CRS_DESCRIPTION, CRS_CREDIT)
+- CLASS(<u><b>CRS_CODE, CLASS_SECTION</u></b>, CLASS_TIME, ROOM_CODE, PROF_NUM)
 - CRS_CODE + CLASS_SECTION is a PK of entity CLASS 
 - CRS_CODE is a FK of entity CLASS
 
@@ -200,15 +212,24 @@ table {
   font-size: 20px;
 }
 </style>
-Feature|Non-Identifying Relationship | Identifying Relationship
+Feature|Non-Identifying (Weak) Relationship | Identifying (Strong) Relationship
 -------|-----------------------------|--------------------------
 Entity Type	|Between strong entities|	Between a strong and weak entity
 Foreign Key in Related Entity|	FK is not part of PK|	FK is part of composite PK
 Entity Independence	|Related entity can exist independently| Related entity cannot exist without the strong entity
 
+# The Order to Load Tables Under 1:M Relationship 
+- Keep in mind that the order in which the tables are created and loaded is very important.
+- In the “COURSE generates CLASS” relationship, the COURSE table must be created before the CLASS table. After all, it would not be acceptable to have the CLASS table’s foreign key refer to a COURSE table that did not yet exist.
+- Load the data of the “1” side first in a 1:M relationship to avoid the possibility of referential integrity errors.
+
 # Relationship Participation
-- **Optional participation** means that one entity occurrence does not require a corresponding entity occurrence in a particular relationship
-- **Mandatory participation** means that one entity occurrence requires a corresponding entity occurrence in a particular relationship
+- Relationship participation is either <span class="blue-text">optional or mandatory</span>.
+- Because of the bidirectional nature of relationships, it is necessary to determine the connectivity as well as max and min cardinalities of the relationship from COURSE to CLASS and from CLASS to COURSE. 
+- **Optional participation** means that one entity occurrence does not require a corresponding entity occurrence in the relationship
+- **Mandatory participation** means that one entity occurrence requires a corresponding entity occurrence in the relationship
+
+# Illustration of Relationship Participation
 
 <div class="middle-grid">
     <img src="restricted/CFig04_13.jpg" alt="">
