@@ -78,6 +78,7 @@ style: |
 <div class="grid">
     <img src="restricted/CFig04_02.jpg" alt="">
 </div>
+
 - CLASS (<u><b>CLASS_CODE</b></u>, CRS_CODE, CLASS_SECTION, CLASS_TIME,
 ROOM_CODE, PROF_NUM)
 - CLASS (<u><b>CRS_CODE, CLASS_SECTION</b></u>, CLASS_TIME, ROOM_CODE, PROF_NUM)

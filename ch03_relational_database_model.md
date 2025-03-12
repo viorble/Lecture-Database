@@ -88,7 +88,7 @@ style: |
 # Example of Keys
 ![bg right:50% w:600 keys](restricted/CFig03_01.jpg)
 - Superkey: STU_NUM, (STU_NUM, STU_LNAME), (STU_FNAME, STU_LNAME, STU_INIT)
-- Candidate key: STU_NUM
+- Candidate key: STU_NUM, (STU_FNAME, STU_LNAME, STU_INIT)
 - Primary key: STU_NUM
 - FK: DEPT_CODE, PROF_NUM 
 
