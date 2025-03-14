@@ -804,23 +804,44 @@ set sql_safe_updates = 1;
 ```
 
 # Embedded SQL
-- Embedded SQL are SQL statements contained within an application programming language
-- A host language is any language that contains embedded SQL statements, like Python, C, COBOL
-# Differences between SQL and procedural languages
-- Run-time mismatch:
-  - With SQL, each instruction is parsed and it is executed one instruction at a time
-  - The Host program typically runs at the client side in its own memory
-- Processing mismatch
-  - Conventional programming languages process one data element at a time
-  - Newer programming environments manipulate data sets in a cohesive manner
-- Data type mismatch
-  - Data types provided by SQL might not match data types used in different host languages
+- Embedded SQL are SQL statements contained within an application programming language like Python, C, COBOL
+```python
+connection = mysql.connector.connect(host_name, user_name, password)
+cursor = connection.cursor()
 
-# The embedded SQL framework defines the following:
-- A standard syntax to identify embedded SQL code within the host language
-- A standard syntax to identify host variables
-- A communication area used to exchange status and error information between SQL and the host language
+query = '''
+SELECT P_CODE, P_DESCRIPT, P_PRICE FROM PRODUCT
+WHERE V_CODE IN (25595, 23118, 21225);'''
+cursor.execute(query)
+
+results = cursor.fetchall()
+for result in results:
+    print(result)
+```
+
+# Python Embedded SQL
+- Install library: <u>pip3 install mysql-connector-python</u>
+- Append library path
+- Import library
+- Build connection
+- Create tables
+- Create / Read / Update / Delete rows
+- Close connection
+[Score manipulate](../Lecture-Database/files/ipynb/scores.ipynb)
+
+
 
 # Static SQL vs Dynamic SQL
 - Static SQL is a style of embedded SQL I which the SQL statements do not change while the application is running
+```sql
+SELECT P_CODE, P_DESCRIPT, P_QOH, P_PRICE
+FROM PRODUCT
+WHERE P_PRICE > 100;
+```
 - Dynamic SQL environment: a program can generate the SQL statements that are required to respond to ad hoc queries
+```sql
+SELECT :W_ATTRIBUTE_LIST
+FROM :W_TABLE
+WHERE :W_CONDITION;
+```
+
