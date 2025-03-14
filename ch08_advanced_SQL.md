@@ -552,14 +552,16 @@ end;
 </div>
 
 # Procedural SQL Used in Triggers
-- A trigger is a procedural SQL code automatically invoked by the relational DBMS when a data manipulation event occurs
-  - A trigger is invoked before or after a data row is inserted, updated, or deleted (not support select)
-  - A trigger is associated with a database table
-  - Each database table may have one or more triggers
-  - A trigger is executed as part of the transaction that triggered it
-  - Triggers are critical to proper database operation and management
+A trigger is a procedural SQL code automatically invoked by the relational DBMS when a data manipulation event occurs
+- Trigger is invoked before or after a row is inserted, updated, or deleted (not select)
+  - Fire trigger after rows are changed: audit data
+  - Fire trigger before rows are changed: affect data
+- A trigger is associated with a database table
+- Each database table may have one or more triggers
+- A trigger is executed as part of the transaction that triggered it
+- Triggers are critical to proper database operation and management
 
-# Triggers That Audit Data
+# Triggers After Row Changed That Audit Data
 Using triggers to track changes to a table (payable) by creating another audit table (payable_audit) that logs who change what and when.
 - After insert triggers
 - After delete triggers
@@ -685,3 +687,140 @@ where  payable_id = 3;
 -- Did the update get logged?
 select * from payable_audit;
 ```
+
+# Triggers Before Row Changed That Affect Data
+- Before insert triggers
+- Before delete triggers
+- Before update triggers
+
+# Bank Database
+Table credit
+```sql
+create database bank;
+
+use bank;
+
+create table credit
+	(
+	customer_id		int,
+	customer_name	varchar(100),
+	credit_score	int
+	);
+```
+
+# Before Insert Trigger
+```sql
+drop trigger if exists tr_credit_bi;
+delimiter //
+create trigger tr_credit_bi before insert on credit
+for each row
+begin
+  if (new.credit_score < 300) then
+	set new.credit_score = 300;
+  end if;
+  
+  if (new.credit_score > 850) then
+	set new.credit_score = 850;
+  end if;
+ end//
+
+delimiter ;
+```
+
+# Test Trigger tr_credit_bi
+```sql
+insert into credit
+	(
+	customer_id,
+	customer_name,
+	credit_score
+	)
+values
+	(1,	'Milton Megabucks',	  987),
+	(2,	'Patty Po', 		  145),
+	(3, 'Vinny Middle-Class', 702);
+```
+
+# Before Update Trigger
+```sql
+drop trigger if exists tr_credit_bu;
+delimiter //
+create trigger tr_credit_bu before update on credit
+for each row
+begin
+  if (new.credit_score < 300) then
+	set new.credit_score = 300;
+  end if;
+  
+  if (new.credit_score > 850) then
+	set new.credit_score = 850;
+  end if;
+ end//
+
+delimiter ;
+```
+
+# Test Trigger tr_credit_bu
+```sql
+set sql_safe_updates = 0;
+
+update credit
+set credit_score = 1111
+where customer_id = 3;
+
+set sql_safe_updates = 1;
+
+```
+
+# Before Delete Trigger
+```sql
+use bank;
+delimiter //
+
+create trigger tr_credit_bd
+before delete on credit
+for each row
+begin
+  if (old.credit_score > 750) then
+  --- Raises a custom error to prevent deletion.
+  --- '45000' is a custom error state in MySQL, meaning “unhandled user-defined exception”.
+    signal sqlstate '45000'
+    set message_text = 'Cannot delete scores over 750';
+  end if;
+
+end//
+
+delimiter ;
+```
+
+# Test Trigger tr_credit_bd
+```sql
+set sql_safe_updates = 0;
+
+delete from credit where customer_id = 1;
+delete from credit where customer_id = 2;
+
+set sql_safe_updates = 1;
+```
+
+# Embedded SQL
+- Embedded SQL are SQL statements contained within an application programming language
+- A host language is any language that contains embedded SQL statements, like Python, C, COBOL
+# Differences between SQL and procedural languages
+- Run-time mismatch:
+  - With SQL, each instruction is parsed and it is executed one instruction at a time
+  - The Host program typically runs at the client side in its own memory
+- Processing mismatch
+  - Conventional programming languages process one data element at a time
+  - Newer programming environments manipulate data sets in a cohesive manner
+- Data type mismatch
+  - Data types provided by SQL might not match data types used in different host languages
+
+# The embedded SQL framework defines the following:
+- A standard syntax to identify embedded SQL code within the host language
+- A standard syntax to identify host variables
+- A communication area used to exchange status and error information between SQL and the host language
+
+# Static SQL vs Dynamic SQL
+- Static SQL is a style of embedded SQL I which the SQL statements do not change while the application is running
+- Dynamic SQL environment: a program can generate the SQL statements that are required to respond to ad hoc queries
