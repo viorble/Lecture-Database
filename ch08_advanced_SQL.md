@@ -553,10 +553,97 @@ end;
 
 # Procedural SQL Used in Triggers
 - A trigger is a procedural SQL code automatically invoked by the relational DBMS when a data manipulation event occurs
-  - A trigger is invoked before or after a data row is inserted, updated, or deleted
+  - A trigger is invoked before or after a data row is inserted, updated, or deleted (not support select)
   - A trigger is associated with a database table
   - Each database table may have one or more triggers
   - A trigger is executed as part of the transaction that triggered it
   - Triggers are critical to proper database operation and management
 
+# Triggers That Audit Data
+Using triggers to track changes to a table (payable) by creating another audit table (payable_audit) that logs who change what and when.
+- After insert triggers
+- After delete triggers
+- After update triggers
 
+# Accounting Database
+Table payable and payable_audit
+```sql
+create database accounting;
+use accounting;
+create table payable
+	(payable_id  int,
+	 company  varchar(100),
+	 amount  numeric(8,2),
+	 service  varchar(100));
+insert into payable
+	(	payable_id, company, amount, service)
+values
+	(1, 'Acme HVAC', 		 	 123.32,	'Repair of Air Conditioner'),
+	(2, 'Initech Printers',		1459.00,	'New Printers'),
+	(3, 'Hooli Cleaning',		4398.55,	'Janitorial Services');
+create table payable_audit
+	(audit_datetime	datetime,
+	audit_user varchar(50),
+	audit_change varchar(500));
+```
+# After Insert Triggers
+Naming convention: tr_payable_ai = trigger payable after insert
+```sql
+drop trigger if exists tr_payable_ai;
+delimiter //
+create trigger tr_payable_ai after insert on payable
+for each row
+begin
+  insert into payable_audit
+	(audit_datetime,
+   audit_user,
+   audit_change)
+  values
+  (now(), user(), 
+	 concat(
+	   'New row for payable_id ', new.payable_id,
+		 '. Company: ', new.company,
+		 '. Amount: ', new.amount,
+		 '. Service: ', new.service));
+end//
+delimiter ;
+```
+
+# Test Trigger: tr_payable_ai
+```sql
+-- Insert a row into the payable table to test the insert trigger
+insert into payable
+	(payable_id, company, amount, service)
+values
+	(4, 'Sirius Painting', 451.45, 'Painting the lobby');
+	
+-- Did a row get logged in the payable_audit table showing what was inserted into the payable table?
+select * from payable_audit;
+```
+
+# After Delete Triggers
+```sql
+use accounting;
+drop trigger if exists tr_payable_ad;
+delimiter //
+create trigger tr_payable_ad after delete on payable
+for each row
+begin
+  insert into payable_audit
+    (audit_datetime, audit_user, audit_change)
+  values
+    (now(), user(),
+     concat(
+        'Deleted row for payable_id ', old.payable_id,
+        '. Company: ', old.company,
+        '. Amount: ', old.amount,
+        '. Service: ', old.service));
+end//
+delimiter ;	
+```
+# Test Trigger: tr_payable_ad
+```sql
+delete from payable where company = 'Sirius Painting';
+
+select * from payable_audit;
+```
