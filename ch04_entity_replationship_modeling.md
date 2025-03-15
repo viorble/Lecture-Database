@@ -413,3 +413,6 @@ ENROLL (the associative entity between STUDENT and CLASS)
 - What is the difference between weak entity and strong entity?
 - What is the difference between non-identifying and identifying relationship?
 - How to translate M:N relationship in ERM?
+
+# Homework #B
+資料庫課程作業(B)

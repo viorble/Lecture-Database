@@ -289,6 +289,6 @@ Products of O/R DBMS
 - Explain NoSQL characteristics
 - What are the four levels of data abstraction
 
-# Homework #1
+# Homework #A
 資料庫課程作業(A)
 

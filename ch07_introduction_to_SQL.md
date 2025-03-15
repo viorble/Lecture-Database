@@ -47,6 +47,30 @@ style: |
     font-size: 0.70rem;
   }
 ---
+# Introduction to MySQL
+- MySQL is a relational database management system (RDBMS)
+- MySQL is open-source and free
+- MySQL is ideal for both small and large applications
+- MySQL is very fast, reliable, scalable, and easy to use
+- MySQL is cross-platform
+- MySQL is compliant with the ANSI SQL standard
+- MySQL was first released in 1995
+- MySQL is developed, distributed, and supported by Oracle Corporation
+- MySQL is named after co-founder Monty Widenius's daughter, My
+
+# SQL Statement in MySQL
+- SQL keywords are NOT case sensitive: select is the same as SELECT
+- Use semicolon at the end of each SQL statement to separate each SQL statement
+- Some of The Most Important SQL Commands
+ <span class='small-text'>
+INSERT INTO - [C]eate new data into a database
+SELECT - [R]ead data from a database
+UPDATE - [U]pdates data in a database
+DELETE - [D]eletes data from a database
+CREATE DATABASE - creates a new database; ALTER DATABASE - modifies a database
+CREATE TABLE - creates a new table; ALTER TABLE - modifies a table; DROP TABLE - deletes a table
+CREATE INDEX - creates an index (search key); DROP INDEX - deletes an index</span>
+
 # Chapter7: Introduction to Structured Query Language (SQL)
 - SQL is composed of commands that enable users
   -  create database and table structures
@@ -1004,3 +1028,6 @@ WHERE C2.CUS_LNAME IS NULL;
 - Explain the difference between an ORDER BY clause and a GROUP BY clause.
 - What three join types are included in the OUTER JOIN classification? 
 - What are the four categories of SQL functions
+
+# Homework #C
+資料庫課程作業(C)

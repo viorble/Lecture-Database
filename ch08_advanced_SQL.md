@@ -832,16 +832,38 @@ for result in results:
 
 
 # Static SQL vs Dynamic SQL
-- Static SQL is a style of embedded SQL I which the SQL statements do not change while the application is running
-```sql
-SELECT P_CODE, P_DESCRIPT, P_QOH, P_PRICE
-FROM PRODUCT
-WHERE P_PRICE > 100;
+- Static SQL: embedded SQL which the SQL statements do not change while the application is running
+```python
+cur.execute("""CREATE TABLE IF NOT EXISTS Name
+               (first_name TEXT, last_name TEXT)""")
 ```
-- Dynamic SQL environment: a program can generate the SQL statements that are required to respond to ad hoc queries
-```sql
-SELECT :W_ATTRIBUTE_LIST
-FROM :W_TABLE
-WHERE :W_CONDITION;
+- Dynamic SQL: a program generate SQL statements responding to ad hoc queries
+```python
+name_list = [('Smith', 'John'), ('Johnson', 'Jane'), ('Lee', 'Samantha'), 
+('Patel', 'Raj'), ('Hernandez', 'Maria')]
+
+cur.executemany(""" INSERT INTO Name (first_name, last_name) VALUES (%s, %s)""", name_list)
 ```
 
+# Python MySQL Connector Error Types
+Error Type | Error Code Example | Cause
+-----------|--------------------|-------
+InterfaceError | 2003: Can't connect to MySQL | Connection failure
+DatabaseError | 1049: Unknown database | Database does not exist
+DataError | 1264: Out of range value | Invalid data type
+OperationalError | 2006: MySQL server has gone away | Server issue or timeout
+IntegrityError | 1062: Duplicate entry | Primary key violation
+ProgrammingError | 1064: SQL syntax error | Invalid SQL syntax
+NotSupportedError | 1235: Feature not supported | Unsupported SQL feature
+InternalError | 1054: Unknown column | Internal MySQL issue
+
+# Review Questions
+- What is the purpose of a CHECK constraint?
+- What is the difference between an INSERT command and an UPDATE command?
+- What is a stored procedure, and why is it particularly useful?
+
+# Recap SQL Statement
+[W3 School SQL Quiz](https://www.w3schools.com/mysql/mysql_quiz.asp)
+
+# Homework #D
+資料庫課程作業(D)
