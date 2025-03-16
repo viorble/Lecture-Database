@@ -867,3 +867,88 @@ InternalError | 1054: Unknown column | Internal MySQL issue
 
 # Homework #D
 資料庫課程作業(D)
+
+# Tips and Tricks
+- Working in wrong database
+- Using the wrong server
+- Leaving where clauses incomplete
+- Running partial SQL statement
+- Transaction
+- Supporting on existing system
+
+# Tip - Working in wrong database
+
+You used Workbench to create an employee table in  distribution database?? Did you?
+
+```sql
+create database distribution;
+create table employee(
+    employee_id int primary key,
+    employee_name varchar (100),
+    tee_shirt_size varchar (3));
+```
+```sql
+-- ALT1
+use distribution;
+create table employee (...)
+-- ALT2
+create table distribution.employee(...);
+-- Show database
+select database();
+show databases;
+```
+# Tip - Using the Wrong Server
+- Sometimes, SQL statements can be executed against the wrong MySQL server. Companies often set up different servers for production and development. 
+- It's not unusual for a developer to have two windows open: one connected to the production server and one connected to the development server. If you're not careful, you can make changes in the wrong window.
+- Purposely separate development and production environment
+  - authorized to different team and people (不同團隊及工程師)
+  - operated by different PC or notebook (不同工作電腦)
+  - open by different working window (不同工作視窗)
+  - connected by different names shown in tabs (不同工作分頁)
+
+# Tip - Leaving Where Clauses Incomplete
+Looking at a Ford Focus on the lot, you notice that you have it listed a green, but its color is actually closer to blue. You decide to update its color from green to blue in the database.
+```sql
+-- it update 3 rows. that is wrong
+update inventory
+set color = 'blue'
+where mfg = 'Ford' and model = 'Focus';
+```
+```sql
+-- step1 - verify where clause by select
+select * 
+from inventory
+where mfg = 'Ford' and model = 'Focus' and color='green';
+-- step2: create update statement using correct where clause
+update inventory
+set color = 'blue'
+where mfg = 'Ford' and model = 'Focus' and color='green';
+```
+
+# Running Partial SQL Statements
+- Execute the selected portion of the script or everything, if there is no selection: Provides a simple way to execute the entire query or a subset of the query.
+- Execute the statement under the keyboard cursor: Uses the position the keyboard cursor to identify and execute the query.
+```sql
+delete from inventory  -- only select this line, then click 'Execute the selected portion'
+where vin='4XBCX68RFWE532566'
+```
+<div class="grid">
+    <img src="files/image/mysql_wb_toolbar.png">
+</div>
+<br>
+
+[Workbench toolbar](https://dev.mysql.com/doc/workbench/en/wb-sql-editor-toolbar.html)
+
+# Supporting an Existing System
+In workbench, choose menu "Database" to select "Reverse Engineer" function
+
+# Most Common Database Design
+- business field as primary key
+- storing redundant data
+- spaces or quotes in table names
+- poor or no referential integrity
+- multiple pieces of information in a single field
+- storing optional types of data in different columns
+- using the wrong data types and sizes
+<br>
+[Vedio: Learn 7 of the most common database design mistakes](https://youtu.be/s6m8Aby2at8?si=9xPGZqbksCEIi6pi)
