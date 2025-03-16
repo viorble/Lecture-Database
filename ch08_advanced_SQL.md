@@ -952,3 +952,10 @@ In workbench, choose menu "Database" to select "Reverse Engineer" function
 - using the wrong data types and sizes
 <br>
 [Vedio: Learn 7 of the most common database design mistakes](https://youtu.be/s6m8Aby2at8?si=9xPGZqbksCEIi6pi)
+
+# MySQL Shell
+MySQL command line client tool that run SQL, Python or JavaScript commands
+> mysqlsh -h localhost -D database_name_here -u user_name_here
+> \sql
+> select * from employee;
+> \quit
