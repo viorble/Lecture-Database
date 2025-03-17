@@ -100,7 +100,7 @@ An entity supertype is a generic entity type related to one or more entity subty
 - Security-compliant: social secure ID is not good
 
 # When to Use Composite Primary Keys
-- As identifiers of composite entities, in which each primary key combination is allowed once in M:N relationship
+- As identifiers of composite (bridge, associate) entities, in which each primary key combination is allowed once in M:N relationship
 - As identifiers of weak entities, in which the weak entity has a strong identifying relationship with the parent entity
 
 ![bg right:50% w:100% CFig05_07](restricted/CFig05_07.jpg)

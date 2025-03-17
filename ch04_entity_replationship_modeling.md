@@ -131,7 +131,7 @@ PK: in a separated cell with bold and underline font
 A weak entity is an entity that cannot exist independently and depends on a strong entity for its identification.
 - Does NOT have a sufficient PK on its own.
 - Requires a FK from a related strong entity to form a composite PK.
-- Always has a **total participation** (every row of the weak entity must be associated with at least one row of another strong entity).
+- Always has a **total participation** (every row of the weak entity must be associated with one row of another strong entity).
 - The relationship between a weak entity and its strong entity is called an **identifying relationship**.
 
 # Illustrate Weak Entities
