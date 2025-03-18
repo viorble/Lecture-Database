@@ -69,14 +69,12 @@ style: |
 - Attributes must have a **domain**, the set of possible values for a given attribute
 - **Identifier** and **composite identifier** is one or more attributes that uniquely identify each row (primary key, PK)
 - **Simple attribute** (age, sex) and **composite attribute** (address, phone_number)
-- **Single-valued attribute** (emp_id) and **multi-valued attributes** (car_color)
-  - Replace multi-value attribute by creating several new attributes
-  - Replace multi-value attribute by creating an new entity
+- **Single-valued attribute** (emp_id) and **multi-valued attributes** (car_color, emp_habit)
 - **Derived attribute** whose value is calculated from other attributes (working_years)
 
 # Identifier and Composite identifier
 <div class="grid">
-    <img src="restricted/CFig04_02.jpg" alt="">
+    <img src="restricted/CFig04_02a.jpg" alt="">
 </div>
 
 - CLASS (<u><b>CLASS_CODE</b></u>, CRS_CODE, CLASS_SECTION, CLASS_TIME,
@@ -93,6 +91,8 @@ Required attribute: bold font
 PK: in a separated cell with bold and underline font
 
 # Implementing Multi-valued Attributes
+  - If necessary, replace multi-value attribute by creating several new attributes
+  - If necessary, replace multi-value attribute by creating an new entity
 <div class="grid">
     <img src="restricted/CFig04_04.jpg" alt="">
     <img src="restricted/CFig04_05.jpg" alt="">
@@ -120,7 +120,6 @@ PK: in a separated cell with bold and underline font
 - (1, 1): each class is taught by one and only one professor
 
 # Existence Dependence
-- An entity represents a real-world object in a database. 
 - Entity is <span class="blue-text">strong</span> or <span class="blue-text">weak</span> depends on whether the entity can exist independently or not.
 - A strong (regular) entity can exist apart from all of its related entities, it is <span class="blue-text">existence-independent</span>
 - A weak entity is <span class="blue-text">existence-dependent</span> on another related entity occurrence. That is, it need a mandatory foreign key. 
@@ -184,28 +183,6 @@ Primary Key|Has a unique primary key|Requires a FK from a related strong entity 
 </div> 
 
 - dotted line shows weak relationships; solid line shows strong relationships
-- The 'o' symbol in Fig 4.10 is related to relationship participation
-
-# Non-Identifying (Weak) Relationship
-When the related (M side) entity has its own primary key and does not depend on another entity (1 side) for identification.
-- The relationship exists between two strong entities.
-- The FK in the related (M side) entity is not part of the PK of the related (1 side) entity.
-- The related entity can exist independently.
-For example:
-- COURSE(<u><b>CRS_CODE</b></u>, DEPT_CODE, CRS_DESCRIPTION, CRS_CREDIT)
-- CLASS(<u><b>CLASS_CODE</u></b>, *CRS_CODE*, CLASS_SECTION, CLASS_TIME, ROOM_CODE, PROF_NUM)
-- CRS_CODE is a FK of entity CLASS
-
-# Identifying (Strong) Relationship
-Exists when a weak entity depends on a strong entity for its identification.
-- The FK of the related (M side, weak) entity is 
-- Part of weak (M side) entity's PK is the FK of it, which link to strong entity.
-- The weak entity cannot exist independently.
-For example:
-- COURSE(<u><b>CRS_CODE</u></b>, DEPT_CODE, CRS_DESCRIPTION, CRS_CREDIT)
-- CLASS(<u><b>CRS_CODE, CLASS_SECTION</u></b>, CLASS_TIME, ROOM_CODE, PROF_NUM)
-- CRS_CODE + CLASS_SECTION is a PK of entity CLASS 
-- CRS_CODE is a FK of entity CLASS
 
 # Key Differences Between Non-Identifying and Identifying Relationships
 <style scoped>
@@ -218,6 +195,7 @@ Feature|Non-Identifying (Weak) Relationship | Identifying (Strong) Relationship
 Entity Type	|Between strong entities|	Between a strong and weak entity
 Foreign Key in Related Entity|	FK is not part of PK|	FK is part of composite PK
 Entity Independence	|Related entity can exist independently| Related entity cannot exist without the strong entity
+Example|.COURSE(<u><b>CRS_CODE</b></u>, DEPT_CODE, CRS_DESCRIPTION, CRS_CREDIT)<br>.CLASS(<u><b>CLASS_CODE</u></b>, *CRS_CODE*, CLASS_SECTION, CLASS_TIME, ROOM_CODE, PROF_NUM)<br>.CRS_CODE is a FK of entity CLASS|.COURSE(<u><b>CRS_CODE</u></b>, DEPT_CODE, CRS_DESCRIPTION, CRS_CREDIT)<br>.CLASS(<u><b>CRS_CODE, CLASS_SECTION</u></b>, CLASS_TIME, ROOM_CODE, PROF_NUM)<br>. CRS_CODE + CLASS_SECTION is a PK of entity CLASS<br>.CRS_CODE is a FK of entity CLASS
 
 # The Order to Load Tables Under 1:M Relationship 
 - Keep in mind that the order in which the tables are created and loaded is very important.
@@ -238,25 +216,6 @@ Entity Independence	|Related entity can exist independently| Related entity cann
     <img src="restricted/CFig04_15.jpg" alt="">
 </div> 
 
-# Mandatory (Total) Participation
-An entity has mandatory (total) participation in a relationship if every instance of that entity must be associated with at least one instance of another entity.
-- Every entity instance must participate in the relationship.
-- Common in weak entities where a weak entity cannot exist without a strong entity.
-For example
-- Entity EMPLOYEE (EMPLOYEE_ID, NAME, AGE)
-- Entity DEPENDENT (DEPENDENT_NAME, EMPLOYEE_ID, RELATIONSHIP)
-- Relationship: **Employee “Has” Dependents**
-- Every Dependent must be associated with an Employee.
-- Dependent has mandatory (total) participation because it cannot exist without an Employee.
-
-# Optional (Partial) Participation
-An entity has partial participation in a relationship if some instances of the entity may not be associated with another entity.
-- Not all entity instances are required to participate in the relationship.
-For example
-- COURSE(**CRS_CODE**, DEPT_CODE, CRS_DESCRIPTION, CRS_CREDIT)
-- CLASS(**CLASS_CODE**, *CRS_CODE*, CLASS_SECTION, CLASS_TIME, ROOM_CODE, PROF_NUM)
-- CRS_CODE is a FK of entity CLASS
-
 # Key Differences Between Total and Partial Participation
 <style scoped>
 table {
@@ -267,7 +226,7 @@ Feature	| Total Participation |	Partial Participation
 --------|---------------------|----------------------
 Requirement|	Every entity instance must participate|	Some entity instances may not participate
 Entity Dependency|	Entity cannot exist without the relationship|	Entity can exist independently
-Common Examples|	Weak entities (e.g., Dependent must have an Employee)	|Optional relationships (e.g., Student may or may not have a Library Members
+Common Examples|	Dependent must have an Employee	|Student may or may not have a Library Members
 
 # Relationship Degree
 - A relationship degree indicates the number of entities associated with a relationship
@@ -281,18 +240,12 @@ Common Examples|	Weak entities (e.g., Dependent must have an Employee)	|Optional
     <img src="restricted/CFig04_16.jpg" alt="">
 </div> 
 
-# Illustration of Relationship Degree (Table)
-<div class="grid">
-    <img src="restricted/CFig04_17.jpg" alt="">
-</div>
-
 # Recursive Relationship
 One of unary relationship
 <div class="middle-grid">
     <img src="restricted/CFig04_18.jpg" alt="">
     <img src="restricted/CFig04_19.jpg" alt="">
     <img src="restricted/CFig04_20.jpg" alt="">
-    <img src="restricted/CFig04_21.jpg" alt="">
 </div> 
 
 # Associative (Composite) Entities
