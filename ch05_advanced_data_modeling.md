@@ -40,7 +40,7 @@ style: |
   }
 ---
 # Chapter5: Advanced Data Modeling
-- Main extended entity relationship (EER) model.
+- Illustrate extended entity relationship (EER) model.
 - Describe the characteristics of good primary keys and how to select them.
 - Data-modeling design cases
 
@@ -48,36 +48,26 @@ style: |
 ![bg right:60% w:100% CFig05_01](restricted/CFig05_01.jpg)
 
 # Extended (Enhanced) Entity Relationship Model (EERM)
-- EERM is the result of adding more semantic constructs to the original ER model
+- EERM is the result of adding more object-oriented concept to the original ER model
 - A diagram that uses the EERM is called EER diagram (EERD)
-![bg right:50% w:80% CFig05_02](restricted/CFig05_02.jpg)
 
 # Entity Supertypes and Subtypes
 - The grouping of employees into various types provides the following two benefits:
   - It avoids unnecessary nulls in attributes when some employees have characteristics that are not shared by other employees
   - It enables a particular employee type to participate in relationships that are unique to that employee type
-An entity supertype is a generic entity type related to one or more entity subtypes
 - The entity supertype (EMPLOYEE) contains common characteristics
 - The entity subtype (PILOT, MECHANIC, ACCOUNTANT) contains unique characteristics of each entity subtype
 
-# Specialization Hierarchy
-- Higher-level entity supertypes and lower-level entity subtypes
-- A subtype can only exist within the context of a supertype
-- Every subtype has only one supertype
-- A supertype can have many subtypes
-
-# Characteristics of Specialization Hierarchy
+# Characteristics of EERD
 - Support attribute **inheritance**
   - Subtypes inherit primary key from supertype
   - Subtypes inherit all attributes and relationships from its supertypes
 - Have a special supertype attribute as the **subtype discriminator**, commonly use equality comparison
-  - Define **disjoint** or **overlapping** constraints: supertype occurrence appears in one or more subtypes
-  - Define **complete** or **partial** constraints: every superset occurrence must be a member of at least one subtype
 
 # Specialization Hierarchy Example
 ![bg right:60% w:100% CFig05_02](restricted/CFig05_02.jpg)
 
-# Entity Clustering
+# Entity Clustering (封裝的概念)
 - OFFERING: SEMESTER + COURSE + CLASS
 - LOCATION: ROOM + BUILDING
 ![bg right:60% w:60% CFig05_06](restricted/CFig05_06.jpg)
@@ -90,7 +80,10 @@ An entity supertype is a generic entity type related to one or more entity subty
 
 # Natural Keys and Primary Keys
 - A natural key is a real-world identifier used to uniquely identify real-world objects, which forms part of end user day-to-day business vocabulary
-- Usually, if an entity has a natural identifier, a data modeler uses it as the primary key of the entity being modeled 
+- Usually, if an entity has a natural identifier, a data modeler uses it as the primary key of the entity being modeled
+
+Q: Guess the pros and cons of using nature key
+[7 Database Design Mistake](https://youtu.be/s6m8Aby2at8?si=LsJyqtws-hEz2UyN)
 
 # Primary Key Guidelines
 - Unique values
@@ -133,19 +126,7 @@ Design comparison
 - <span class="small-text">Modeling time-variant data, need a new entity with 1:M relationship to the original entity </span>
 - <span class="small-text">This new entity contains the new value, the date of the change, and any other pertinent attribute</span>
 - <span class="small-text">Question: What is (1) current salary and (2) salary raise history of an employee within a time period</span>
-![bg right:40% w:100% CFig05_09](restricted/CFig05_09.jpg)
-
-# Design Case 2: Maintaining Manager History
-![bg right:40% w:100% CFig05_10](restricted/CFig05_10.jpg)
-- Question: Who manage the dept (DEPT_ID) now and who ever lead the dept?
-- Discuss
-  - <span class="small-text">is the 'manages' relationship redundant?</span>
-  - <span class="small-text">any design difference between "an employee is the manager of a dept only once" and "the same employee to be the manager of the same dept but on different dates"</span>   
-
-# Design Case 2: Maintaining Job History
-![bg right:40% w:100% CFig05_11](restricted/CFig05_11.jpg)
-- Combine salary history and job history together
-- It is worth emphasizing that the 'manages' and 'employs' relationships are theoretically optional and redundant in practice. But, considering the performance if we want to find out where each employee works 
+![bg right:40% w:100% CFig05_09](restricted/CFig05_09.jpg) 
 
 # Design Case 3: Fan Traps
 - A design trap occurs when a relationship is improperly or incompletely identified, which is not consistent with the real world

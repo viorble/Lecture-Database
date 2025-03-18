@@ -30,7 +30,9 @@ style: |
   .red-text {
     color: red;
   }
-  
+  .brown-text {
+    color: brown;
+  }
   .blue-text {
     color: lightskyblue;  
   }
@@ -47,19 +49,18 @@ style: |
 </div>
 
 # Entity Relationship Model
-- The entity relationship model (ERM) forms the basis of an ERD
+- The entity relationship model (ERM) generate ERD (ER diagram)
 - The ERD represents the <span class="blue-text">external model</span> as viewed by end users
 - The ERD represents the <span class="blue-text">conceptual model</span> as viewed by database designer
-- ERDs depict the database’s main components:
+- ERDs describe the database’s main components:
   - Entities
   - Attributes
   - Relationships
-![bg right:40% w:100% database design process](https://techforumugm.files.wordpress.com/2020/03/dd01.png?w=816&h=352&crop=1)
 
 # Entity
 - An entity is an object of interest to the end user
-- An entity in the ERM is a table (relation), a row is an entity instance (tuple)
-- In Chen, Crow’s Foot, and UML notations, an entity is represented by a rectangle
+- An entity in the ERM is a table (relation)
+- In Crow’s Foot notation, an entity is represented by a rectangle
   - contains entity name
   - entity name is a noun usually written in all capital letters. It would depend on your naming convention
 
@@ -67,7 +68,7 @@ style: |
 - **Attributes** are characteristics of entities
 - **Required attribute** (not null) and **optional attribute** (allow null)
 - Attributes must have a **domain**, the set of possible values for a given attribute
-- **Identifier** and **composite identifier** is one or more attributes that uniquely identify each row (primary key, PK)
+- **Identifier** and **composite identifier** is one or more attributes that uniquely identify each row.
 - **Simple attribute** (age, sex) and **composite attribute** (address, phone_number)
 - **Single-valued attribute** (emp_id) and **multi-valued attributes** (car_color, emp_habit)
 - **Derived attribute** whose value is calculated from other attributes (working_years)
@@ -77,9 +78,8 @@ style: |
     <img src="restricted/CFig04_02a.jpg" alt="">
 </div>
 
-- CLASS (<u><b>CLASS_CODE</b></u>, CRS_CODE, CLASS_SECTION, CLASS_TIME,
-ROOM_CODE, PROF_NUM)
-- CLASS (<u><b>CRS_CODE, CLASS_SECTION</b></u>, CLASS_TIME, ROOM_CODE, PROF_NUM)
+- CLASS_CODE is a identifier
+- (CRS_CODE, CLASS_SECTION) is a composite identifier
 
 # Entity's Notation
 <div class="grid">
@@ -97,11 +97,15 @@ PK: in a separated cell with bold and underline font
     <img src="restricted/CFig04_04.jpg" alt="">
     <img src="restricted/CFig04_05.jpg" alt="">
 </div>
+<br>
+<span class="brown-text">Q: What is the pros and cons between the two replacement approaches</span>
 
 # Derived Attributes
 <div class="grid">
     <img src="restricted/CFig04_06.jpg" alt="">
 </div>
+<br>
+<span class="brown-text">Q: What attribute is proper to use derived attributed, working_year or total_amount?</span>
 
 # Relationship
 - The entities that participate in a relationship are also known as <span class="blue-text">participants</span>
@@ -120,60 +124,41 @@ PK: in a separated cell with bold and underline font
 - (1, 1): each class is taught by one and only one professor
 
 # Existence Dependence
-- Entity is <span class="blue-text">strong</span> or <span class="blue-text">weak</span> depends on whether the entity can exist independently or not.
-- A strong (regular) entity can exist apart from all of its related entities, it is <span class="blue-text">existence-independent</span>
-- A weak entity is <span class="blue-text">existence-dependent</span> on another related entity occurrence. That is, it need a mandatory foreign key. 
-
-- Relationship 'EMPLOYEE claims DEPENDENT', the DEPENDENT entity is existence dependent on the EMPLOYEE entity. That is, DEPENDENT has a mandatory foreign key, EMP_NUM to link with EMPLOYEE. 
+- Entity can be <span class="blue-text">strong</span> or <span class="blue-text">weak</span> depending on whether the entity can exist independently or not.
+- A strong entity can exist apart from all of its related entities, it is <span class="blue-text">existence-independent</span>
+- A weak entity is <span class="blue-text">existence-dependent</span> on another related entity occurrence
+- Relationship 'EMPLOYEE claims DEPENDENT', the DEPENDENT entity is existence dependent on the EMPLOYEE entity. That is, DEPENDENT has a mandatory (NOT NULL) foreign key, EMP_NUM to link with EMPLOYEE. 
 
 # Weak Entity
-A weak entity is an entity that cannot exist independently and depends on a strong entity for its identification.
-- Does NOT have a sufficient PK on its own.
-- Requires a FK from a related strong entity to form a composite PK.
-- Always has a **total participation** (every row of the weak entity must be associated with one row of another strong entity).
-- The relationship between a weak entity and its strong entity is called an **identifying relationship**.
+- A weak entity is existence-dependent on a strong entity with a strong (identifying) relationship - requires a non-null FK from the related strong entity and form a composite PK.
+  - DEPENDENT(<u><b>EMP_NUM, DEP_SID</b></u>, DEP_NAME, DEP_DOB), EMP_NUM is FK,
+- A weak entity always has a **mandatory participation** to a strong entity (every row of the weak entity must be associated with one row of a strong entity because of non-null FK).
 
-# Illustrate Weak Entities
-- A weak entity is existence-dependent on a strong entity with a strong (identifying) relationship
-- A strong entity is existence-independent
+# Strong Entity
+- A strong entity has a PK that uniquely identifies each record without depending on other entity.
+- EMPLOYEE(<u><b>EMP_NUM</b></u>, EMP_LNAME, EMP_FNAME, EMP_INITIAL, EMP_DOB, EMP_HIREDATE)
+
+# Example of Strong and Weak Entities
+Considering two entities: EMPLOYEE (strong) and DEPENDENT (weak)
+- DEPENDENT is weak because it has no sufficient PK by itself at the beginning
+  - DEPENDENT(<u><b>DEP_SID</b></u>, DEP_NAME, DEP_DOB, EMP_NUM), EMP_NUM is FK, but when two employee is couple, their children will be duplicated
+  - DEP_SID alone cannot uniquely identify a dependent.
+- Need expand PK of DEPENDENT by combining EMP_NUM
+  - DEPENDENT(<u><b>EMP_NUM, DEP_SID</b></u>, DEP_NAME, DEP_DOB) to build a strong (identifying) relationship with EMPLOYEE to uniquely identify each dependent.
+- DEP_NUM is better than DEP_SID in terms of privacy
+  - DEPENDENT(<u><b>EMP_NUM, DEP_NUM</b></u>, DEP_NAME, DEP_DOB), EMP_NUM is non-null FK
+
+# Illustrate Relationship Between Weak & Strong Entity
 <div class="middle-grid">
     <img src="restricted/CFig04_11.jpg" alt="">
     <img src="restricted/CFig04_12.jpg" alt="">
 </div> 
 
-# Strong Entity
-A strong entity (or existence-independent entity) is an entity that can exist independently. It has a primary key that uniquely identifies each record without depending on any other entity.
--	Has a PK that uniquely identifies each instance.
-- Does not depend on any other entity for its identification.
-- STUDENT(<u><b>STUDENT_ID</b></u>, NAME, AGE, MAJOR)
-
-# Example of Strong and Weak Entities
-Considering two entities: EMPLOYEE (strong) and DEPENDENT (weak)
-- Entity EMPLOYEE (<u><b>EMPLOYEE_ID</b></u>, NAME, AGE)
-- Entity DEPENDENT (<u><b>DEPENDENT_NAME, EMPLOYEE_ID</b></u>, RELATIONSHIP)
-- DEPENDENT_NAME alone cannot uniquely identify a dependent.
-- EMPLOYEE_ID (from entity Employee) is needed to uniquely identify each dependent.
-- PK of DEPENDENT is a combination of DEPENDENT_NAME + EMPLOYEE_ID.
-- A weak entity is always associated with a strong entity through an **identifying relationship**.
-
-# Key Differences Between Strong and Weak Entities
-<style scoped>
-table {
-  font-size: 20px;
-}
-</style>
-Feature	|Strong Entity|	Weak Entity
---------|-------------|------------
-Existence|Can exist independently|Cannot exist without a related strong entity
-Primary Key|Has a unique primary key|Requires a FK from a related strong entity to form a composite PK.
-**Relationship Type**	|Regular relationship|Identifying relationship
-**Participation**	|Can be partial or total|	Always total participation
-
 # Relationship Strength
-- <u>Relationship strength</u> is based on how to define PK of a related entity. 
+- <u>Relationship strength</u> can be strong or weak based on how to define PK of a related entity. 
 - To implement a relationship, the PK of one entity (parent entity, normally on the “one” side of 1:M relationship) appears as a FK in the related entity (child entity, mostly the entity on the “many” side of 1:M relationship) to link two entities. 
-  - <span class="blue-text"> Non-identifying(weak) Relationships </span>: if the PK of the related ("M side") entity does <u>NOT</u> contain a PK of the parent ('1 side') entity
-  - <span class="blue-text"> Identifying (strong) Relationships</span>: when the PK of the related ("M side") entity contains the PK of the parent ("1 side") entity
+  - <span class="blue-text"> Non-identifying(weak) Relationships </span>: if the PK of the "M side" entity does <u>NOT</u> contain a PK of the '1 side' entity
+  - <span class="blue-text"> Identifying (strong) Relationships</span>: when the PK of the "M side" entity contains the PK of the "1 side" entity
 
 # Illustration of Relationship Strength
 
@@ -184,18 +169,13 @@ Primary Key|Has a unique primary key|Requires a FK from a related strong entity 
 
 - dotted line shows weak relationships; solid line shows strong relationships
 
-# Key Differences Between Non-Identifying and Identifying Relationships
-<style scoped>
-table {
-  font-size: 20px;
-}
-</style>
-Feature|Non-Identifying (Weak) Relationship | Identifying (Strong) Relationship
--------|-----------------------------|--------------------------
-Entity Type	|Between strong entities|	Between a strong and weak entity
-Foreign Key in Related Entity|	FK is not part of PK|	FK is part of composite PK
-Entity Independence	|Related entity can exist independently| Related entity cannot exist without the strong entity
-Example|.COURSE(<u><b>CRS_CODE</b></u>, DEPT_CODE, CRS_DESCRIPTION, CRS_CREDIT)<br>.CLASS(<u><b>CLASS_CODE</u></b>, *CRS_CODE*, CLASS_SECTION, CLASS_TIME, ROOM_CODE, PROF_NUM)<br>.CRS_CODE is a FK of entity CLASS|.COURSE(<u><b>CRS_CODE</u></b>, DEPT_CODE, CRS_DESCRIPTION, CRS_CREDIT)<br>.CLASS(<u><b>CRS_CODE, CLASS_SECTION</u></b>, CLASS_TIME, ROOM_CODE, PROF_NUM)<br>. CRS_CODE + CLASS_SECTION is a PK of entity CLASS<br>.CRS_CODE is a FK of entity CLASS
+# Implementation Strong / Weak Relationship in DBMS
+- Use a strong relationship when:
+	•	The M-side entity is conceptually a part of the 1-side.
+	•	The M-side object should be destroyed when the 1-side is destroyed (e.g., an employee’s dependant).
+- Use a weak relationship when:
+	•	The M-site entity can exist independently of the 1-side.
+	•	The M-side object should not be deleted if the 1-side is deleted (e.g., an employee and a department).
 
 # The Order to Load Tables Under 1:M Relationship 
 - Keep in mind that the order in which the tables are created and loaded is very important.
@@ -205,8 +185,8 @@ Example|.COURSE(<u><b>CRS_CODE</b></u>, DEPT_CODE, CRS_DESCRIPTION, CRS_CREDIT)<
 # Relationship Participation
 - Relationship participation is either <span class="blue-text">optional or mandatory</span>.
 - Because of the bidirectional nature of relationships, it is necessary to determine the connectivity as well as max and min cardinalities of the relationship from COURSE to CLASS and from CLASS to COURSE. 
-- **Optional participation** means that one entity occurrence does not require a corresponding entity occurrence in the relationship
-- **Mandatory participation** means that one entity occurrence requires a corresponding entity occurrence in the relationship
+- **Optional participation** means that some rows may not participate into the relationship
+- **Mandatory participation** means that each row must participate into the relationship
 
 # Illustration of Relationship Participation
 
@@ -216,34 +196,13 @@ Example|.COURSE(<u><b>CRS_CODE</b></u>, DEPT_CODE, CRS_DESCRIPTION, CRS_CREDIT)<
     <img src="restricted/CFig04_15.jpg" alt="">
 </div> 
 
-# Key Differences Between Total and Partial Participation
-<style scoped>
-table {
-  font-size: 20px;
-}
-</style>
-Feature	| Total Participation |	Partial Participation
---------|---------------------|----------------------
-Requirement|	Every entity instance must participate|	Some entity instances may not participate
-Entity Dependency|	Entity cannot exist without the relationship|	Entity can exist independently
-Common Examples|	Dependent must have an Employee	|Student may or may not have a Library Members
-
 # Relationship Degree
-- A relationship degree indicates the number of entities associated with a relationship
-- A unary relationship exists when an association is maintained within a single entity 
-- A binary relationship exists when two entities are associated
-- A ternary relationship exists when three entities are associated
-
-
-# Illustration of Relationship Degree (ERD)
 <div class="middle-grid">
     <img src="restricted/CFig04_16.jpg" alt="">
 </div> 
 
 # Recursive Relationship
-One of unary relationship
 <div class="middle-grid">
-    <img src="restricted/CFig04_18.jpg" alt="">
     <img src="restricted/CFig04_19.jpg" alt="">
     <img src="restricted/CFig04_20.jpg" alt="">
 </div> 
@@ -287,7 +246,8 @@ Building an ERD usually involves the following activities as a <span class="blue
 ![bg right:40% w:100% CFig04_28](restricted/CFig04_28.jpg)
 
 # Tiny College (TC) (4/10)
-- A department may offer several sections (classes) of the same course. Each of those classes is taught by a professor at a given time in a given place. 
+- A course can be taught in several classes.
+- A course may not be taught in some semester 
 - A class is offered during a given semester. SEMESTER defines the year and the term that the class will be offered. 
 - CLASS is optional to SEMESTER.
 - CLASS is optional to COURSE.
@@ -301,7 +261,7 @@ Building an ERD usually involves the following activities as a <span class="blue
 ![bg right:40% w:100% CFig04_30](restricted/CFig04_30.jpg)
 
 # Tiny College (TC) (6/10)
-- Each professor may teach up to four classes; each class is a section of a course.
+- Each professor may teach up to four classes; each class is belong to a course.
 - A professor may also be on a research contract and teach no classes at all.
 ![bg right:40% w:100% CFig04_31](restricted/CFig04_31.jpg)
 
@@ -309,11 +269,10 @@ Building an ERD usually involves the following activities as a <span class="blue
 - A student may enroll in several classes but take each class only once.
 - Each student may enroll in up to six classes, and each class may have up to 35 students, (STUDENT and CLASS is M:N relationship ). 
 - This M:N relationship must be divided into two 1:M relationships by ENROLL entity 
-- If a class exists but has no students enrolled in it, that class does not occur in the ENROLL table. ENROLL entity is weak: it is existence-dependent.
 ![bg right:40% w:100% CFig04_32](restricted/CFig04_32.jpg)
 
 # Tiny College (TC) (8/10)
-- Each department has several students whose major is offered by that department.
+- Each department has several students whose major is offered by that department. <span class="red-text">(VAGUE!!)</span>
 - Each student has only a single major associated with a single department.
 - It is possible for a student not to declare a major field of study.
 ![bg right:40% w:100% CFig04_33](restricted/CFig04_33.jpg)
@@ -322,7 +281,6 @@ Building an ERD usually involves the following activities as a <span class="blue
 - Each student has an advisor in his or her department
 - Each advisor counsels several students.
 - An advisor is also a professor, but not all professors advise students.
-- Therefore, STUDENT is optional to PROFESSOR in the "PROFESSOR advises STUDENT" relationship.
 ![bg right:40% w:100% CFig04_34](restricted/CFig04_34.jpg)
 
 # Tiny College (TC) (10/10)
@@ -351,20 +309,14 @@ ENROLL (the associative entity between STUDENT and CLASS)
 ![bg right:70% w:60% CFig04_36](restricted/CFig04_36.jpg)
 
 # Database Design Challenges: Conflicting Goals
-- Database designers must often make design compromises that are triggered by conflicting goals
+- Database designers must often make design compromises that are triggered by conflicting <span class='blue-text'>GOALS</span>
   - Database design must conform to design standards
   - High processing speed may limit the number and complexity of logically desirable relationships
-  - Maximum information generation may lead to loss of clean design structures and high transaction speed
-- A design that meets all logical requirements and design conventions is an important goal
-
-# Database Design Challenges: Example
-![bg right:70% w:90% CFig04_39](restricted/CFig04_39.jpg)
+- However, a design that meets all requirements and design conventions are the most important goals
 
 # Review Questions
-- What two conditions must be met before an entity can be classified as a weak entity?
-- What are the main characteristics of entity relationship components?
 - What is the difference between weak entity and strong entity?
-- What is the difference between non-identifying and identifying relationship?
+- What is the difference between weak (non-identifying) and identifying (strong) relationship?
 - How to translate M:N relationship in ERM?
 
 # Homework #B
