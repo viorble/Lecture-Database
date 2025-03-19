@@ -321,3 +321,13 @@ ENROLL (the associative entity between STUDENT and CLASS)
 
 # Homework #B
 資料庫課程作業(B)
+
+# Present Final Project Progress
+- Date: 04/15 (專班) and 04/16 (資財)
+- Duration: 5 minutes per team
+- Approach: oral presentation and one word page only
+- Agenda:
+  - Project briefing and teaming
+  - Expected deliverables 
+  - Current progress
+  - Support needed (if any)
