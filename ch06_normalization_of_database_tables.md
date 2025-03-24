@@ -32,7 +32,7 @@ style: |
   }
   
   .blue-text {
-    color: blue;  
+    color: lightskyblue;  
   }
 
   .brown-text {
@@ -48,18 +48,99 @@ style: |
 - Learn to evaluate and design good table structures to **control data redundancies** thereby avoiding data anomalies.
 - The process that yields such desirable results is known as **normalization**.
 
+# Good Database Self-Taught Resource
+https://www.databasestar.com
+https://www.databasestar.com/vip/
+
 # Database Tables and Normalization
-- <span class="blue-text">**Normalization**</span> is a process for evaluating and correcting table structures to <span class="brown-text">**minimize data redundancies**</span> 
+- <span class="blue-text">**Normalization**</span> is a process for adjusting table structures to <span class="brown-text">**minimize data redundancies**</span> 
   - Reduce data anomalies
-  - Assigns attributes to tables based on determination
-- Normalization works through a series of stages called normal forms
+  - Assigns attributes to tables based on functional dependency
+- Normalization goes through a series of stages called normal forms
 ![bg right:50% w:100%](https://www.c-sharpcorner.com/UploadFile/nipuntomar/normalization-and-its-types/Images/Norm.gif)
 
+# Why Normalize a Database
+- Prevent the same data from being stored in more than one place (insert anomaly)
+- Prevent updates being made to some data but not others (update anomaly)
+- Prevent data not being deleted when it is supposed to be, or from data being lost when it is not supposed to be (delete anomaly)
+- Ensure the data is accurate
+- Reduce the storage space that a database takes up
+- Ensure the queries on a database run as fast as possible
+
+# Data Redundancies Issues - A Sample Table
+<style scoped>
+table {
+  font-size: 20px;
+}
+</style>
+Student ID|Student Name|Fees Paid|Course Name|Class 1|Class 2|Class 3
+----------|------------|---------|-----------|-------|-------|-------
+1|John Smith|200|Economics|Economics 1|Biology 1
+2|Maria Griffin|500|Computer Science|Biology 1|Business Intro|Programming 2
+3|Susan Johnson|400|Medicine|Biology 2		
+4|Matt Long|850|Dentistry
+
+- Attributes: student names, paid fees, registered classes
+- It is not a normalized table, and there are a few issues with this
+
+# Data Redundancies Issues - Insert Anomaly
+- If we want to add a new student but did not know their course name
+<style scoped>
+table {
+  font-size: 20px;
+}
+</style>
+Student ID|Student Name|Fees Paid|Course Name|Class 1|Class 2|Class 3
+----------|------------|---------|-----------|-------|-------|-------
+1|John Smith|200|Economics|Economics 1|Biology 1
+2|Maria Griffin|500|Computer Science|Biology 1|Business Intro|Programming 2
+3|Susan Johnson|400|Medicine|Biology 2		
+4|Matt Long|850|Dentistry
+5|Jared Oldham|0|?
+
+- We would be adding incomplete data to our table, which can cause issues when trying to analyze this data.
+
+# Data Redundancies Issues - Update Anomaly
+- If the class Biology 1 was changed to “Intro to Biology”. We would have to query all of the columns that could have this Class field and rename each one that was found.
+
+<style scoped>
+table {
+  font-size: 20px;
+}
+</style>
+Student ID|Student Name|Fees Paid|Course Name|Class 1|Class 2|Class 3
+----------|------------|---------|-----------|-------|-------|-------
+1|John Smith|200|Economics|Economics 1|Biology 1
+2|Maria Griffin|500|Computer Science|Biology 1|Business Intro|Programming 2
+3|Susan Johnson|400|Medicine|Biology 2		
+4|Matt Long|850|Dentistry
+
+- There’s a risk that we miss out on a value, which would cause issues.
+- Ideally, we would only update the value once, in one location.
+
+# Data Redundancies Issues - Delete Anomaly
+- If Susan Johnson quits and her record needs to be deleted from the system. We could delete her row
+
+<style scoped>
+table {
+  font-size: 20px;
+}
+</style>
+Student ID|Student Name|Fees Paid|Course Name|Class 1|Class 2|Class 3
+----------|------------|---------|-----------|-------|-------|-------
+1|John Smith|200|Economics|Economics 1|Biology 1
+2|Maria Griffin|500|Computer Science|Biology 1|Business Intro|Programming 2
+**3**|**Susan Johnson**|**400**|**Medicine**|**Biology 2**		
+4|Matt Long|850|Dentistry
+
+- But, if we delete this row, we lose the record of the Biology 2 class, because it’s not stored anywhere else. The same can be said for the Medicine course.
+- We should be able to delete one type of data or one record without having impacts on other records we don’t want to delete.
+
 # A Sample Report Layout
-![bg right:70% w:100%](restricted/CTable06_01.jpg)
+![bg right:70% w:90%](restricted/CTable06_01.jpg)
 
 # Poor Table Structure
-![bg right:60% w:100%](restricted/CFig06_01.jpg)
+![bg right:60% w:90%](restricted/CFig06_01.jpg)
 - Data inconsistency
 - Difficult to update
 - Data redundant
@@ -73,8 +154,8 @@ style: |
 - Database designers commonly use normalization in the following two situations:
   - When designing a new database structure
   - To analyze the relationship among the attributes within each entity and determine if the structure can be improved through normalization
-- The main goal of normalization is to eliminate data anomalies by eliminating unnecessary or unwanted data redundancies
-- Normalization uses the concept of functional dependencies to identify which attribute determines other attributes
+- The main goal of normalization is to eliminate data anomalies by eliminating unnecessary or unwanted <span class="blue-text">data redundancies</span>
+- Normalization uses the concept of <span class="blue-text">functional dependencies</span> to identify which attribute determines other attributes
 
 # The Normalization Process
 The objective of normalization is to ensure:
@@ -84,40 +165,36 @@ The objective of normalization is to ensure:
 - All non-prime attributes in a table are dependent on the primary key
 - Each table has no insertion, update, or deletion anomalies
 - Ensure that all tables are in at least in 3NF in business environment
-- Work one relation at a time, identifying the determination and functional dependencies of a relation (table)
+- Work one relation at a time, identifying functional dependencies of a relation (table)
 
 # Normal Forms
 ![bg right:70% w:100%](restricted/CTable06_02.jpg)
 
 # Normalization Base: Functional Dependency
-- Normalization starts by identifying the dependencies of a given table
-- Them progressively breaking up the table into a set of new tables based on the identified dependencies.
-- Functional Dependency: The attribute B is fully functionally dependent on the attribute A if each value of A determines one and only one value of B.
+- Normalization starts by identifying **functional dependencies** of a given table
+- <span class="blue-text">Functional Dependency X&rarr;Y</span>: the values of Y are determined by the values of X. (X, Y is a set of attributes)
+- <span class="blue-text">X&rarr;Y is full functional dependency </span>, if no attribute can be removed from X and still keep the dependency.
 - Example: 
   - PROJ_NUM → PROJ_ NAME (read as PROJ_ NUM functionally determines PROJ_NAME)
   - Attribute PROJ_NUM is known as the determinant attribute
   - Attribute PROJ_NAME is known as the dependent attribute.
 
-# Functional Dependency Type: Partial dependency
+# Functional Dependency Type: Partial Functional Dependency
 When there is a functional dependence in which the determinant is only part of the PK
-- The assumption is that there is only one candidate key 
-- Partial dependencies tend to be straightforward and easy to identify
+- <span class="blue-text">X&rarr;Y is a partial functional dependency </span> if some attribute can be removed from X and the dependency is still there.
 
 Example
-- functional dependency: (A, B) &rarr; (C, D)
-- functional dependency: B &rarr; C
-- primary key: (A, B)
-- We will call B &rarr; C is partial dependency 
+- functional dependency: (A, B) &rarr; C, we say it is a partial functional dependency, if we can find a subset of (A, B) to make another functional dependency: B &rarr; C 
 
 # Functional Dependency - Transitive dependency
 When the attribute is dependent on another attribute that is not part of the primary key
 - Transitive dependencies are more difficult to identify among a set of data
 - They occur only when a functional dependence exists among non-prime attributes
 Example
-- functional dependencies X → Y
-- functional dependencies Y → Z
-- primary key: X 
-- the dependency X → Z is a transitive dependency because X determines the value of Z via Y. 
+- given primary key: X 
+- exists functional dependencies X → Y
+- exists functional dependencies Y → Z
+- thus, we can find a functional dependency X → Z, which is a <span class="blue-text">transitive dependency</span> because X can determine the value of Z via Y. 
 - Y → Z signals that a transitive dependency exists because Y is not a PK.
 
 # Why Do We Do Database Normalization?
@@ -151,10 +228,18 @@ PK: an identifier composed of one or more attributes that uniquely identifies a 
 # 1NF Step3 - Identify all Dependencies
 - According to PK, a dependency exist
   - PROJ_NUM, EMP_NUM → PROJ_NAME, EMP_NAME, JOB_CLASS, CHG_HOUR, HOURS
-  - *PROJ_NAME, EMP_NAME, JOB_CLASS, CHG_HOUR, HOURS* depends on **PROJ_NUM, EMP_NUM**
 - (partial dependency) PROJ_NUM → PROJ_NAME
 - (partial dependency) EMP_NUM → EMP_NAME, JOB_CLASS, CHG_HOUR, <span class="brown-text">(not HOURS)</span>
 - (transitive dependency) JOB_CLASS → CHG_HOUR
+
+The functional dependency {Book} → {Author nationality} emerges; that is, if we know the book, we can know the author's nationality. Furthermore:
+
+{Book} → {Author}
+{Author} does not → {Book}
+{Author} → {Author nationality}
+Therefore {Book} → {Author nationality} is a transitive dependency.
+
+
 
 # Dependency Diagram
 Dependency diagram shows all dependencies found within given table structure

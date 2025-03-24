@@ -126,12 +126,13 @@ Design comparison
 - <span class="small-text">Modeling time-variant data, need a new entity with 1:M relationship to the original entity </span>
 - <span class="small-text">This new entity contains the new value, the date of the change, and any other pertinent attribute</span>
 - <span class="small-text">Question: What is (1) current salary and (2) salary raise history of an employee within a time period</span>
-![bg right:40% w:100% CFig05_09](restricted/CFig05_09.jpg) 
+- <span class="small-text">Discussion: in relationship emp_sal_hist, what cardinality salary_hist is? (0,M) or (1,M) </span>
+![bg right:30% w:90% CFig05_09](restricted/CFig05_09.jpg) 
 
 # Design Case 3: Fan Traps
-- A design trap occurs when a relationship is improperly or incompletely identified, which is not consistent with the real world
-  - The most common design trap is known as a fan trap. A fan trap occurs when you have one entity in two 1:M relationships to other entities
-  - It produces an association among other entities not expressed in the model
+- A design **trap** occurs when a relationship is improperly or incompletely identified, which is not consistent with the real world
+- The most common design trap is fan trap, a type of join path between three tables when a "1-to-M" join links a table which is in turn linked by another "1-to-M" join
+- It produces an association among other entities not expressed in the model
   ![bg right:40% w:100% CFig05_12](restricted/CFig05_12.jpg)
 - Question: Which team the player Jordan belongs to ? 
 
