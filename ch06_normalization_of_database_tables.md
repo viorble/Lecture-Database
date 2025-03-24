@@ -170,46 +170,48 @@ The objective of normalization is to ensure:
 # Normal Forms
 ![bg right:70% w:100%](restricted/CTable06_02.jpg)
 
-# Normalization Base: Functional Dependency
+# Normalization Base: Functional Dependency (FD)
 - Normalization starts by identifying **functional dependencies** of a given table
-- <span class="blue-text">Functional Dependency X&rarr;Y</span>: the values of Y are determined by the values of X. (X, Y is a set of attributes)
-- <span class="blue-text">X&rarr;Y is full functional dependency </span>, if no attribute can be removed from X and still keep the dependency.
+- <span class="blue-text">FD X&rarr;Y</span>: the values of Y are determined by the values of X. (X, Y is a set of attributes)
+- <span class="blue-text">X&rarr;Y is full FD </span>, if no attribute can be removed from X and still keep the dependency.
 - Example: 
   - PROJ_NUM → PROJ_ NAME (read as PROJ_ NUM functionally determines PROJ_NAME)
   - Attribute PROJ_NUM is known as the determinant attribute
   - Attribute PROJ_NAME is known as the dependent attribute.
 
 # Functional Dependency Type: Partial Functional Dependency
-When there is a functional dependence in which the determinant is only part of the PK
-- <span class="blue-text">X&rarr;Y is a partial functional dependency </span> if some attribute can be removed from X and the dependency is still there.
+When there is a FD in which the determinant is only part of the PK
+- <span class="blue-text">X&rarr;Y is a partial FD </span> if X is a subset of PK.
 
 Example
-- functional dependency: (A, B) &rarr; C, we say it is a partial functional dependency, if we can find a subset of (A, B) to make another functional dependency: B &rarr; C 
+- Give a table having PK (A, B), a FD (B &rarr; C), we say it is a partial FD because B is a subset of PK 
 
-# Functional Dependency - Transitive dependency
+# Functional Dependency - Transitive Functional Dependency
 When the attribute is dependent on another attribute that is not part of the primary key
-- Transitive dependencies are more difficult to identify among a set of data
-- They occur only when a functional dependence exists among non-prime attributes
+- Transitive FD is more difficult to identify among a set of data
+- They occur only when a FD exists among non-prime attributes
 Example
-- given primary key: X 
-- exists functional dependencies X → Y
-- exists functional dependencies Y → Z
-- thus, we can find a functional dependency X → Z, which is a <span class="blue-text">transitive dependency</span> because X can determine the value of Z via Y. 
-- Y → Z signals that a transitive dependency exists because Y is not a PK.
+- Given primary key: X, we identify two FDs X → Z and X → Y
+- After investigating, we also find that there is a FD Y → Z, which can support X determine Z because (X → Y) + (Y → Z) can make (X → Z) that is, x can determine the value of Z via Y. 
+- Y → Z signals that there is a <span class="blue-text">transitive FD</span> because Y is not a PK.
 
 # Why Do We Do Database Normalization?
 ![bg right:70% w:100%](https://cdn.hackr.io/uploads/posts/attachments/1666888816mdnYlrMoEE.png)
 
 # Conversion to First Normal Form (1NF)
-A table in the first normal form means
-- All key attributes are defined
-- There are no repeating groups in the table
+A table in 1NF means
+- All key attributes are well defined 
+- There are no repeating groups
 - All attributes are dependent on the primary key
 
 Converting to 1NF starts with three steps
 1. Eliminate the repeating groups 
 2. Identify the primary key 
 3. Identify all dependencies
+
+# Conversion to First Normal Form (1NF) - Supplement
+- Row order do not convey any information
+- There is no mixed data types within a column
 
 # 1NF Step1 - Eliminate Repeating Groups
 Repeating group: a group of entries existing for a single key value
@@ -226,20 +228,10 @@ PK: an identifier composed of one or more attributes that uniquely identifies a 
 ![bg right:70% w:100%](restricted/CFig06_02.jpg)
 
 # 1NF Step3 - Identify all Dependencies
-- According to PK, a dependency exist
-  - PROJ_NUM, EMP_NUM → PROJ_NAME, EMP_NAME, JOB_CLASS, CHG_HOUR, HOURS
-- (partial dependency) PROJ_NUM → PROJ_NAME
-- (partial dependency) EMP_NUM → EMP_NAME, JOB_CLASS, CHG_HOUR, <span class="brown-text">(not HOURS)</span>
-- (transitive dependency) JOB_CLASS → CHG_HOUR
-
-The functional dependency {Book} → {Author nationality} emerges; that is, if we know the book, we can know the author's nationality. Furthermore:
-
-{Book} → {Author}
-{Author} does not → {Book}
-{Author} → {Author nationality}
-Therefore {Book} → {Author nationality} is a transitive dependency.
-
-
+- According to PK (PROJ_NUM, EMP_NUM), we can find a dependency exist (PROJ_NUM, EMP_NUM) → (PROJ_NAME, EMP_NAME, JOB_CLASS, CHG_HOUR, HOURS) and derive it into two partial dependencies and one transitive dependency
+- Partial FD: PROJ_NUM → PROJ_NAME (because PROJ_NUM is a part of PK)
+- Partial FD: EMP_NUM → EMP_NAME, JOB_CLASS, CHG_HOUR, <span class="brown-text">(not HOURS)</span> (because EMP_NUM is a part of PK)
+- Transitive FD: JOB_CLASS → CHG_HOUR (because JOB_CLASS is not part of PK )
 
 # Dependency Diagram
 Dependency diagram shows all dependencies found within given table structure
@@ -250,18 +242,18 @@ Dependency diagram shows all dependencies found within given table structure
   - All key attributes are defined
   - There are no repeating groups in the table
   - All attributes are dependent on the primary key
-- Some tables may contain partial and transitive dependencies
+- Some tables may contain partial and transitive FDs
 
 # Conversion to Second Normal Form (2NF)
 A table in the second normal form means
 - it is in 1NF
-- it does not include partial dependencies
+- it does not include partial FD
 
 Conversion to 2NF occurs only when the 1NF has a composite primary key
 - If the 1NF has a single-attribute primary key, then the table is automatically in 2NF
 
 Converting to 2NF starts with two steps
-1. Make new tables to eliminate partial dependencies
+1. Make new tables to eliminate partial FD
 2. Reassign corresponding dependent attributes
 
 # 2NF Step1 Make New Tables to Eliminate Partial Dependencies
@@ -286,17 +278,17 @@ Converting to 2NF starts with two steps
 # After 2NF
 - All relational tables satisfy 2NF requirements
   - it is in 1NF
-  - it does not include partial dependencies
+  - it does not include partial FD
   - If the 1NF has a single-attribute primary key, then the table is automatically in 2NF
-- Some tables may contain transitive dependencies
+- Some tables may contain transitive FD
 
 # Conversion to Third Normal Form (3NF)
 A table in the third normal form means
 - it is in 2NF
-- it does not include transitive dependencies
+- it does not include transitive FD
 
 Converting to 3NF starts with two steps
-1. Make new tables to eliminate transitive dependencies 
+1. Make new tables to eliminate transitive FD 
 2. Reassign corresponding dependent attributes
 
 # 3NF Step1 Make New Tables to Eliminate Transitive Dependencies
@@ -316,7 +308,7 @@ A transitive dependency: JOB_CLASS → CHG_HOUR
 
 # After 3NF
 - it is in 2NF
-- it does not include transitive dependencies
+- it does not include transitive FD
 
 # Improving the design
 - Normalization form only focus on avoiding data redundancy
@@ -329,12 +321,6 @@ A transitive dependency: JOB_CLASS → CHG_HOUR
   6. Refine primary keys as required for data granularity
   7. Maintain historical accuracy
   8. Evaluate using derived attributes
-
-# The Completed Database After Design Improvement
-<div class="grid">
-    <img src="restricted/CFig06_06a.jpg" alt="">
-    <img src="restricted/CFig06_06b.jpg" alt="">
-</div> 
 
 # Minimize data entry errors
 - When a new database designer on board, we need insert a record in EMPLOYEE table. Thus, we enter data into JOB_CLASS. 
@@ -416,7 +402,7 @@ ASSIGN_NUM|PROJ_NUM|EMP_NUM|ASSIGN_DATE|ASSIGN_HOUR
 - Lower granularity yields greater flexibility
 
 # Maintain historical accuracy
-- Add jog charge per hour (ASSIGN_CHG_HOUR) into ASSIGNMENT table is important to maintain historical accuracy of the data
+- Add job charge per hour (ASSIGN_CHG_HOUR) into ASSIGNMENT table is important to maintain historical accuracy of the data
 - JOB_CHG_HOUR in JOB and ASSIGN_CHG_HOUR in ASSIGNMENT. they may the same in a time period. 
 - Due to salary raise, JOB_CHG_HOUR will be changed
 - ASSIGN_CHG_HOUR keep historical data and only reflect the charge hour whey employee report hours
@@ -445,17 +431,8 @@ ASSIGN_NUM|PROJ_NUM|EMP_NUM|ASSIGN_DATE|ASSIGN_HOUR
 # Normalization and Database Design
 - Normalization should be part of the design process
 - Proposed entities must meet the required normal form before table structures are created
-- Principles and normalization procedures to be understood to redesign and modify databases
+- Principles and normalization procedures to be written when redesigning and modifying databases
 - ERD should be updated through the iterative process
-
-# Homework: Contracting Company
-1. Read section 6-7 content
-2. Design database schemas for Contracting Company, including but not limited to
-  - Business rules
-  - Evolving history of ER diagram in terms of normal forms
-  - 1NF, 2NF, 3NF conversion, dependency diagram and reason
-  - At least 3 sample records of each table to illustrate PK and FK among tables to demonstrate their relationships.
-  - Check your design by Table 6.7 Data Modeling Checklist
 
 # Denormalization
 - Important database design goals include the following:
@@ -478,3 +455,12 @@ ASSIGN_NUM|PROJ_NUM|EMP_NUM|ASSIGN_DATE|ASSIGN_HOUR
 - When is a table in 1NF
 - When is a table in 2NF
 - When is a table in 3NF
+
+# Homework: Contracting Company
+1. Read section 6-7 content
+2. Design database schemas for Contracting Company, including but not limited to
+  - Business rules
+  - Evolving history of ER diagram in terms of normal forms
+  - 1NF, 2NF, 3NF conversion, dependency diagram and reason
+  - At least 3 sample records of each table to illustrate PK and FK among tables to demonstrate their relationships.
+  - Check your design by Table 6.7 Data Modeling Checklist
