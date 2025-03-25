@@ -238,12 +238,12 @@ Building an ERD usually involves the following activities as a <span class="blue
 - Each school has several departments.
   - The number of departments operated by a school is at least one to many
   - Each department belongs to only a single school
-![bg right:40% w:100% CFig04_27](restricted/CFig04_27.jpg)
+![bg right:40% w:100% CFig04_27](files/image/Tiny_College_1.jpeg)
 
 # Tiny College (TC) (3/10)
 - Each department may offer courses.
   - Some departments that were classified as "research only," they would not offer courses; therefore, the COURSE entity would be optional to the DEPARTMENT entity.
-![bg right:40% w:100% CFig04_28](restricted/CFig04_28.jpg)
+![bg right:40% w:100% CFig04_28](files/image/Tiny_College_2.jpeg)
 
 # Tiny College (TC) (4/10)
 - A course can be taught in several classes.
@@ -251,44 +251,44 @@ Building an ERD usually involves the following activities as a <span class="blue
 - A class is offered during a given semester. SEMESTER defines the year and the term that the class will be offered. 
 - CLASS is optional to SEMESTER.
 - CLASS is optional to COURSE.
-![bg right:40% w:100% CFig04_29](restricted/CFig04_29.jpg)
+![bg right:40% w:100% CFig04_29](files/image/Tiny_College_3.jpeg)
 
 # Tiny College (TC) (5/10)
 - Each department should have one or more professors assigned to it. 
 - One and only one of those professors chairs the department
 - Not all professors are required to chair a department. 
 - DEPARTMENT is optional to PROFESSOR in the "chairs" relationship.
-![bg right:40% w:100% CFig04_30](restricted/CFig04_30.jpg)
+![bg right:40% w:100% CFig04_30](files/image/Tiny_College_4.jpeg)
 
 # Tiny College (TC) (6/10)
 - Each professor may teach up to four classes; each class is belong to a course.
 - A professor may also be on a research contract and teach no classes at all.
-![bg right:40% w:100% CFig04_31](restricted/CFig04_31.jpg)
+![bg right:40% w:100% CFig04_31](files/image/Tiny_College_5.jpeg)
 
 # Tiny College (TC) (7/10)
 - A student may enroll in several classes but take each class only once.
 - Each student may enroll in up to six classes, and each class may have up to 35 students, (STUDENT and CLASS is M:N relationship ). 
 - This M:N relationship must be divided into two 1:M relationships by ENROLL entity 
-![bg right:40% w:100% CFig04_32](restricted/CFig04_32.jpg)
+![bg right:40% w:100% CFig04_32](files/image/Tiny_College_6.jpeg)
 
 # Tiny College (TC) (8/10)
 - Each department has several students whose major is offered by that department. <span class="red-text">(VAGUE!!)</span>
 - Each student has only a single major associated with a single department.
 - It is possible for a student not to declare a major field of study.
-![bg right:40% w:100% CFig04_33](restricted/CFig04_33.jpg)
+![bg right:40% w:100% CFig04_33](files/image/Tiny_College_7.jpeg)
 
 # Tiny College (TC) (9/10)
 - Each student has an advisor in his or her department
 - Each advisor counsels several students.
 - An advisor is also a professor, but not all professors advise students.
-![bg right:40% w:100% CFig04_34](restricted/CFig04_34.jpg)
+![bg right:40% w:100% CFig04_34](files/image/Tiny_College_8.jpeg)
 
 # Tiny College (TC) (10/10)
 - A class is taught in a room.
 - Each room is located in a building.
 - A building can contain many rooms. 
 - Some buildings do not contain (class) rooms.
-![bg right:40% w:100% CFig04_35](restricted/CFig04_35.jpg)
+![bg right:40% w:100% CFig04_35](files/image/Tiny_College_9.jpeg)
 
 # Tiny College (TC) (Summary: Entities)
 PROFESSOR
@@ -303,10 +303,10 @@ ROOM
 ENROLL (the associative entity between STUDENT and CLASS)
 
 # Summary: Components of ERM
-![bg right:70% w:100% CTable04_04](restricted/CTable04_04.jpg)
+![bg right:70% w:100% CTable04_04](Component of the ERM.jpeg)
 
 # Summary: Completed ERD
-![bg right:70% w:60% CFig04_36](restricted/CFig04_36.jpg)
+![bg right:70% w:60% CFig04_36](IMG_110779F73195-1.jpeg)
 
 # Database Design Challenges: Conflicting Goals
 - Database designers must often make design compromises that are triggered by conflicting <span class='blue-text'>GOALS</span>
