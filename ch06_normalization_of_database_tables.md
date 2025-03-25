@@ -48,9 +48,13 @@ style: |
 - Learn to evaluate and design good table structures to **control data redundancies** thereby avoiding data anomalies.
 - The process that yields such desirable results is known as **normalization**.
 
-# Good Database Self-Taught Resource
-https://www.databasestar.com
+# Self-Taught Resource
+https://www.databasestar.com/mysql-database/
+https://www.databasestar.com/database-design/
+https://www.databasestar.com/programmer-jokes/
 https://www.databasestar.com/vip/
+https://youtube.com/@decomplexify?si=I5sEMNUZOJcSpiCX
+
 
 # Database Tables and Normalization
 - <span class="blue-text">**Normalization**</span> is a process for adjusting table structures to <span class="brown-text">**minimize data redundancies**</span> 
@@ -154,18 +158,18 @@ Student ID|Student Name|Fees Paid|Course Name|Class 1|Class 2|Class 3
 - Database designers commonly use normalization in the following two situations:
   - When designing a new database structure
   - To analyze the relationship among the attributes within each entity and determine if the structure can be improved through normalization
-- The main goal of normalization is to eliminate data anomalies by eliminating unnecessary or unwanted <span class="blue-text">data redundancies</span>
-- Normalization uses the concept of <span class="blue-text">functional dependencies</span> to identify which attribute determines other attributes
+- The main goal of normalization is to eliminate data anomalies by eliminating unnecessary <span class="blue-text">data redundancies</span>
+- Normalization uses the concept of <span class="blue-text">functional dependencies, FD</span> to identify which attribute determines other attributes
 
-# The Normalization Process
-The objective of normalization is to ensure:
+# The Objectives of Normalization
 - Each table represents a single subject
 - Each row/column intersection contains only one value and not a group of values
-- No data item will be unnecessarily stored in more than one table. Data is updated in only one place
+- No data item will be unnecessarily stored in more than one table.
+- Data is updated in only one place
 - All non-prime attributes in a table are dependent on the primary key
 - Each table has no insertion, update, or deletion anomalies
 - Ensure that all tables are in at least in 3NF in business environment
-- Work one relation at a time, identifying functional dependencies of a relation (table)
+- Work one table at a time, identifying FD of a table
 
 # Normal Forms
 ![bg right:70% w:100%](restricted/CTable06_02.jpg)
@@ -179,20 +183,20 @@ The objective of normalization is to ensure:
   - Attribute PROJ_NUM is known as the determinant attribute
   - Attribute PROJ_NAME is known as the dependent attribute.
 
-# Functional Dependency Type: Partial Functional Dependency
+# FD Type: Partial Functional Dependency
 When there is a FD in which the determinant is only part of the PK
 - <span class="blue-text">X&rarr;Y is a partial FD </span> if X is a subset of PK.
 
 Example
-- Give a table having PK (A, B), a FD (B &rarr; C), we say it is a partial FD because B is a subset of PK 
+- Give a table having PK (A, B), there is a FD (B &rarr; C), we say it is a partial FD because B is a subset of PK 
 
-# Functional Dependency - Transitive Functional Dependency
-When the attribute is dependent on another attribute that is not part of the primary key
+# FD Type: Transitive Functional Dependency
+When a attribute is dependent on another attribute which is not part of PK
 - Transitive FD is more difficult to identify among a set of data
 - They occur only when a FD exists among non-prime attributes
 Example
-- Given primary key: X, we identify two FDs X → Z and X → Y
-- After investigating, we also find that there is a FD Y → Z, which can support X determine Z because (X → Y) + (Y → Z) can make (X → Z) that is, x can determine the value of Z via Y. 
+- Given primary key: X, there are two FDs X → Z and X → Y
+- After investigating, we find that there is a FD Y → Z, which can support X determine Z because (X → Y) + (Y → Z) can make (X → Z) that is, x can determine the value of Z via Y. 
 - Y → Z signals that there is a <span class="blue-text">transitive FD</span> because Y is not a PK.
 
 # Why Do We Do Database Normalization?
@@ -228,7 +232,7 @@ PK: an identifier composed of one or more attributes that uniquely identifies a 
 ![bg right:70% w:100%](restricted/CFig06_02.jpg)
 
 # 1NF Step3 - Identify all Dependencies
-- According to PK (PROJ_NUM, EMP_NUM), we can find a dependency exist (PROJ_NUM, EMP_NUM) → (PROJ_NAME, EMP_NAME, JOB_CLASS, CHG_HOUR, HOURS) and derive it into two partial dependencies and one transitive dependency
+According to PK (PROJ_NUM, EMP_NUM), we can find a dependency exist (PROJ_NUM, EMP_NUM) → (PROJ_NAME, EMP_NAME, JOB_CLASS, CHG_HOUR, HOURS) and derive it into two partial FD and one transitive FD
 - Partial FD: PROJ_NUM → PROJ_NAME (because PROJ_NUM is a part of PK)
 - Partial FD: EMP_NUM → EMP_NAME, JOB_CLASS, CHG_HOUR, <span class="brown-text">(not HOURS)</span> (because EMP_NUM is a part of PK)
 - Transitive FD: JOB_CLASS → CHG_HOUR (because JOB_CLASS is not part of PK )
@@ -256,7 +260,7 @@ Converting to 2NF starts with two steps
 1. Make new tables to eliminate partial FD
 2. Reassign corresponding dependent attributes
 
-# 2NF Step1 Make New Tables to Eliminate Partial Dependencies
+# 2NF Step1 - Make New Tables to Eliminate Partial FD
 - Separate composite PK (PROJ_NUM + EMP_NUM) into different PKs
   - PK1: PROJ_NUM
   - PK2: EMP_NUM
@@ -266,11 +270,11 @@ Converting to 2NF starts with two steps
   - Table2: EMPLOYEE, PK is EMP_NUM
   - Table3: ASSIGNMENT, PK is PROJ_NUM + EMP_NUM
 
-# 2NF Step2 Reassign Corresponding Dependent Attributes
+# 2NF Step2 - Reassign Corresponding Dependent Attributes
 - Table PROJECT(**PROJ_NUM**, PROJ_NAME)
 - Table EMPLOYEE(**EMP_NUM**, EMP_NAME, JOB_CLASS, CHG_HOUR)
 - Table ASSIGNMENT(**PROJ_NUM**, **EMP_NUM**, <span class="brown-text">ASSIGN_HOUR</span>)
-(any attributes that are not dependent in partial dependency will remain in the original table)
+(any attributes that are not dependent in partial FD will remain in the original table)
 
 # Dependency Diagram
 ![bg right:70% w:90%](restricted/CFig06_04.jpg)
@@ -291,17 +295,17 @@ Converting to 3NF starts with two steps
 1. Make new tables to eliminate transitive FD 
 2. Reassign corresponding dependent attributes
 
-# 3NF Step1 Make New Tables to Eliminate Transitive Dependencies
-A transitive dependency: JOB_CLASS → CHG_HOUR 
+# 3NF Step1 - Make New Tables to Eliminate Transitive FD
+A transitive FD: JOB_CLASS → CHG_HOUR 
 - Make determinant (JOB_CLASS) as a PK of a new table
 - Create tables based on new PK
   - Table JOB(**JOB_CLASS**, CHG_HOUR)
 
-# 3NF Step2 Reassign corresponding dependent attributes
-- Table EMPLOYEE(**EMP_NUM**, EMP_NAME, JOB_CLASS)
-- Table JOB(**JOB_CLASS**, CHG_HOUR)
-- Table PROJECT(**PROJ_NUM**, PROJ_NAME)
-- Table ASSIGNMENT(**PROJ_NUM**, **EMP_NUM**, ASSIGN_HOUR)
+# 3NF Step2 - Reassign Corresponding Dependent Attributes
+- Table EMPLOYEE(<u>**EMP_NUM**</u>, EMP_NAME, JOB_CLASS)
+- Table JOB(<u>**JOB_CLASS**</u>, CHG_HOUR)
+- Table PROJECT(<u>**PROJ_NUM**</u>, PROJ_NAME)
+- Table ASSIGNMENT(<u>**PROJ_NUM**, **EMP_NUM**</u>, ASSIGN_HOUR)
 
 # Dependency Diagram
 ![bg right:70% w:90%](restricted/CFig06_05.jpg)
@@ -326,6 +330,7 @@ A transitive dependency: JOB_CLASS → CHG_HOUR
 - When a new database designer on board, we need insert a record in EMPLOYEE table. Thus, we enter data into JOB_CLASS. 
 - However, sometime we may enter either Database Designer, DB Designer or database designer. It easily makes data entry errors
 - Reduce the data enter errors by adding a <span class="brown-text">surrogate key</span> JOB_CODE <br>   JOB_CODE → JOB_CLASS, CHG_HOUR 
+- Table JOB(<u>**JOB_CODE**</u>, JOB_CLASS, CHG_HOUR)
 - Surrogate key is an artificial key introduced by DB designer
   - simplify PK design
   - usually numeric
@@ -354,7 +359,7 @@ A transitive dependency: JOB_CLASS → CHG_HOUR
 
 
 - After 3NF
-  ASSIGNMENT(**PROJ_NUM**, **EMP_NUM**, ASSIGN_HOUR)
+  ASSIGNMENT(<u>**PROJ_NUM**, **EMP_NUM**</u>, ASSIGN_HOUR)
 <style scoped>
 table {
   font-size: 25px;
@@ -370,7 +375,7 @@ Report hours at the end of project
 # Refine PKs as Required for Data Granularity (2/3)
 
 - Add ASSIGN_DATE attribute
-  ASSIGNMENT(**PROJ_NUM**, **EMP_NUM**, **ASSIGN_DATE**, ASSIGN_HOUR)
+  ASSIGNMENT(<u>**PROJ_NUM**, **EMP_NUM**, **ASSIGN_DATE**</u>, ASSIGN_HOUR)
 
 <style scoped>
 table {
@@ -386,7 +391,7 @@ Report hours once a day
 
 # Refine PKs as Required for Data Granularity (3/3)
 - Add ASSIGN_NUM as a surrogate key
-  ASSIGNMENT(**ASSIGN_NUM**, PROJ_NUM, EMP_NUM, ASSIGN_DATE, ASSIGN_HOUR)
+  ASSIGNMENT(<u>**ASSIGN_NUM**</u>, PROJ_NUM, EMP_NUM, ASSIGN_DATE, ASSIGN_HOUR)
 
 <style scoped>
 table {
@@ -431,7 +436,7 @@ ASSIGN_NUM|PROJ_NUM|EMP_NUM|ASSIGN_DATE|ASSIGN_HOUR
 # Normalization and Database Design
 - Normalization should be part of the design process
 - Proposed entities must meet the required normal form before table structures are created
-- Principles and normalization procedures to be written when redesigning and modifying databases
+- Principles and normalization procedures should be written when redesigning and modifying databases
 - ERD should be updated through the iterative process
 
 # Denormalization
@@ -445,7 +450,15 @@ ASSIGN_NUM|PROJ_NUM|EMP_NUM|ASSIGN_DATE|ASSIGN_HOUR
   - lead to data redundancy
 
 # Examples of Denormalization
-![bg right:70% w:100%](restricted/CTable06_06.jpg)
+![bg right:60% w:90%](restricted/CTable06_06.jpg)
+- STU_HRS = Credit hours earned
+- STU_CLASS = Student classification (fr, so, jr, sr)
+
+# Denormalization - Wide and Narrow Table
+<div class="grid">
+    <img src="restricted/CFig06_19.jpg" alt="">
+    <img src="restricted/CFig06_20.jpg" alt="">
+</div>
 
 # Data Modeling Checklist
 ![bg right:70% w:70%](restricted/CTable06_07.jpg)
@@ -457,7 +470,7 @@ ASSIGN_NUM|PROJ_NUM|EMP_NUM|ASSIGN_DATE|ASSIGN_HOUR
 - When is a table in 3NF
 
 # Homework: Contracting Company
-1. Read section 6-7 content
+1. Read section 6-7 Normalization and Database Design
 2. Design database schemas for Contracting Company, including but not limited to
   - Business rules
   - Evolving history of ER diagram in terms of normal forms
