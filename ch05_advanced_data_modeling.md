@@ -45,7 +45,7 @@ style: |
 - Data-modeling design cases
 
 # Nulls Created by Unique Attributes
-![bg right:60% w:100% CFig05_01](restricted/CFig05_01.jpg)
+![bg right:60% w:100% CFig05_01](files/image/5.1.jpeg)
 
 # Extended (Enhanced) Entity Relationship Model (EERM)
 - EERM is the result of adding more object-oriented concept to the original ER model
@@ -65,12 +65,12 @@ style: |
 - Have a special supertype attribute as the **subtype discriminator**, commonly use equality comparison
 
 # Specialization Hierarchy Example
-![bg right:60% w:100% CFig05_02](restricted/CFig05_02.jpg)
+![bg right:60% w:100% CFig05_02](files/image/5.2.jpeg)
 
 # Entity Clustering (封裝的概念)
 - OFFERING: SEMESTER + COURSE + CLASS
 - LOCATION: ROOM + BUILDING
-![bg right:60% w:60% CFig05_06](restricted/CFig05_06.jpg)
+![bg right:60% w:60% CFig05_06](./files/image/5.6.jpeg)
 
 # Entity Integrity: Selecting Primary Keys
 - The most important characteristic of an entity is its primary key (a single attribute or a combination of attributes), which uniquely identifies each entity instance.
@@ -96,7 +96,7 @@ Q: Guess the pros and cons of using nature key
 - As identifiers of composite (bridge, associate) entities, in which each primary key combination is allowed once in M:N relationship
 - As identifiers of weak entities, in which the weak entity has a strong identifying relationship with the parent entity
 
-![bg right:50% w:100% CFig05_07](restricted/CFig05_07.jpg)
+![bg right:50% w:100% CFig05_07](files/image/5.7.jpeg)
 
 # When to Use Surrogate Primary Keys (代理鍵)
 - A surrogate key is a primary key created by the database designer to simplify the identification of entity instances 
@@ -127,24 +127,24 @@ Design comparison
 - <span class="small-text">This new entity contains the new value, the date of the change, and any other pertinent attribute</span>
 - <span class="small-text">Question: What is (1) current salary and (2) salary raise history of an employee within a time period</span>
 - <span class="small-text">Discussion: in relationship emp_sal_hist, what cardinality salary_hist is? (0,M) or (1,M) </span>
-![bg right:30% w:90% CFig05_09](restricted/CFig05_09.jpg) 
+![bg right:30% w:90% CFig05_09](./files/image/5.9.jpeg) 
 
 # Design Case 3: Fan Traps
 - A design **trap** occurs when a relationship is improperly or incompletely identified, which is not consistent with the real world
 - The most common design trap is fan trap, a type of join path between three tables when a "1-to-M" join links a table which is in turn linked by another "1-to-M" join
 - It produces an association among other entities not expressed in the model
-  ![bg right:40% w:100% CFig05_12](restricted/CFig05_12.jpg)
+  ![bg right:40% w:100% CFig05_12](./files/image/5.12.jpeg)
 - Question: Which team the player Jordan belongs to ? 
 
 # Illustration of Design Case 3
-![bg right:40% w:100% CFig05_13](restricted/CFig05_13.jpg)
+![bg right:40% w:100% CFig05_13](./files/image/5.13.jpeg)
 Exists a **transitive** relationship between DIVISION and PLAYER via the TEAM entity
 
 # Design Case 4:  Redundant Relationships
 - Redundant relationships occur when there are multiple relationship paths between related entities
 - The main concern is that they remain consistent across the model
 - Some designs use redundant relationships as a way to simplify the design
-![bg right:40% w:100% CFig05_14](restricted/CFig05_14.jpg)
+![bg right:40% w:100% CFig05_14](./files/image/5.14.jpeg)
 
 # Review Questions
 - What is an entity supertype, and why is it used?
