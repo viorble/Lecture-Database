@@ -141,10 +141,10 @@ Student ID|Student Name|Fees Paid|Course Name|Class 1|Class 2|Class 3
 - We should be able to delete one type of data or one record without having impacts on other records we don’t want to delete.
 
 # A Sample Report Layout
-![bg right:70% w:90%](restricted/CTable06_01.jpg)
+![bg right:70% w:90%](files/image/6.1t.jpeg)
 
 # Poor Table Structure
-![bg right:60% w:90%](restricted/CFig06_01.jpg)
+![bg right:60% w:90%](files/image/6.1.jpeg)
 - Data inconsistency
 - Difficult to update
 - Data redundant
@@ -172,7 +172,7 @@ Student ID|Student Name|Fees Paid|Course Name|Class 1|Class 2|Class 3
 - Work one table at a time, identifying FD of a table
 
 # Normal Forms
-![bg right:70% w:100%](restricted/CTable06_02.jpg)
+![bg right:70% w:100%](files/image/6.2t.jpeg)
 
 # Normalization Base: Functional Dependency (FD)
 - Normalization starts by identifying **functional dependencies** of a given table
@@ -229,7 +229,7 @@ Repeating group: a group of entries existing for a single key value
 PK: an identifier composed of one or more attributes that uniquely identifies a row
 <span class="brown-text">PROJ_NUM + EMP_NUM</span>
 
-![bg right:70% w:100%](restricted/CFig06_02.jpg)
+![bg right:70% w:100%](files/image/6.2.jpeg)
 
 # 1NF Step3 - Identify all Dependencies
 According to PK (PROJ_NUM, EMP_NUM), we can find a dependency exist (PROJ_NUM, EMP_NUM) → (PROJ_NAME, EMP_NAME, JOB_CLASS, CHG_HOUR, HOURS) and derive it into two partial FD and one transitive FD
@@ -239,7 +239,7 @@ According to PK (PROJ_NUM, EMP_NUM), we can find a dependency exist (PROJ_NUM, E
 
 # Dependency Diagram
 Dependency diagram shows all dependencies found within given table structure
-![bg right:70% w:90%](restricted/CFig06_03.jpg)
+![bg right:70% w:90%](files/image/6.3.jpeg)
 
 # After 1NF
 - All relational tables satisfy 1NF requirements
@@ -277,7 +277,7 @@ Converting to 2NF starts with two steps
 (any attributes that are not dependent in partial FD will remain in the original table)
 
 # Dependency Diagram
-![bg right:70% w:90%](restricted/CFig06_04.jpg)
+![bg right:70% w:90%](files/image/6.4.jpeg)
 
 # After 2NF
 - All relational tables satisfy 2NF requirements
@@ -308,7 +308,7 @@ A transitive FD: JOB_CLASS → CHG_HOUR
 - Table ASSIGNMENT(<u>**PROJ_NUM**, **EMP_NUM**</u>, ASSIGN_HOUR)
 
 # Dependency Diagram
-![bg right:70% w:90%](restricted/CFig06_05.jpg)
+![bg right:70% w:90%](files/image/6.5.jpeg)
 
 # After 3NF
 - it is in 2NF
@@ -450,7 +450,7 @@ ASSIGN_NUM|PROJ_NUM|EMP_NUM|ASSIGN_DATE|ASSIGN_HOUR
   - lead to data redundancy
 
 # Examples of Denormalization
-![bg right:60% w:90%](restricted/CTable06_06.jpg)
+![bg right:60% w:90%](files/image/6.6t.jpeg)
 - STU_HRS = Credit hours earned
 - STU_CLASS = Student classification (fr, so, jr, sr)
 
@@ -461,7 +461,7 @@ ASSIGN_NUM|PROJ_NUM|EMP_NUM|ASSIGN_DATE|ASSIGN_HOUR
 </div>
 
 # Data Modeling Checklist
-![bg right:70% w:70%](restricted/CTable06_07.jpg)
+![bg right:70% w:70%](files/image/6.6t.jpeg)
 
 # Review Questions
 - What is normalization
