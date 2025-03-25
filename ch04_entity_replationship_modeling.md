@@ -303,11 +303,10 @@ ROOM
 ENROLL (the associative entity between STUDENT and CLASS)
 
 # Summary: Components of ERM
-![bg right:70% w:100% CTable04_04](Component of the ERM.jpeg)
+![bg right:70% w:100% CTable04_04](files/image/Component%20of%20the%20ERM.jpeg)
 
 # Summary: Completed ERD
-![bg right:70% w:60% CFig04_36](IMG_110779F73195-1.jpeg)
-
+![](files/image/IMG_110779F73195-1.jpeg)
 # Database Design Challenges: Conflicting Goals
 - Database designers must often make design compromises that are triggered by conflicting <span class='blue-text'>GOALS</span>
   - Database design must conform to design standards
