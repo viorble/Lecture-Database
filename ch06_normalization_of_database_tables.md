@@ -446,8 +446,7 @@ ASSIGN_NUM|PROJ_NUM|EMP_NUM|ASSIGN_DATE|ASSIGN_HOUR
 - A problem with normalization is that joining a larger number of tables takes additional input/output (I/O) operations, thereby reducing system speed
 - Defects in unnormalized tables include the following:
   - Data updates are less efficient because tables are larger
-  - Indexing is more cumbersome
-  - lead to data redundancy
+  - Lead to data redundancy
 
 # Examples of Denormalization
 ![bg right:60% w:90%](restricted/CTable06_06.jpg)

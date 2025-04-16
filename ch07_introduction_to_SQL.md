@@ -255,8 +255,8 @@ Each clause in a SELECT query performs the following functions:
   - _ : matches exactly one character
 
 ```sql
-SELECT * FROM users WHERE name LIKE 'J%'; (John, James)
-SELECT * FROM products WHERE code LIKE 'A_1'; (A01, AB1)
+SELECT * FROM emp WHERE emp_lname LIKE 'J%'; (John, James)
+SELECT * FROM vendor WHERE v_code LIKE '2122_'; (A01, AB1)
 ```
 
 # Column Definition of PRODUCT and VENDOR
