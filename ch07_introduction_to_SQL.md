@@ -84,11 +84,11 @@ CREATE INDEX - creates an index (search key); DROP INDEX - deletes an index</spa
   - The American National Standards Institute (ANSI) prescribes a standard SQL.
   - International Organization for Standardization (ISO) also accept.
 - SQL functions fit into several broad categories:
-  - Data manipulation language (DML)
-  - Data definition language (DDL)
-  - Transaction control language (TCL)
-  - Data control language (DCL)
-- SQL is a nonprocedural language
+  - Data manipulation language (DML): INSERT, SELECT, UPDATE, DELETE
+  - Data definition language (DDL): CREATE TABLE
+  - Transaction control language (TCL): COMMIT, ROLLBACK
+  - Data control language (DCL): GRANT, REVOKE
+- SQL is a nonprocedural language, including many set operators
 
 # SQL Data Manipulation Commands
 ![bg right:65% w:90%](restricted/CTable07_01.jpg)
@@ -103,11 +103,86 @@ CREATE INDEX - creates an index (search key); DROP INDEX - deletes an index</spa
 ![bg right:60% w:100%](restricted/CTable08_01.jpg)
 
 # MySQL Data Types
-- String: char, varchar, text
-- Numeric: int, tinyint, boolean, decimal, float
+- String: char, text, binary, blob
+- Numeric: integer, fixed-point, floating point, boolean
 - Date: date, time, datetime
 
+# MySQL String Data Types
+<style scoped>
+table {
+  font-size: 20px;
+}
+</style>
+Data Type|Description|Max Size|Use Case Example
+---------|-----------|----------|----------------
+CHAR(n) | Fixed-length string (right-padded with spaces) | 255 chars |country codes
+VARCHAR(n) | Variable-length string | 64K bytes | names, emails, titles
+TEXT | Large text data | by subtype | articles, comments, blog
+BINARY(n) |Fixed-length binary data |255 bytes | Binary tokens, hashes
+VARBINARY(n) | Variable-length binary data | 64K bytes | Compressed data
+BLOB | Large binary data| by subtype | Images, files, multimedia
+ENUM | A string object with a predefined set of possible values | 64K values | Status like ('pending', 'shipped')
+SET | A string object that can store multiple predefined values (comma-separated)| 64 members | Tags like ("sports", "music","tech")
+
 [List of MySQL Data Types](https://www.w3schools.com/mysql/mysql_datatypes.asp)
+
+# MySQL Numeric Data Types - Integer
+<style scoped>
+table {
+  font-size: 20px;
+}
+</style>
+
+Data Type | Storage | Range | Example Use Case
+----------|---------|-------|-----------------
+TINYINT | 1 byte | -128 to 127 | Status flags (0 = off, 1 = on)
+SMALLINT | 2 bytes | -32,768 to 32,767 | Age field
+MEDIUMINT | 3 bytes | -8,388,608 to 8,388,607 | Moderate row IDs or counts
+INT/INTEGER | 4 bytes | -2.1B to 2.1B | User IDs, product IDs
+BIGINT | 8 bytes | -9.2 quintillion to -9.2 quintillion| Order numbers, financial records
+
+# MySQL Numeric Data Types - Decimal Type
+
+- Exact, stored as string-like binary, no precision loss
+- Slower for math operations
+- DECIMAL(10, 2): 12345678.90
+- Financial data, money, tax, rates
+
+Data Type | Description | Example
+----------|-------------|------------------
+DECIMAL(5,2) | 5 digits total, 2 after decimal precise | -999.99 ~ 999.99
+NUMERIC(5,2) | Alias of DECIMAL
+
+# MySQL Numeric Data Types - Floating-Point Type
+- Approximate, stored as binary float, can lose precision
+- Faster and uses less storage
+- DOUBLE -> 3.14159265358979
+- Scientific data, measurements
+ 
+Data Type | Storage | Example Use Case | Precision
+----------|---------|------------------|----------
+FLOAT | 4 bytes |  Weight: 12.34 | ~7 digits
+DOUBLE | 8 bytes | GPS coordinates: 25.036793, 121.564558 | ~15 to 16 digits
+
+# MySQL Numeric Data Types - Boolean Type
+Data Type | Example Use Case
+----------|----------------
+BOOLEAN | TRUE or FALSE
+BOOL | same as BOOLEAN
+
+# MySQL Date and Time Data Types
+<style scoped>
+table {
+  font-size: 20px;
+}
+</style>
+Data Type | Format  | Example Value | Use Case
+----------|---------|---------------|---------
+DATE | YYYY-MM-DD | '2025-04-22' | birthdays
+DATETIME | YYYY-MM-DD HH:MM:SS | '2025-04-22 13:45:00' | Exact date & time of an event
+TIMESTAMP | YYYY-MM-DD HH:MM:SS | '2025-04-22 05:00:00' | Auto-tracking changes, auditing
+TIME | HH:MM:SS | '14:30:00' | Duration, business hours
+YEAR | YYYY | '2025' | product release year
 
 # Steps to Develop Database
 1. Design ER model (Fig 7.1 or Fig 8.1)
@@ -321,8 +396,8 @@ FROM PRODUCT;
 ```
 
 # FROM Clause Options
-- The FROM clause of the query specifies the table or tables from which the data is to be retrieved
-- Only columns in the table specified in the FROM clause are available throughout the rest of the query
+- The FROM clause specifies table(s) which is involved
+- Only columns in tables in FROM clause are available throughout the rest of the query
 - Multiple tables must be combined using a type of JOIN operation
 
 # ORDER BY Clause Options
@@ -353,8 +428,7 @@ ORDER BY EMP_LNAME, EMP_FNAME, EMP_INITIAL;
 ```sql
 SELECT columnlist
 FROM tablelist
-[WHERE conditionlist ]
-[ORDER BY columnlist [ASC | DESC] ];
+[WHERE conditionlist ];
 ```
 
 # Using Comparison Operator on Numeric Attribute 
@@ -386,11 +460,11 @@ SELECT P_DESCRIPT, P_INDATE, P_PRICE, V_CODE
 FROM PRODUCT
 WHERE P_PRICE < 50 AND P_INDATE > '2021-01-01';
 
-/* use parentheses and 
-compare below two select statements */
+/* use parentheses and compare below two select statements */
 SELECT P_DESCRIPT, P_PRICE, V_CODE
 FROM PRODUCT
 WHERE (V_CODE = 25595 OR V_CODE = 24288) AND P_PRICE > 100;
+
 SELECT P_DESCRIPT, P_PRICE, V_CODE
 FROM PRODUCT
 WHERE V_CODE = 25595 OR V_CODE = 24288 AND P_PRICE > 100;
