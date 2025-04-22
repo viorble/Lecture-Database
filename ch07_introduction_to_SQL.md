@@ -205,7 +205,7 @@ one invoice.
 # Step1C: Data Dict
 ![bg right:80% w:90%](restricted/CTable08_02.jpg)
 
-# Step2: Create Database (MySQL syntax)
+# Step2: Create Database (MySQL syntax) (DDL)
 ```sql
 CREATE DATABASE [IF NOT EXISTS] database_name;
 ```
@@ -215,7 +215,7 @@ CREATE DATABASE EPPS_SALECO;
 CREATE DATABASE IF NOT EXISTS EPPS_SALECO;
 USE EPPS_SALECO;
 ```
-# Step3: Create Database Tables (MySQL syntax)
+# Step3: Create Database Tables (MySQL syntax) (DDL)
 ```sql
 CREATE TABLE [IF NOT EXISTS] table_name (
   column_name1 data_type [column_constraints],
@@ -230,7 +230,7 @@ CREATE TABLE [IF NOT EXISTS] table_name (
 CREATE TABLE IF NOT EXISTS VENDOR (
   V_CODE INT,
   V_NAME VARCHAR(35) NOT NULL,
-  V_CONTACT VARCHAR(15) NOT NULL,
+  V_CONTACT VARCHAR(25) NOT NULL,
   V_AREACODE CHAR(3) NOT NULL,
   V_PHONE CHAR(8) NOT NULL,
   V_STATE CHAR(2) NOT NULL,
@@ -244,18 +244,56 @@ CREATE TABLE IF NOT EXISTS VENDOR (
 CREATE TABLE IF NOT EXISTS PRODUCT (
   P_CODE VARCHAR(10),
   P_DESCRIPT VARCHAR(35) NOT NULL,
-  P_INDATE DATETIME NOT NULL,
-  P_QOH INTEGER NOT NULL,
-  P_MIN INTEGER NOT NULL,
-  P_PRICE NUMERIC(8,2) NOT NULL,
-  P_DISCOUNT NUMERIC(4,2) NOT NULL,
-  V_CODE INTEGER,
+  P_INDATE DATE NOT NULL,
+  P_QOH SMALLINT NOT NULL,
+  P_MIN SMALLINT NOT NULL,
+  P_PRICE DECIMAL(8,2) NOT NULL,
+  P_DISCOUNT DECIMAL(5,2) NOT NULL,
+  V_CODE INT,
   PRIMARY KEY (P_CODE),
   FOREIGN KEY (V_CODE) REFERENCES VENDOR (V_CODE)
 );
 ```
+# Create CUSTOMER Table
+```sql
+CREATE TABLE CUSTOMER (
+  CUS_CODE	INTEGER,
+  CUS_LNAME	VARCHAR(15) NOT NULL,
+  CUS_FNAME	VARCHAR(15) NOT NULL,
+  CUS_INITIAL	CHAR(1),
+  CUS_AREACODE 	CHAR(3),
+  CUS_PHONE	CHAR(8) NOT NULL,
+  CUS_BALANCE	NUMERIC(9,2) DEFAULT 0.00,
+  PRIMARY KEY (CUS_CODE),
+  CONSTRAINT CUS_UI1 UNIQUE(CUS_LNAME,CUS_FNAME, CUS_PHONE));
+```
 
-# STEP4: Insert Data (MySQL Syntax)
+# Create INVOICE Table
+```sql
+CREATE TABLE IF NOT EXISTS INVOICE (
+  INV_NUMBER  INTEGER,
+  CUS_CODE	INTEGER NOT NULL,
+  INV_DATE  DATE NOT NULL,
+  PRIMARY KEY (INV_NUMBER),
+  FOREIGN KEY (CUS_CODE) REFERENCES CUSTOMER (CUS_CODE), 
+  CONSTRAINT INV_CK1 CHECK (INV_DATE > '2012-01-01'));
+```
+# Create LINE Table
+```sql
+CREATE TABLE LINE (
+  INV_NUMBER 	INTEGER NOT NULL,
+  LINE_NUMBER	NUMERIC(2,0) NOT NULL,
+  P_CODE		VARCHAR(10) NOT NULL,
+  LINE_UNITS	NUMERIC(9,2) DEFAULT 0.00 NOT NULL,
+  LINE_PRICE	NUMERIC(9,2) DEFAULT 0.00 NOT NULL,
+  PRIMARY KEY (INV_NUMBER,LINE_NUMBER),
+  FOREIGN KEY (INV_NUMBER) REFERENCES INVOICE (INV_NUMBER) ON DELETE CASCADE,
+  FOREIGN KEY (P_CODE) REFERENCES PRODUCT(P_CODE),
+  CONSTRAINT LINE_UI1 UNIQUE(INV_NUMBER, P_CODE));
+```
+
+
+# STEP4: Insert Data (MySQL Syntax) (DML)
 ```sql
 /* basic syntax */
 INSERT INTO table_name (column1, column2, ..., columnN)
@@ -306,17 +344,61 @@ INSERT INTO PRODUCT VALUES('PVC23DRT','PVC pipe, 3.5-in., 8-ft'              ,'2
 INSERT INTO PRODUCT VALUES('SM-18277','1.25-in. metal screw, 25'             ,'2022-03-01',172, 75,  6.99,0.00,21225);
 INSERT INTO PRODUCT VALUES('SW-23116','2.5-in. wd. screw, 50'                ,'2022-02-24',237,100,  8.45,0.00,21231);
 INSERT INTO PRODUCT VALUES('WR3/TT3' ,'Steel matting, 4''x8''x1/6", .5" mesh','2022-01-17', 18,  5,119.95,0.10,25595);
+```
 
+# Insert Into CUSTOMER Table
+```sql
+/* CUSTOMER rows					*/
+INSERT INTO CUSTOMER VALUES(10010,'Ramas'   ,'Alfred','A' ,'615','844-2573',0);
+INSERT INTO CUSTOMER VALUES(10011,'Dunne'   ,'Leona' ,'K' ,'713','894-1238',0);
+INSERT INTO CUSTOMER VALUES(10012,'Smith'   ,'Kathy' ,'W' ,'615','894-2285',345.86);
+INSERT INTO CUSTOMER VALUES(10013,'Olowski' ,'Paul'  ,'F' ,'615','894-2180',536.75);
+INSERT INTO CUSTOMER VALUES(10014,'Orlando' ,'Myron' ,NULL,'615','222-1672',0);
+INSERT INTO CUSTOMER VALUES(10015,'O''Brian','Amy'   ,'B' ,'713','442-3381',0);
+INSERT INTO CUSTOMER VALUES(10016,'Brown'   ,'James' ,'G' ,'615','297-1228',221.19);
+INSERT INTO CUSTOMER VALUES(10017,'Williams','George',NULL,'615','290-2556',768.93);
+INSERT INTO CUSTOMER VALUES(10018,'Farriss' ,'Anne'  ,'G' ,'713','382-7185',216.55);
+INSERT INTO CUSTOMER VALUES(10019,'Smith'   ,'Olette','K' ,'615','297-3809',0);
+```
+
+# Insert Into INVOICE Table
+```sql
+INSERT INTO INVOICE VALUES(1001,10014,'2022-01-16');
+INSERT INTO INVOICE VALUES(1002,10011,'2022-01-16');
+INSERT INTO INVOICE VALUES(1003,10012,'2022-01-16');
+INSERT INTO INVOICE VALUES(1004,10011,'2022-01-17');
+INSERT INTO INVOICE VALUES(1005,10018,'2022-01-17');
+INSERT INTO INVOICE VALUES(1006,10014,'2022-01-17');
+INSERT INTO INVOICE VALUES(1007,10015,'2022-01-17');
+INSERT INTO INVOICE VALUES(1008,10011,'2022-01-17');
+```
+
+# Insert Into LINE Table
+```sql
+INSERT INTO LINE VALUES(1001,1,'13-Q2/P2',1,14.99);
+INSERT INTO LINE VALUES(1001,2,'23109-HB',1,9.95);
+INSERT INTO LINE VALUES(1002,1,'54778-2T',2,4.99);
+INSERT INTO LINE VALUES(1003,1,'2238/QPD',1,38.95);
+INSERT INTO LINE VALUES(1003,2,'1546-QQ2',1,39.95);
+INSERT INTO LINE VALUES(1003,3,'13-Q2/P2',5,14.99);
+INSERT INTO LINE VALUES(1004,1,'54778-2T',3,4.99);
+INSERT INTO LINE VALUES(1004,2,'23109-HB',2,9.95);
+INSERT INTO LINE VALUES(1005,1,'PVC23DRT',12,5.87);
+INSERT INTO LINE VALUES(1006,1,'SM-18277',3,6.99);
+INSERT INTO LINE VALUES(1006,2,'2232/QTY',1,109.92);
+INSERT INTO LINE VALUES(1006,3,'23109-HB',1,9.95);
+INSERT INTO LINE VALUES(1006,4,'89-WRE-Q',1,256.99);
+INSERT INTO LINE VALUES(1007,1,'13-Q2/P2',2,14.99);
+INSERT INTO LINE VALUES(1007,2,'54778-2T',1,4.99);
+INSERT INTO LINE VALUES(1008,1,'PVC23DRT',5,5.87);
+INSERT INTO LINE VALUES(1008,2,'WR3/TT3',3,119.95);
+INSERT INTO LINE VALUES(1008,3,'23109-HB',1,9.95);
 ```
 
 # Data in Database
 ![bg right:70% w:90%](restricted/CFig08_02.jpg)
 
-# SQL Data Manipulation Language (DML)
-- Many SQL DML are used to perform actions such as adding or deleting rows or changing attribute values within tables
-- Data retrieval is done using SELECT which specifies what data should be retrieved and how it should be filtered, aggregated, and displayed
-
-# Basic SELECT Syntax
+# Basic SELECT Syntax (DML)
 ```sql
 SELECT column1, column2, ...
 FROM table_name
@@ -327,6 +409,34 @@ FROM table_name
 [LIMIT number OFFSET offset];
 ```
 
+# A Complete SELECT Statement
+```sql
+SELECT department, COUNT(*) AS employee_count, AVG(salary) AS avg_salary
+FROM employees
+WHERE status = 'active'
+GROUP BY department
+HAVING AVG(salary) > 50000
+ORDER BY avg_salary DESC
+LIMIT 5 OFFSET 10;
+```
+
+# Explanation of SELECT Statement
+<style scoped>
+table {
+  font-size: 20px;
+}
+</style>
+
+Clause|Purpose|Explanation
+------|-------|-----------
+SELECT department, COUNT(*), AVG(salary) | Columns to retrieve | Selects the department, number of employees, and average salary
+FROM employees | Table source | Uses the employees table
+WHERE status = 'active' | Filter rows | Only include employees who are currently active
+GROUP BY department | Grouping | Groups rows by department
+HAVING AVG(salary) > 50000 | Group filter | Only show departments where the average salary is above 50,000
+ORDER BY avg_salary DESC | Sort | Sorts the result by average salary in descending order
+LIMIT 5 OFFSET 10 | Pagination | Skips the first 10 rows and returns the next 5
+
 # SELECT Clause
 - SELECT – specifies the attributes to be returned (column name or *)
 - FROM – specifies the table(s)
@@ -334,17 +444,6 @@ FROM table_name
 - GROUP BY – groups the rows of data into collections based on columns
 - HAVING – filters the groups formed by GROUP BY clause
 - ORDER BY – sorts the final query result rows in ascending or descending order by columns
-
-# Use Wildcard in Expression
-A wildcard character is a symbol that can be used as a general substitute for other characters or commands
-  - \* : all columns
-  - % : matches zero or more characters
-  - _ : matches exactly one character
-
-```sql
-SELECT * FROM PRODUCT WHERE P_CODE LIKE '15%';
-SELECT * FROM PRODUCT WHERE P_CODE LIKE '2232/Q__';
-```
 
 # Select an Entire PRODUCT Table
 ```sql
@@ -484,22 +583,32 @@ WHERE NOT (V_CODE = 21344);
 
 # Illustrations of Special Operators
 ```sql
-SELECT *
-FROM PRODUCT
+SELECT * FROM PRODUCT
 WHERE P_PRICE BETWEEN 50.00 AND 100.00;
-SELECT *
-FROM PRODUCT
+
+SELECT * FROM PRODUCT
 WHERE V_CODE IN (21344, 24288);
-SELECT V_NAME, V_CONTACT, V_AREACODE, V_PHONE
-FROM VENDOR
+
+SELECT V_NAME, V_CONTACT, V_AREACODE, V_PHONE FROM VENDOR
 WHERE V_CONTACT LIKE 'Smith%';
--- wildcard % for zero or more chars, _ for any one char
-SELECT P_CODE, P_DESCRIPT, V_CODE
-FROM PRODUCT
+
+/* wildcard % for zero or more chars, _ for any one char */
+SELECT P_CODE, P_DESCRIPT, V_CODE FROM PRODUCT
 WHERE V_CODE IS NULL;
-SELECT V_NAME, V_CONTACT, V_AREACODE, V_PHONE
-FROM VENDOR
+
+SELECT V_NAME, V_CONTACT, V_AREACODE, V_PHONE FROM VENDOR
 WHERE UPPER(V_CONTACT) NOT LIKE 'SMITH%';
+```
+
+# Use Wildcard in Expression
+A wildcard character is a symbol that can be used as a general substitute for other characters or commands
+  - \* : all columns
+  - % : matches zero or more characters
+  - _ : matches exactly one character
+
+```sql
+SELECT * FROM PRODUCT WHERE P_CODE LIKE '15%';
+SELECT * FROM PRODUCT WHERE P_CODE LIKE '2232/Q__';
 ```
 
 # MySQL Comparison Operators
@@ -1098,5 +1207,3 @@ WHERE C2.CUS_LNAME IS NULL;
 - What three join types are included in the OUTER JOIN classification? 
 - What are the four categories of SQL functions
 
-# Homework #C
-資料庫課程作業(C)
