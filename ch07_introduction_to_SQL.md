@@ -914,6 +914,8 @@ FROM PRODUCT JOIN VENDOR ON PRODUCT.V_CODE = VENDOR.V_CODE
 GROUP BY V_CODE
 ORDER BY V_NAME;
 ```
+### Lab: list number of lines and average amount of each invoice
+
 
 # Grouping Data (2)
 ```sql
@@ -976,11 +978,19 @@ WHERE V_CODE NOT IN (
 
 # WHERE Subqueries
 ```sql
--- List all customers who order a claw hammer
+-- what is the purpose of the SQL below
 SELECT P_CODE, P_PRICE
 FROM PRODUCT
 WHERE P_PRICE >= 
     (SELECT AVG(P_PRICE) FROM PRODUCT);
+
+-- List all customers who order a claw hammer
+SELECT DISTINCT CUSTOMER.CUS_CODE, CUS_LNAME, CUS_FNAME
+FROM CUSTOMER
+JOIN INVOICE ON CUSTOMER.CUS_CODE = INVOICE.CUS_CODE
+JOIN LINE ON INVOICE.INV_NUMBER = LINE.INV_NUMBER
+JOIN PRODUCT ON PRODUCT.P_CODE = LINE.P_CODE
+WHERE P_DESCRIPT = 'Claw hammer';
 
 SELECT DISTINCT CUS_CODE, CUS_LNAME, CUS_FNAME
 FROM CUSTOMER
@@ -991,13 +1001,6 @@ WHERE P_CODE = (
     SELECT P_CODE
     FROM PRODUCT
     WHERE P_DESCRIPT = 'Claw hammer');
-
-SELECT DISTINCT CUSTOMER.CUS_CODE, CUS_LNAME, CUS_FNAME
-FROM CUSTOMER
-JOIN INVOICE ON CUSTOMER.CUS_CODE = INVOICE.CUS_CODE
-JOIN LINE ON INVOICE.INV_NUMBER = LINE.INV_NUMBER
-JOIN PRODUCT ON PRODUCT.P_CODE = LINE.P_CODE
-WHERE P_DESCRIPT = 'Claw hammer';    
 ```
 
 # IN Subqueries
@@ -1092,8 +1095,7 @@ FROM (SELECT P_CODE,
 # Correlated Subqueries (Definition)
 - <span class="blue-text">Inner subquery</span>
   - Inner subqueries execute independently. 
-  - The inner sub-query executes first; its **output** is used by the outer query, which then executes until the
-last outer query finishes (the first SQL statement in the code).
+  - The inner sub-query executes first; its **output** is used by the outer query, which then executes until the last outer query finishes (the first SQL statement in the code).
 - <span class="blue-text">Correalted subquery</span>
   -  A subquery that executes once for each row in the outer query.
   -  The inner query is related to the outer query
@@ -1165,16 +1167,44 @@ SELECT CURTIME();
 # MySQL String Functions
 ```sql
 SELECT CONCAT(EMP_FNAME, " ", EMP_LNAME)
-FROM EMP;
-SELECT FORMAT(P_QOH * P_PRICE, 0) as Total_Value
-FROM PRODUCT
+FROM EMPLOYEE;
+
 -- LEFT and RIGHT
 SELECT LEFT(EMP_LNAME, 3)
-FROM EMP;
+FROM EMPLOYEE;
+
 -- UPPER and LOWER
 SELECT UPPER(LEFT(EMP_LNAME, 3))
-FROM EMP;
--- Others: SUBSTRING, TRIM, LTRIM, RTRIM
+FROM EMPLOYEE;
+
+-- SUBSTRING
+SELECT EMP_LNAME, SUBSTRING(EMP_LNAME, 2,2)
+FROM EMPLOYEE;
+
+-- Others: TRIM, LTRIM, RTRIM
+```
+
+# MySQL NUMBER FORMAT Function
+```sql
+SELECT FORMAT(P_QOH * P_PRICE, 0) as Total_Value
+FROM PRODUCT
+
+SELECT FORMAT(1234567.891, 2);
+
+SELECT
+  ROUND(12345.6789, 2) AS RoundedNumber,
+  FORMAT(12345.6789, 2) AS FormattedString;
+```
+# MySQL DATE FORMAT Function
+```sql
+SELECT DATE_FORMAT('2025-04-29', '%y/%M/%D');
+SELECT DATE_FORMAT(CURRENT_DATE, '%Y/%m/%d');
+SELECT DATE_FORMAT(NOW(), '%W, %M %d, %Y');
+SELECT P_CODE, DATE_FORMAT(P_INDATE, "%m/%d/%Y")
+FROM PRODUCT
+SELECT P_CODE, P_INDATE, DATE_ADD(P_INDATE, INTERVAL 2 YEAR)
+FROM PRODUCT
+ORDER BY DATE_ADD(P_INDATE, INTERVAL 2 YEAR);
 ```
 # MySQL Date/Time Functions
 <div class="middle-grid">
