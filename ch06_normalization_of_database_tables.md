@@ -468,7 +468,7 @@ ASSIGN_NUM|PROJ_NUM|EMP_NUM|ASSIGN_DATE|ASSIGN_HOUR
 - When is a table in 2NF
 - When is a table in 3NF
 
-# Homework: Contracting Company
+# Homework #C
 1. Read section 6-7 Normalization and Database Design
 2. Design database schemas for Contracting Company, including but not limited to
   - Business rules

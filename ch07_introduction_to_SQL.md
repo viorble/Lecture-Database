@@ -144,6 +144,7 @@
 
 - Database stores database schema, a group of database objects
 
+# Step2: Create Database (MySQL syntax) (DDL)
 ```sql
 CREATE DATABASE [IF NOT EXISTS] database_name;
 ```
@@ -158,6 +159,7 @@ USE EPPS_SALECO;
 
 ## Step3: Create Database Tables (MySQL syntax)
 
+# Step3: Create Database Tables (MySQL syntax) (DDL)
 ```sql
 CREATE TABLE [IF NOT EXISTS] table_name (
   column_name1 data_type [column_constraints],
@@ -173,7 +175,7 @@ CREATE TABLE [IF NOT EXISTS] table_name (
 CREATE TABLE IF NOT EXISTS VENDOR (
   V_CODE INT,
   V_NAME VARCHAR(35) NOT NULL,
-  V_CONTACT VARCHAR(15) NOT NULL,
+  V_CONTACT VARCHAR(25) NOT NULL,
   V_AREACODE CHAR(3) NOT NULL,
   V_PHONE CHAR(8) NOT NULL,
   V_STATE CHAR(2) NOT NULL,
@@ -188,19 +190,58 @@ CREATE TABLE IF NOT EXISTS VENDOR (
 CREATE TABLE IF NOT EXISTS PRODUCT (
   P_CODE VARCHAR(10),
   P_DESCRIPT VARCHAR(35) NOT NULL,
-  P_INDATE DATETIME NOT NULL,
-  P_QOH INTEGER NOT NULL,
-  P_MIN INTEGER NOT NULL,
-  P_PRICE NUMERIC(8,2) NOT NULL,
-  P_DISCOUNT NUMERIC(4,2) NOT NULL,
-  V_CODE INTEGER,
+  P_INDATE DATE NOT NULL,
+  P_QOH SMALLINT NOT NULL,
+  P_MIN SMALLINT NOT NULL,
+  P_PRICE DECIMAL(8,2) NOT NULL,
+  P_DISCOUNT DECIMAL(5,2) NOT NULL,
+  V_CODE INT,
   PRIMARY KEY (P_CODE),
   FOREIGN KEY (V_CODE) REFERENCES VENDOR (V_CODE)
 );
 ```
+# Create CUSTOMER Table
+```sql
+CREATE TABLE CUSTOMER (
+  CUS_CODE	INTEGER,
+  CUS_LNAME	VARCHAR(15) NOT NULL,
+  CUS_FNAME	VARCHAR(15) NOT NULL,
+  CUS_INITIAL	CHAR(1),
+  CUS_AREACODE 	CHAR(3),
+  CUS_PHONE	CHAR(8) NOT NULL,
+  CUS_BALANCE	NUMERIC(9,2) DEFAULT 0.00,
+  PRIMARY KEY (CUS_CODE),
+  CONSTRAINT CUS_UI1 UNIQUE(CUS_LNAME,CUS_FNAME, CUS_PHONE));
+```
 
 ## STEP4: Insert Data (MySQL Syntax)
 
+# Create INVOICE Table
+```sql
+CREATE TABLE IF NOT EXISTS INVOICE (
+  INV_NUMBER  INTEGER,
+  CUS_CODE	INTEGER NOT NULL,
+  INV_DATE  DATE NOT NULL,
+  PRIMARY KEY (INV_NUMBER),
+  FOREIGN KEY (CUS_CODE) REFERENCES CUSTOMER (CUS_CODE), 
+  CONSTRAINT INV_CK1 CHECK (INV_DATE > '2012-01-01'));
+```
+# Create LINE Table
+```sql
+CREATE TABLE LINE (
+  INV_NUMBER 	INTEGER NOT NULL,
+  LINE_NUMBER	NUMERIC(2,0) NOT NULL,
+  P_CODE		VARCHAR(10) NOT NULL,
+  LINE_UNITS	NUMERIC(9,2) DEFAULT 0.00 NOT NULL,
+  LINE_PRICE	NUMERIC(9,2) DEFAULT 0.00 NOT NULL,
+  PRIMARY KEY (INV_NUMBER,LINE_NUMBER),
+  FOREIGN KEY (INV_NUMBER) REFERENCES INVOICE (INV_NUMBER) ON DELETE CASCADE,
+  FOREIGN KEY (P_CODE) REFERENCES PRODUCT(P_CODE),
+  CONSTRAINT LINE_UI1 UNIQUE(INV_NUMBER, P_CODE));
+```
+
+
+# STEP4: Insert Data (MySQL Syntax) (DML)
 ```sql
 /* basic syntax */
 INSERT INTO table_name (column1, column2, ..., columnN)
@@ -253,7 +294,55 @@ INSERT INTO PRODUCT VALUES('PVC23DRT','PVC pipe, 3.5-in., 8-ft'              ,'2
 INSERT INTO PRODUCT VALUES('SM-18277','1.25-in. metal screw, 25'             ,'2022-03-01',172, 75,  6.99,0.00,21225);
 INSERT INTO PRODUCT VALUES('SW-23116','2.5-in. wd. screw, 50'                ,'2022-02-24',237,100,  8.45,0.00,21231);
 INSERT INTO PRODUCT VALUES('WR3/TT3' ,'Steel matting, 4''x8''x1/6", .5" mesh','2022-01-17', 18,  5,119.95,0.10,25595);
+```
 
+# Insert Into CUSTOMER Table
+```sql
+/* CUSTOMER rows					*/
+INSERT INTO CUSTOMER VALUES(10010,'Ramas'   ,'Alfred','A' ,'615','844-2573',0);
+INSERT INTO CUSTOMER VALUES(10011,'Dunne'   ,'Leona' ,'K' ,'713','894-1238',0);
+INSERT INTO CUSTOMER VALUES(10012,'Smith'   ,'Kathy' ,'W' ,'615','894-2285',345.86);
+INSERT INTO CUSTOMER VALUES(10013,'Olowski' ,'Paul'  ,'F' ,'615','894-2180',536.75);
+INSERT INTO CUSTOMER VALUES(10014,'Orlando' ,'Myron' ,NULL,'615','222-1672',0);
+INSERT INTO CUSTOMER VALUES(10015,'O''Brian','Amy'   ,'B' ,'713','442-3381',0);
+INSERT INTO CUSTOMER VALUES(10016,'Brown'   ,'James' ,'G' ,'615','297-1228',221.19);
+INSERT INTO CUSTOMER VALUES(10017,'Williams','George',NULL,'615','290-2556',768.93);
+INSERT INTO CUSTOMER VALUES(10018,'Farriss' ,'Anne'  ,'G' ,'713','382-7185',216.55);
+INSERT INTO CUSTOMER VALUES(10019,'Smith'   ,'Olette','K' ,'615','297-3809',0);
+```
+
+# Insert Into INVOICE Table
+```sql
+INSERT INTO INVOICE VALUES(1001,10014,'2022-01-16');
+INSERT INTO INVOICE VALUES(1002,10011,'2022-01-16');
+INSERT INTO INVOICE VALUES(1003,10012,'2022-01-16');
+INSERT INTO INVOICE VALUES(1004,10011,'2022-01-17');
+INSERT INTO INVOICE VALUES(1005,10018,'2022-01-17');
+INSERT INTO INVOICE VALUES(1006,10014,'2022-01-17');
+INSERT INTO INVOICE VALUES(1007,10015,'2022-01-17');
+INSERT INTO INVOICE VALUES(1008,10011,'2022-01-17');
+```
+
+# Insert Into LINE Table
+```sql
+INSERT INTO LINE VALUES(1001,1,'13-Q2/P2',1,14.99);
+INSERT INTO LINE VALUES(1001,2,'23109-HB',1,9.95);
+INSERT INTO LINE VALUES(1002,1,'54778-2T',2,4.99);
+INSERT INTO LINE VALUES(1003,1,'2238/QPD',1,38.95);
+INSERT INTO LINE VALUES(1003,2,'1546-QQ2',1,39.95);
+INSERT INTO LINE VALUES(1003,3,'13-Q2/P2',5,14.99);
+INSERT INTO LINE VALUES(1004,1,'54778-2T',3,4.99);
+INSERT INTO LINE VALUES(1004,2,'23109-HB',2,9.95);
+INSERT INTO LINE VALUES(1005,1,'PVC23DRT',12,5.87);
+INSERT INTO LINE VALUES(1006,1,'SM-18277',3,6.99);
+INSERT INTO LINE VALUES(1006,2,'2232/QTY',1,109.92);
+INSERT INTO LINE VALUES(1006,3,'23109-HB',1,9.95);
+INSERT INTO LINE VALUES(1006,4,'89-WRE-Q',1,256.99);
+INSERT INTO LINE VALUES(1007,1,'13-Q2/P2',2,14.99);
+INSERT INTO LINE VALUES(1007,2,'54778-2T',1,4.99);
+INSERT INTO LINE VALUES(1008,1,'PVC23DRT',5,5.87);
+INSERT INTO LINE VALUES(1008,2,'WR3/TT3',3,119.95);
+INSERT INTO LINE VALUES(1008,3,'23109-HB',1,9.95);
 ```
 
 # Sample Database Model
@@ -298,6 +387,7 @@ Each clause in a SELECT query performs the following functions:
 
 ## Basic SELECT Syntax
 
+# Basic SELECT Syntax (DML)
 ```sql
 SELECT column1, column2, ...
 FROM table_name
@@ -310,6 +400,35 @@ FROM table_name
 
 ## SELECT Clause
 
+# A Complete SELECT Statement
+```sql
+SELECT department, COUNT(*) AS employee_count, AVG(salary) AS avg_salary
+FROM employees
+WHERE status = 'active'
+GROUP BY department
+HAVING AVG(salary) > 50000
+ORDER BY avg_salary DESC
+LIMIT 5 OFFSET 10;
+```
+
+# Explanation of SELECT Statement
+<style scoped>
+table {
+  font-size: 20px;
+}
+</style>
+
+Clause|Purpose|Explanation
+------|-------|-----------
+SELECT department, COUNT(*), AVG(salary) | Columns to retrieve | Selects the department, number of employees, and average salary
+FROM employees | Table source | Uses the employees table
+WHERE status = 'active' | Filter rows | Only include employees who are currently active
+GROUP BY department | Grouping | Groups rows by department
+HAVING AVG(salary) > 50000 | Group filter | Only show departments where the average salary is above 50,000
+ORDER BY avg_salary DESC | Sort | Sorts the result by average salary in descending order
+LIMIT 5 OFFSET 10 | Pagination | Skips the first 10 rows and returns the next 5
+
+# SELECT Clause
 - SELECT – specifies the attributes to be returned (column name or *)
 - FROM – specifies the table(s)
 - WHERE – filters the rows of data
@@ -342,6 +461,7 @@ Table: PRODUCT
 
 ## Select an Entire PRODUCT Table
 
+# Select an Entire PRODUCT Table
 ```sql
 SELECT * 
 FROM EPPS_SALECO.PRODUCT;
@@ -409,6 +529,7 @@ FROM PRODUCT;
 SELECT NOW() + INTERVAL 7 DAY;
 SELECT CURDATE() - INTERVAL 1 MONTH;
 SELECT '2025-04-01' + INTERVAL 1 DAY;
+SELECT INV_DATE AS "Invoice Date", INV_DATE + INTERVAL 90 DAY AS "Payment Date" FROM INVOICE
 ```
 
 # Listing Unique Values
@@ -418,6 +539,9 @@ SQL’s DISTINCT clause produces a list of only those values that are different 
 ```sql
 SELECT DISTINCT V_CODE
 FROM PRODUCT;
+
+SELECT DISTINCT INV_DATE 
+FROM INVOICE;
 ```
 
 # FROM Clause Options
@@ -451,7 +575,42 @@ SELECT EMP_LNAME, EMP_FNAME, EMP_INITIAL, EMP_PHONE
 FROM EMPLOYEE
 ORDER BY EMP_LNAME, EMP_FNAME, EMP_INITIAL;
 ```
+# Create EMPLOYEE Table
 
+```sql
+CREATE TABLE EMPLOYEE (
+EMP_NUM		INTEGER	PRIMARY KEY,
+EMP_TITLE	CHAR(10),
+EMP_LNAME	VARCHAR(15) NOT NULL,
+EMP_FNAME	VARCHAR(15) NOT NULL,
+EMP_INITIAL	CHAR(1),
+EMP_DOB		DATETIME,
+EMP_HIRE_DATE	DATETIME,
+EMP_YEARS	INTEGER,
+EMP_AREACODE 	CHAR(3),
+EMP_PHONE	CHAR(8),
+EMP_MGR		INTEGER);
+
+INSERT INTO EMPLOYEE VALUES(100,'Mr.' ,'Kolmycz'   ,'George' ,'D' ,'1967-06-15','2010-03-15', 11,'615','324-5456', NULL);
+INSERT INTO EMPLOYEE VALUES(101,'Ms.' ,'Lewis'     ,'Rhonda' ,'G' ,'1990-03-19','2011-04-25', 10,'615','324-4472',100);
+INSERT INTO EMPLOYEE VALUES(102,'Mr.' ,'Vandam'    ,'Rhett'  ,NULL,'1983-11-14','2015-12-20', 6,'901','675-8993',100);
+INSERT INTO EMPLOYEE VALUES(103,'Ms.' ,'Jones'     ,'Anne'   ,'M' ,'1999-10-16','2019-08-28', 2,'615','898-3456',100);
+INSERT INTO EMPLOYEE VALUES(104,'Mr.' ,'Lange'     ,'John'   ,'P' ,'1996-11-08','2019-10-20', 2,'901','504-4430',105);
+INSERT INTO EMPLOYEE VALUES(105,'Mr.' ,'Williams'  ,'Robert' ,'D' ,'2000-03-14','2020-11-08', 1,'615','890-3220',NULL);
+INSERT INTO EMPLOYEE VALUES(106,'Mrs.','Smith'     ,'Jeanine','K' ,'1993-02-12','2014-01-05', 7,'615','324-7883',105);
+INSERT INTO EMPLOYEE VALUES(107,'Mr.' ,'Diante'    ,'Jorge'  ,'D' ,'1999-08-21','2019-07-02', 2,'615','890-4567',105);
+INSERT INTO EMPLOYEE VALUES(108,'Mr.' ,'Wiesenbach','Paul'   ,'R' ,'1991-02-14','2017-11-18', 4,'615','897-4358',NULL);
+INSERT INTO EMPLOYEE VALUES(109,'Mr.' ,'Smith'     ,'George' ,'K' ,'1986-06-18','2014-04-14', 7,'901','504-3339',108);
+INSERT INTO EMPLOYEE VALUES(110,'Mrs.','Genkazi'   ,'Leighla','W' ,'1995-05-19','2015-12-01', 6,'901','569-0093',108);
+INSERT INTO EMPLOYEE VALUES(111,'Mr.' ,'Washington','Rupert' ,'E' ,'1991-01-03','2018-06-21', 3,'615','890-4925',105);
+INSERT INTO EMPLOYEE VALUES(112,'Mr.' ,'Johnson'   ,'Edward' ,'E' ,'1986-05-14','2008-12-01', 13,'615','898-4387',100);
+INSERT INTO EMPLOYEE VALUES(113,'Ms.' ,'Smythe'    ,'Melanie','P' ,'1995-09-15','2020-05-11', 1,'615','324-9006',105);
+INSERT INTO EMPLOYEE VALUES(114,'Ms.' ,'Brandon'   ,'Marie'  ,'G' ,'1981-11-02','2004-11-15', 17,'901','882-0845',108);
+INSERT INTO EMPLOYEE VALUES(115,'Mrs.','Saranda'   ,'Hermine','R' ,'1997-07-25','2018-04-23', 3,'615','324-5505',105);
+INSERT INTO EMPLOYEE VALUES(116,'Mr.' ,'Smith'     ,'George' ,'A' ,'1990-11-08','2013-12-10', 8,'615','890-2984',108);
+
+
+```
 # WHERE Clause Options
 
 - Comparison operator: =, <, <=, >, >=, <> or !=
@@ -523,22 +682,32 @@ WHERE NOT (V_CODE = 21344);
 # Illustrations of Special Operators
 
 ```sql
-SELECT *
-FROM PRODUCT
+SELECT * FROM PRODUCT
 WHERE P_PRICE BETWEEN 50.00 AND 100.00;
-SELECT *
-FROM PRODUCT
+
+SELECT * FROM PRODUCT
 WHERE V_CODE IN (21344, 24288);
-SELECT V_NAME, V_CONTACT, V_AREACODE, V_PHONE
-FROM VENDOR
+
+SELECT V_NAME, V_CONTACT, V_AREACODE, V_PHONE FROM VENDOR
 WHERE V_CONTACT LIKE 'Smith%';
--- wildcard % for zero or more chars, _ for any one char
-SELECT P_CODE, P_DESCRIPT, V_CODE
-FROM PRODUCT
+
+/* wildcard % for zero or more chars, _ for any one char */
+SELECT P_CODE, P_DESCRIPT, V_CODE FROM PRODUCT
 WHERE V_CODE IS NULL;
-SELECT V_NAME, V_CONTACT, V_AREACODE, V_PHONE
-FROM VENDOR
+
+SELECT V_NAME, V_CONTACT, V_AREACODE, V_PHONE FROM VENDOR
 WHERE UPPER(V_CONTACT) NOT LIKE 'SMITH%';
+```
+
+# Use Wildcard in Expression
+A wildcard character is a symbol that can be used as a general substitute for other characters or commands
+  - \* : all columns
+  - % : matches zero or more characters
+  - _ : matches exactly one character
+
+```sql
+SELECT * FROM PRODUCT WHERE P_CODE LIKE '15%';
+SELECT * FROM PRODUCT WHERE P_CODE LIKE '2232/Q__';
 ```
 
 # MySQL Comparison Operators
@@ -605,20 +774,43 @@ SELECT column-list FROM table1, table2 WHERE table1.column = table2.column
 ## Example of JOIN USING
 
 ```sql
+/* List what product provided by what vendor */
 SELECT P_CODE, P_DESCRIPT, V_CODE, V_NAME, V_AREACODE, V_PHONE
 FROM PRODUCT JOIN VENDOR USING (V_CODE);
 ```
 
 ## Example of JOIN ON
 
+# Illustrated by Relational Algebra  Natural Join
+PRODUCT -> SELECT -> PROJECT
+<style>
+.grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+.grid img {
+    width: 100%;
+}
+</style>
+
+<div class="grid">
+    <img src="restricted/CFig03_10.jpg" alt="two tables">
+    <img src="restricted/CFig03_11.jpg" alt="product">
+    <img src="restricted/CFig03_12.jpg" alt="select">
+    <img src="restricted/CFig03_13.jpg" alt="project">
+</div>
+
+# Example of JOIN ON
 ```sql
+/* ????? */
 SELECT INVOICE.INV_NUMBER, PRODUCT.P_CODE, P_DESCRIPT, LINE_UNITS, LINE_PRICE
 FROM INVOICE
 JOIN LINE ON INVOICE.INV_NUMBER = LINE.INV_NUMBER 
 JOIN PRODUCT ON LINE.P_CODE = PRODUCT.P_CODE;
 
 -- Compare to JOIN ON
-SELECT INV_NUMBER, P_CODE, P_DESCRIPT, LINE_UNITS, LINE_PRICE
+SELECT INVOICE.INV_NUMBER, PRODUCT.P_CODE, P_DESCRIPT, LINE_UNITS, LINE_PRICE
 FROM INVOICE 
 JOIN LINE USING(INV_NUMBER) 
 JOIN PRODUCT USING(P_CODE);
@@ -674,7 +866,8 @@ Three types of outer join: Left (outer) join, Right (outer) join, Full (outer) j
 SELECT column-list
 FROM table1 LEFT[OUTER] JOIN table2 ON join-condition
 
-SELECT P_CODE, VENDOR.V_CODE, V_NAME
+-- ?????
+SELECT VENDOR.V_CODE, V_NAME, P_CODE
 FROM VENDOR 
 LEFT JOIN PRODUCT ON VENDOR.V_CODE = PRODUCT.V_CODE;
 ```
@@ -684,11 +877,11 @@ LEFT JOIN PRODUCT ON VENDOR.V_CODE = PRODUCT.V_CODE;
 ```sql
 SELECT column-list
 FROM table1 RIGHT[OUTER] JOIN table2 ON join-condition
-
-SELECT P_CODE, VENDOR.V_CODE, V_NAME
+-- ?????
+SELECT VENDOR.V_CODE, V_NAME, P_CODE
 FROM VENDOR 
 RIGHT JOIN PRODUCT ON VENDOR.V_CODE = PRODUCT.V_CODE;
-
+--- ?????
 SELECT VENDOR.V_CODE, V_NAME, P_CODE
 FROM PRODUCT 
 RIGHT JOIN VENDOR ON PRODUCT.V_CODE = VENDOR.V_CODE
@@ -731,8 +924,7 @@ Using a table alias allows the database programmer to improve the maintainabilit
 
 ```sql
 SELECT P_DESCRIPT, P_PRICE, V_NAME, V_CONTACT, V_AREACODE, V_PHONE
-FROM
-PRODUCT P 
+FROM PRODUCT P 
 JOIN VENDOR V ON P.V_CODE = V.V_CODE;
 ```
 
@@ -742,8 +934,8 @@ A query that joins a table to itself
 
 ```sql
 SELECT E.EMP_NUM, E.EMP_LNAME, E.EMP_MGR, M.EMP_LNAME
-FROM EMP E
-JOIN EMP M ON E.EMP_MGR = M.EMP_NUM;
+FROM EMPLOYEE E
+JOIN EMPLOYEE M ON E.EMP_MGR = M.EMP_NUM;
 ```
 
 # Aggregate Processing
