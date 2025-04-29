@@ -1,52 +1,12 @@
----
-marp: true
-theme: default
-class: invert
-size: 16:9
-paginate: true
-footer: 國立陽明交通大學 電子與光子學士學位學程
-headingDivider: 1
-style: |
-  section::after {
-    content: attr(data-marpit-pagination) '/' attr(data-marpit-pagination-total);
-  }
-  .columns {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 1rem;
-  }
-  .middle-grid {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 1rem;
-  }
-  .middle-grid img {
-    width: 75%;
-  }
-  .grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-  }
-  .grid img {
-    width: 100%;
-  }
-  .red-text {
-    color: red;
-  }
-  
-  .blue-text {
-    color: lightskyblue;  
-  }
+# Introduction to Structured Query Language (SQL)
 
-  .brown-text {
-    color: brown;  
-  }
+- SQL is composed of commands that enable users
+  - create database and table structures
+  - perform various types of data manipulation
+  - execute data administration
+  - query the database to extract useful information.
+- All RDBMS supports SQL, and many software vendors have developed extensions to the basic SQL command set.
 
-  .small-text {
-    font-size: 0.70rem;
-  }
----
 # Introduction to MySQL
 
 - MySQL is a relational database management system (RDBMS)
@@ -62,47 +22,48 @@ style: |
 # SQL Statement in MySQL
 
 - SQL keywords are NOT case sensitive: select is the same as SELECT
-- Use semicolon at the end of each SQL statement to separate each SQL statement
+- Use semicolon(;) at the end of each SQL statement to separate each SQL statement
 - Some of The Most Important SQL Commands
-  `<span class='small-text'>`
-  INSERT INTO - [C]eate new data into a database
-  SELECT - [R]ead data from a database
-  UPDATE - [U]pdates data in a database
-  DELETE - [D]eletes data from a database
-  CREATE DATABASE - creates a new database; ALTER DATABASE - modifies a database
-  CREATE TABLE - creates a new table; ALTER TABLE - modifies a table; DROP TABLE - deletes a table
-  CREATE INDEX - creates an index (search key); DROP INDEX - deletes an index
-
-# Chapter7: Introduction to Structured Query Language (SQL)
-
-- SQL is composed of commands that enable users
-  - create database and table structures
-  - perform various types of data manipulation
-  - execute data administration
-  - query the database to extract useful information.
-- All RDBMS supports SQL, and many software vendors have developed extensions to the basic SQL command set.
+  > INSERT INTO - [C]eate new data into a database
+  > SELECT - [R]ead data from a database
+  > UPDATE - [U]pdates data in a database
+  > DELETE - [D]eletes data from a database
+  > CREATE DATABASE - creates a new database; ALTER DATABASE - modifies a database
+  > CREATE TABLE - creates a new table; ALTER TABLE - modifies a table; DROP TABLE - deletes a table
+  > CREATE INDEX - creates an index (search key); DROP INDEX - deletes an index
+  >
 
 # SQL Basics
 
 - Described in ANSI/ISO SQL
+
   - The American National Standards Institute (ANSI) prescribes a standard SQL.
   - International Organization for Standardization (ISO) also accept.
 - SQL functions fit into several broad categories:
+
   - Data manipulation language (DML): INSERT, SELECT, UPDATE, DELETE
   - Data definition language (DDL): CREATE TABLE
   - Transaction control language (TCL): COMMIT, ROLLBACK
   - Data control language (DCL): GRANT, REVOKE
+
+| 類別 | 功能                       | 例子                                        |
+| ---- | -------------------------- | ------------------------------------------- |
+| DML  | 操作資料(CRUD)             | `SELECT`,`INSERT`,`UPDATE`,`DELETE` |
+| DDL  | 定義資料表結構、修改資料表 | `CREATE`,`DROP`,`ALTER`               |
+| TCL  | 控制交易一致性             | `COMMIT`,`ROLLBACK`,`SAVEPOINT`       |
+| DCL  | 控制權限                   | `GRANT`,`REVOKE`                        |
+
 - SQL is a nonprocedural language, including many set operators
 
-# SQL Data Manipulation Commands
+## SQL Data Manipulation Commands
 
 ![bg right:65% w:90%](files/image/%20ch7/CTable07_01.png)
 
-# SQL Data Definition Commands
+## SQL Data Definition Commands
 
 ![bg right:65% w:90%](files/image/%20ch7/CTable07_02.png)
 
-# Basic Data Types
+## Basic Data Types
 
 - Numeric
 - Character
@@ -111,88 +72,46 @@ style: |
 
 # MySQL Data Types
 
-- String: char, varchar, text
-- Numeric: int, tinyint, boolean, decimal, float
 - String: char, text, binary, blob
+
+| 類型             | 說明                     | 範例用途                            |
+| ---------------- | ------------------------ | ----------------------------------- |
+| `CHAR(n)`      | 固定長度字串（右補空白） | 國家代碼、區碼                      |
+| `VARCHAR(n)`   | 可變長度字串             | 姓名、Email、標題                   |
+| `TEXT`         | 大量文字內容             | 留言、文章內容                      |
+| `BINARY(n)`    | 固定長度的二進位資料     | 雜湊值、Token                       |
+| `VARBINARY(n)` | 可變長度的二進位資料     | 壓縮檔案                            |
+| `BLOB`         | 大型二進位資料           | 圖片、音訊、影片                    |
+| `ENUM`         | 有限選項                 | 狀態（例如 `('pending','done')`） |
+| `SET`          | 多選集合                 | 標籤（例如 `"music,sports"`）     |
+
 - Numeric: integer, fixed-point, floating point, boolean
+
+| 類型                 | 儲存大小              | 範圍              | 範例用途            |
+| -------------------- | --------------------- | ----------------- | ------------------- |
+| `TINYINT`          | 1 byte                | -128 ~ 127        | 開關、布林旗標      |
+| `SMALLINT`         | 2 bytes               | -32,768 ~ 32,767  | 年齡                |
+| `MEDIUMINT`        | 3 bytes               | 約 ±8 百萬       | 中型計數器          |
+| `INT`/`INTEGER`  | 4 bytes               | 約 ±21 億        | 使用者 ID、產品代碼 |
+| `BIGINT`           | 8 bytes               | ±9.2 quintillion | 訂單編號、金融資料  |
+| `BOOLEAN`/`BOOL` | 本質為 `TINYINT(1)` | 0 or 1            | 真/假值             |
+
+| 類型                                                         | 說明                       | 範例用途      |
+| ------------------------------------------------------------ | -------------------------- | ------------- |
+| `DECIMAL(L,D)`/`NUMERIC(L,D)`DECIMAL(10, 2): 12345678.90 | 精確數字，無誤差           | 金額、稅率    |
+| `FLOAT`/`DOUBLE`                                         | 近似浮點數，速度快但有誤差 | 科學資料、GPS |
+
 - Date: date, time, datetime
 
-# MySQL String Data Types
-<style scoped>
-table {
-  font-size: 20px;
-}
-</style>
-Data Type|Description|Max Size|Use Case Example
----------|-----------|----------|----------------
-CHAR(n) | Fixed-length string (right-padded with spaces) | 255 chars |country codes
-VARCHAR(n) | Variable-length string | 64K bytes | names, emails, titles
-TEXT | Large text data | by subtype | articles, comments, blog
-BINARY(n) |Fixed-length binary data |255 bytes | Binary tokens, hashes
-VARBINARY(n) | Variable-length binary data | 64K bytes | Compressed data
-BLOB | Large binary data| by subtype | Images, files, multimedia
-ENUM | A string object with a predefined set of possible values | 64K values | Status like ('pending', 'shipped')
-SET | A string object that can store multiple predefined values (comma-separated)| 64 members | Tags like ("sports", "music","tech")
+| 類型          | 格式                        | 用途                   |
+| ------------- | --------------------------- | ---------------------- |
+| `DATE`      | `YYYY-MM-DD`              | 生日、報到日           |
+| `TIME`      | `HH:MM:SS`                | 營業時間               |
+| `DATETIME`  | `YYYY-MM-DD HH:MM:SS`     | 完整時間記錄           |
+| `TIMESTAMP` | 同 `DATETIME`，常自動更新 | 建檔時間、自動記錄修改 |
+| `YEAR`      | `YYYY`                    | 發行年份               |
 
 [List of MySQL Data Types](https://www.w3schools.com/mysql/mysql_datatypes.asp)
-
-# MySQL Numeric Data Types - Integer
-<style scoped>
-table {
-  font-size: 20px;
-}
-</style>
-
-Data Type | Storage | Range | Example Use Case
-----------|---------|-------|-----------------
-TINYINT | 1 byte | -128 to 127 | Status flags (0 = off, 1 = on)
-SMALLINT | 2 bytes | -32,768 to 32,767 | Age field
-MEDIUMINT | 3 bytes | -8,388,608 to 8,388,607 | Moderate row IDs or counts
-INT/INTEGER | 4 bytes | -2.1B to 2.1B | User IDs, product IDs
-BIGINT | 8 bytes | -9.2 quintillion to -9.2 quintillion| Order numbers, financial records
-
-# MySQL Numeric Data Types - Decimal Type
-
-- Exact, stored as string-like binary, no precision loss
-- Slower for math operations
-- DECIMAL(10, 2): 12345678.90
-- Financial data, money, tax, rates
-
-Data Type | Description | Example
-----------|-------------|------------------
-DECIMAL(5,2) | 5 digits total, 2 after decimal precise | -999.99 ~ 999.99
-NUMERIC(5,2) | Alias of DECIMAL
-
-# MySQL Numeric Data Types - Floating-Point Type
-- Approximate, stored as binary float, can lose precision
-- Faster and uses less storage
-- DOUBLE -> 3.14159265358979
-- Scientific data, measurements
- 
-Data Type | Storage | Example Use Case | Precision
-----------|---------|------------------|----------
-FLOAT | 4 bytes |  Weight: 12.34 | ~7 digits
-DOUBLE | 8 bytes | GPS coordinates: 25.036793, 121.564558 | ~15 to 16 digits
-
-# MySQL Numeric Data Types - Boolean Type
-Data Type | Example Use Case
-----------|----------------
-BOOLEAN | TRUE or FALSE
-BOOL | same as BOOLEAN
-
-# MySQL Date and Time Data Types
-<style scoped>
-table {
-  font-size: 20px;
-}
-</style>
-Data Type | Format  | Example Value | Use Case
-----------|---------|---------------|---------
-DATE | YYYY-MM-DD | '2025-04-22' | birthdays
-DATETIME | YYYY-MM-DD HH:MM:SS | '2025-04-22 13:45:00' | Exact date & time of an event
-TIMESTAMP | YYYY-MM-DD HH:MM:SS | '2025-04-22 05:00:00' | Auto-tracking changes, auditing
-TIME | HH:MM:SS | '14:30:00' | Duration, business hours
-YEAR | YYYY | '2025' | product release year
 
 # Steps to Develop Database
 
@@ -201,9 +120,10 @@ YEAR | YYYY | '2025' | product release year
 3. Create database **schema** (a logical group of database objects, like tables and indexes)
 4. Insert data
 
-# Step1: Analyze Biz Rules to Design ER Model
+## Step1: Analyze Biz Rules to Design ER Model
 
-# Step1A: Analyze Biz Rules to Design ER Model
+### Step1A: Analyze Biz Rules to Design ER Model
+
 - A customer may generate many invoices. Each invoice is generated by one customer.
 - An invoice contains one or more invoice lines. Each invoice line is associated with
   one invoice.
@@ -212,30 +132,32 @@ YEAR | YYYY | '2025' | product release year
 - If a product is vendor-supplied, it is supplied by only a single vendor.
 - Some products are not supplied by a vendor.
 
-# Step1: Deliver ER Diagram
+### Step1B: Deliver ER Diagram
 
-![bg right:65% w:90%](files/image/%20ch7/CFig07_01.png)
+![bg right:65% w:90%](adding_image/CFig07_01.png)
 
-# Step2: Create Database (CH07_SALECO)
+### Step1C: Data Dict
+
+![bg right:80% w:90%](adding_image/CTable08_02.png)
+
+## Step2: Create Database (MySQL syntax)
 
 - Database stores database schema, a group of database objects
-# Step1B: Deliver ER Diagram
-![bg right:65% w:90%](restricted/CFig07_01.jpg)
 
-# Step1C: Data Dict
-![bg right:80% w:90%](restricted/CTable08_02.jpg)
-
-# Step2: Create Database (MySQL syntax)
 ```sql
 CREATE DATABASE [IF NOT EXISTS] database_name;
 ```
+
 Database (schema) name: IIM_SALECO or EPPS_SALECO
+
 ```sql
 CREATE DATABASE EPPS_SALECO;
 CREATE DATABASE IF NOT EXISTS EPPS_SALECO;
 USE EPPS_SALECO;
 ```
-# Step3: Create Database Tables (MySQL syntax)
+
+## Step3: Create Database Tables (MySQL syntax)
+
 ```sql
 CREATE TABLE [IF NOT EXISTS] table_name (
   column_name1 data_type [column_constraints],
@@ -244,16 +166,7 @@ CREATE TABLE [IF NOT EXISTS] table_name (
   [table_constraints]
 );
 ```
-
-# Step3: Create Database Tables
-
-<div class="columns">
-<div>
-
-## VENDOR table
-
-
-# Create VENDOR Table
+### Create VENDOR Table
 ```sql
 CREATE TABLE IF NOT EXISTS VENDOR (
   V_CODE INT,
@@ -266,15 +179,7 @@ CREATE TABLE IF NOT EXISTS VENDOR (
   PRIMARY KEY (V_CODE)
 );
 ```
-
-</div>
-
-<div>
-
-## PRODUCT table
-
-
-# Create PRODUCT Table
+## Create PRODUCT Table
 ```sql
 CREATE TABLE IF NOT EXISTS PRODUCT (
   P_CODE VARCHAR(10),
@@ -289,20 +194,8 @@ CREATE TABLE IF NOT EXISTS PRODUCT (
   FOREIGN KEY (V_CODE) REFERENCES VENDOR (V_CODE)
 );
 ```
+## STEP4: Insert Data (MySQL Syntax)
 
-</div>
-
-</div>
-
-# STEP4: Insert Data
-
-<div class="columns">
-<div>
-
-## VENDOR table
-
-
-# STEP4: Insert Data (MySQL Syntax)
 ```sql
 /* basic syntax */
 INSERT INTO table_name (column1, column2, ..., columnN)
@@ -320,7 +213,8 @@ INSERT INTO table_name
 VALUES (value1, value2, ..., valueN);
 ```
 
-# Insert Into VENDOR Table
+### Insert Into VENDOR Table
+
 ```sql
 INSERT INTO VENDOR VALUES(21225,'Bryson, Inc.'    ,'Smithson','615','223-3234','TN','Y');
 INSERT INTO VENDOR VALUES(21226,'SuperLoo, Inc.'  ,'Flushing','904','215-8995','FL','N');
@@ -334,16 +228,7 @@ INSERT INTO VENDOR VALUES(25443,'B&K, Inc.'       ,'Smith'   ,'904','227-0093','
 INSERT INTO VENDOR VALUES(25501,'Damal Supplies'  ,'Smythe'  ,'615','890-3529','TN','N');
 INSERT INTO VENDOR VALUES(25595,'Rubicon Systems' ,'Orton'   ,'904','456-0092','FL','Y');
 ```
-
-</div>
-
-<div>
-
-## PRODUCT table
-
-```  
-
-# Insert Into PRODUCT table
+### Insert Into PRODUCT table
 ```sql
 INSERT INTO PRODUCT VALUES('11QER/31','Power painter, 15 psi., 3-nozzle'     ,'2021-11-03',  8,  5,109.99,0.00,25595);
 INSERT INTO PRODUCT VALUES('13-Q2/P2','7.25-in. pwr. saw blade'              ,'2021-12-13', 32, 15, 14.99,0.05,21344);
@@ -363,11 +248,6 @@ INSERT INTO PRODUCT VALUES('SW-23116','2.5-in. wd. screw, 50'                ,'2
 INSERT INTO PRODUCT VALUES('WR3/TT3' ,'Steel matting, 4''x8''x1/6", .5" mesh','2022-01-17', 18,  5,119.95,0.10,25595);
 
 ```
-
-</div>
-
-</div>
-
 # Sample Database Model
 
 ![bg right:70% w:90%](files/image/%20ch7/CFig08_01.png)
@@ -402,11 +282,14 @@ Each clause in a SELECT query performs the following functions:
 ```
 
 - A wildcard character is a symbol that can be used as a general substitute for other characters or commands
+
 # SQL Data Manipulation Language (DML)
+
 - Many SQL DML are used to perform actions such as adding or deleting rows or changing attribute values within tables
 - Data retrieval is done using SELECT which specifies what data should be retrieved and how it should be filtered, aggregated, and displayed
 
 # Basic SELECT Syntax
+
 ```sql
 SELECT column1, column2, ...
 FROM table_name
@@ -418,6 +301,7 @@ FROM table_name
 ```
 
 # SELECT Clause
+
 - SELECT – specifies the attributes to be returned (column name or *)
 - FROM – specifies the table(s)
 - WHERE – filters the rows of data
@@ -426,10 +310,12 @@ FROM table_name
 - ORDER BY – sorts the final query result rows in ascending or descending order by columns
 
 # Use Wildcard in Expression
+
 A wildcard character is a symbol that can be used as a general substitute for other characters or commands
-  - \* : all columns
-  - % : matches zero or more characters
-  - _ : matches exactly one character
+
+- \* : all columns
+- % : matches zero or more characters
+- _ : matches exactly one character
 
 ```sql
 SELECT * FROM PRODUCT WHERE P_CODE LIKE '15%';
@@ -489,7 +375,9 @@ FROM PRODUCT;
 SELECT P_DESCRIPT AS DESCRIPTION, P_PRICE AS "UNIT PRICE", P_QOH AS QTY, P_QOH * P_PRICE AS "TOTAL VALUE"  
 FROM PRODUCT;
 ```
+
 # Numeric Calculation
+
 ```sql
 SELECT 
 P_PRICE as ORG_PRICE,
@@ -507,8 +395,8 @@ FROM PRODUCT;
 - Follow the rules of precedence
 - +, -, *, /, div, %, mod
 
-
 # Date Arithmetic
+
 ```sql
 SELECT NOW() + INTERVAL 7 DAY;
 SELECT CURDATE() - INTERVAL 1 MONTH;
@@ -534,6 +422,7 @@ FROM PRODUCT;
 - Only columns in the table specified in the FROM clause are available throughout the rest of the query
 
 # FROM Clause Options
+
 - The FROM clause specifies table(s) which is involved
 - Only columns in tables in FROM clause are available throughout the rest of the query
 - Multiple tables must be combined using a type of JOIN operation
@@ -1062,7 +951,7 @@ WHERE P_QOH * P_PRICE >
           WHERE V_STATE = 'FL'));
 ```
 
-- `<span class="small-text">` Greater than ALL" is equivalent to "greater than the highest product cost of the list 
+- `<span class="small-text">` Greater than ALL" is equivalent to "greater than the highest product cost of the list
 - `<span class="small-text">` ANY operator to compare a single value to a list of values and select only the rows for which the inventory cost is greater than any value in the list
 - `<span class="small-text">` Use the equal to ANY operator, which would be the equivalent of the IN operator.
 
@@ -1158,7 +1047,7 @@ SELECT INV_NUMBER, P_CODE, LINE_UNITS, (SELECT AVG(LINE_UNITS)
 FROM LINE LS
 WHERE LS.LINE_UNITS > (SELECT AVG(LINE_UNITS)
                        FROM LINE LA
-                       WHERE LA.P_CODE = LS.P_CODE);                          
+                       WHERE LA.P_CODE = LS.P_CODE);  
 ```
 
 # Correlated Subqueries (Exists)
