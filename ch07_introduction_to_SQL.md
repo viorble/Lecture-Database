@@ -705,18 +705,41 @@ SELECT column-list FROM table1, table2 WHERE table1.column = table2.column
 
 # Example of JOIN USING
 ```sql
+/* List what product provided by what vendor */
 SELECT P_CODE, P_DESCRIPT, V_CODE, V_NAME, V_AREACODE, V_PHONE
 FROM PRODUCT JOIN VENDOR USING (V_CODE);
 ```
+
+# Illustrated by Relational Algebra  Natural Join
+PRODUCT -> SELECT -> PROJECT
+<style>
+.grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+.grid img {
+    width: 100%;
+}
+</style>
+
+<div class="grid">
+    <img src="restricted/CFig03_10.jpg" alt="two tables">
+    <img src="restricted/CFig03_11.jpg" alt="product">
+    <img src="restricted/CFig03_12.jpg" alt="select">
+    <img src="restricted/CFig03_13.jpg" alt="project">
+</div>
+
 # Example of JOIN ON
 ```sql
+/* ????? */
 SELECT INVOICE.INV_NUMBER, PRODUCT.P_CODE, P_DESCRIPT, LINE_UNITS, LINE_PRICE
 FROM INVOICE
 JOIN LINE ON INVOICE.INV_NUMBER = LINE.INV_NUMBER 
 JOIN PRODUCT ON LINE.P_CODE = PRODUCT.P_CODE;
 
 -- Compare to JOIN ON
-SELECT INV_NUMBER, P_CODE, P_DESCRIPT, LINE_UNITS, LINE_PRICE
+SELECT INVOICE.INV_NUMBER, PRODUCT.P_CODE, P_DESCRIPT, LINE_UNITS, LINE_PRICE
 FROM INVOICE 
 JOIN LINE USING(INV_NUMBER) 
 JOIN PRODUCT USING(P_CODE);
@@ -767,7 +790,8 @@ Three types of outer join: Left (outer) join, Right (outer) join, Full (outer) j
 SELECT column-list
 FROM table1 LEFT[OUTER] JOIN table2 ON join-condition
 
-SELECT P_CODE, VENDOR.V_CODE, V_NAME
+-- ?????
+SELECT VENDOR.V_CODE, V_NAME, P_CODE
 FROM VENDOR 
 LEFT JOIN PRODUCT ON VENDOR.V_CODE = PRODUCT.V_CODE;
 ```
@@ -776,11 +800,11 @@ LEFT JOIN PRODUCT ON VENDOR.V_CODE = PRODUCT.V_CODE;
 ```sql
 SELECT column-list
 FROM table1 RIGHT[OUTER] JOIN table2 ON join-condition
-
-SELECT P_CODE, VENDOR.V_CODE, V_NAME
+-- ?????
+SELECT VENDOR.V_CODE, V_NAME, P_CODE
 FROM VENDOR 
 RIGHT JOIN PRODUCT ON VENDOR.V_CODE = PRODUCT.V_CODE;
-
+--- ?????
 SELECT VENDOR.V_CODE, V_NAME, P_CODE
 FROM PRODUCT 
 RIGHT JOIN VENDOR ON PRODUCT.V_CODE = VENDOR.V_CODE
@@ -817,8 +841,7 @@ Using a table alias allows the database programmer to improve the maintainabilit
 
 ```sql
 SELECT P_DESCRIPT, P_PRICE, V_NAME, V_CONTACT, V_AREACODE, V_PHONE
-FROM
-PRODUCT P 
+FROM PRODUCT P 
 JOIN VENDOR V ON P.V_CODE = V.V_CODE;
 ```
 
@@ -826,8 +849,8 @@ JOIN VENDOR V ON P.V_CODE = V.V_CODE;
 A query that joins a table to itself
 ```sql
 SELECT E.EMP_NUM, E.EMP_LNAME, E.EMP_MGR, M.EMP_LNAME
-FROM EMP E
-JOIN EMP M ON E.EMP_MGR = M.EMP_NUM;
+FROM EMPLOYEE E
+JOIN EMPLOYEE M ON E.EMP_MGR = M.EMP_NUM;
 ```
 
 # Aggregate Processing
