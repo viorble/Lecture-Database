@@ -166,7 +166,9 @@ CREATE TABLE [IF NOT EXISTS] table_name (
   [table_constraints]
 );
 ```
+
 ### Create VENDOR Table
+
 ```sql
 CREATE TABLE IF NOT EXISTS VENDOR (
   V_CODE INT,
@@ -179,7 +181,9 @@ CREATE TABLE IF NOT EXISTS VENDOR (
   PRIMARY KEY (V_CODE)
 );
 ```
-## Create PRODUCT Table
+
+### Create PRODUCT Table
+
 ```sql
 CREATE TABLE IF NOT EXISTS PRODUCT (
   P_CODE VARCHAR(10),
@@ -194,6 +198,7 @@ CREATE TABLE IF NOT EXISTS PRODUCT (
   FOREIGN KEY (V_CODE) REFERENCES VENDOR (V_CODE)
 );
 ```
+
 ## STEP4: Insert Data (MySQL Syntax)
 
 ```sql
@@ -228,7 +233,9 @@ INSERT INTO VENDOR VALUES(25443,'B&K, Inc.'       ,'Smith'   ,'904','227-0093','
 INSERT INTO VENDOR VALUES(25501,'Damal Supplies'  ,'Smythe'  ,'615','890-3529','TN','N');
 INSERT INTO VENDOR VALUES(25595,'Rubicon Systems' ,'Orton'   ,'904','456-0092','FL','Y');
 ```
+
 ### Insert Into PRODUCT table
+
 ```sql
 INSERT INTO PRODUCT VALUES('11QER/31','Power painter, 15 psi., 3-nozzle'     ,'2021-11-03',  8,  5,109.99,0.00,25595);
 INSERT INTO PRODUCT VALUES('13-Q2/P2','7.25-in. pwr. saw blade'              ,'2021-12-13', 32, 15, 14.99,0.05,21344);
@@ -248,6 +255,7 @@ INSERT INTO PRODUCT VALUES('SW-23116','2.5-in. wd. screw, 50'                ,'2
 INSERT INTO PRODUCT VALUES('WR3/TT3' ,'Steel matting, 4''x8''x1/6", .5" mesh','2022-01-17', 18,  5,119.95,0.10,25595);
 
 ```
+
 # Sample Database Model
 
 ![bg right:70% w:90%](files/image/%20ch7/CFig08_01.png)
@@ -263,7 +271,7 @@ INSERT INTO PRODUCT VALUES('WR3/TT3' ,'Steel matting, 4''x8''x1/6", .5" mesh','2
 - A SQL set-oriented command works over a set of rows
 - A SELECT query specifies which data should be retrieved and how it should be filtered, aggregated, and displayed
 
-# Basic SELECT Queries
+## Basic SELECT Queries
 
 Each clause in a SELECT query performs the following functions:
 
@@ -274,7 +282,7 @@ Each clause in a SELECT query performs the following functions:
 - HAVING – filters the groups formed in the GROUP BY clause based on provided criteria
 - ORDER BY – sorts the final query result rows in ascending or descending order based on the values of one or more attributes
 
-# SELECT Statement Options
+## SELECT Statement Options
 
 ```sql
   SELECT 	columnlist
@@ -283,12 +291,12 @@ Each clause in a SELECT query performs the following functions:
 
 - A wildcard character is a symbol that can be used as a general substitute for other characters or commands
 
-# SQL Data Manipulation Language (DML)
+## SQL Data Manipulation Language (DML)
 
 - Many SQL DML are used to perform actions such as adding or deleting rows or changing attribute values within tables
 - Data retrieval is done using SELECT which specifies what data should be retrieved and how it should be filtered, aggregated, and displayed
 
-# Basic SELECT Syntax
+## Basic SELECT Syntax
 
 ```sql
 SELECT column1, column2, ...
@@ -300,7 +308,7 @@ FROM table_name
 [LIMIT number OFFSET offset];
 ```
 
-# SELECT Clause
+## SELECT Clause
 
 - SELECT – specifies the attributes to be returned (column name or *)
 - FROM – specifies the table(s)
@@ -309,7 +317,7 @@ FROM table_name
 - HAVING – filters the groups formed by GROUP BY clause
 - ORDER BY – sorts the final query result rows in ascending or descending order by columns
 
-# Use Wildcard in Expression
+## Use Wildcard in Expression
 
 A wildcard character is a symbol that can be used as a general substitute for other characters or commands
 
@@ -326,13 +334,13 @@ SELECT * FROM PRODUCT WHERE P_CODE LIKE '2232/Q__';
 
 ![bg right:70% w:90%](files/image/%20ch7/CTable08_02.png)
 
-# Table: CH07_SALECO PRODUCT
+# DEMO Table: CH07_SALECO PRODUCT
 
 Database (Schema): CH07_SALECO
 Table: PRODUCT
 ![bg right:70% w:90%](files/image/%20ch7/restricted:CFig07_02.jpg.png)
 
-# Select an Entire PRODUCT Table
+## Select an Entire PRODUCT Table
 
 ```sql
 SELECT * 
@@ -347,7 +355,7 @@ FROM PRODUCT;
     <img src="restricted/CFig07_02.jpg" alt="">
 </div>
 
-# Select with a Column List
+## Select with a Column List
 
 ```sql
 SELECT P_CODE, P_DESCRIPT, P_PRICE, P_QOH 
@@ -358,7 +366,7 @@ FROM EPPS_SALECO.PRODUCT;
     <img src="restricted/CFig07_03.jpg" alt="">
 </div>
 
-# Using Column Aliases
+## Using Column Aliases
 
 ```sql
 SELECT P_CODE, P_DESCRIPT AS DESCRIPTION, P_PRICE AS "UNIT PRICE", P_QOH AS QTY  
@@ -369,14 +377,14 @@ FROM PRODUCT;
     <img src="restricted/CFig07_04.jpg" alt="">
 </div>
 
-# Using Computed Columns
+## Using Computed Columns
 
 ```sql
 SELECT P_DESCRIPT AS DESCRIPTION, P_PRICE AS "UNIT PRICE", P_QOH AS QTY, P_QOH * P_PRICE AS "TOTAL VALUE"  
 FROM PRODUCT;
 ```
 
-# Numeric Calculation
+## Numeric Calculation
 
 ```sql
 SELECT 
@@ -395,7 +403,7 @@ FROM PRODUCT;
 - Follow the rules of precedence
 - +, -, *, /, div, %, mod
 
-# Date Arithmetic
+## Date Arithmetic
 
 ```sql
 SELECT NOW() + INTERVAL 7 DAY;
@@ -411,15 +419,6 @@ SQL’s DISTINCT clause produces a list of only those values that are different 
 SELECT DISTINCT V_CODE
 FROM PRODUCT;
 ```
-
-<div class="middle-grid">
-    <img src="restricted/CFig07_07.jpg" alt="">
-</div>
-
-# FROM Clause Options
-
-- The FROM clause of the query specifies the table or tables from which the data is to be retrieved
-- Only columns in the table specified in the FROM clause are available throughout the rest of the query
 
 # FROM Clause Options
 
@@ -581,14 +580,14 @@ JOIN operators are used to combine data from multiple tables
   - Right (outer) join
   - Full (outer) join
 
-# JOIN Illustration
+## JOIN Illustration
 
 <div class="grid">
     <img src="files/image/four_join_types.jpg" alt="">
     <img src="files/image/join_example.jpg" alt="">
 </div>
 
-# Three Ways to Do Inner Join (Join)
+## Three Ways to Do Inner Join (Join)
 
 ```sql
 -- JOIN USING
@@ -603,14 +602,14 @@ SELECT column-list FROM table1, table2 WHERE table1.column = table2.column
 
 - In practice, **JOIN ON** is typically considered as a preference.
 
-# Example of JOIN USING
+## Example of JOIN USING
 
 ```sql
 SELECT P_CODE, P_DESCRIPT, V_CODE, V_NAME, V_AREACODE, V_PHONE
 FROM PRODUCT JOIN VENDOR USING (V_CODE);
 ```
 
-# Example of JOIN ON
+## Example of JOIN ON
 
 ```sql
 SELECT INVOICE.INV_NUMBER, PRODUCT.P_CODE, P_DESCRIPT, LINE_UNITS, LINE_PRICE
@@ -625,7 +624,7 @@ JOIN LINE USING(INV_NUMBER)
 JOIN PRODUCT USING(P_CODE);
 ```
 
-# Example of Old-Style JOIN
+## Example of Old-Style JOIN
 
 ```sql
 SELECT P_CODE, P_DESCRIPT, P_PRICE, V_NAME
@@ -644,7 +643,7 @@ FROM PRODUCT JOIN VENDOR ON PRODUCT.V_CODE = VENDOR.V_CODE;
 - The task of joining the tables is split across both the FROM and WHERE which makes complex queries more difficult to maintain
 - They are susceptible to undetected errors
 
-# Illustrate Why Old-Style Join is Not Preferred
+## Illustrate Why Old-Style Join is Not Preferred
 
 ```sql
 -- Get wrong result and easy to find no condition when join PRODUCT
@@ -665,11 +664,11 @@ AND INVOICE.INV_NUMBER = LINE.INV_NUMBER
 AND PRODUCT.V_CODE = VENDOR.V_CODE;
 ```
 
-# Outer Joins
+## Outer Joins
 
 Three types of outer join: Left (outer) join, Right (outer) join, Full (outer) join
 
-# Left Outer Join
+## Left Outer Join
 
 ```sql
 SELECT column-list
@@ -680,7 +679,7 @@ FROM VENDOR
 LEFT JOIN PRODUCT ON VENDOR.V_CODE = PRODUCT.V_CODE;
 ```
 
-# Right Outer Join
+## Right Outer Join
 
 ```sql
 SELECT column-list
@@ -696,7 +695,7 @@ RIGHT JOIN VENDOR ON PRODUCT.V_CODE = VENDOR.V_CODE
 WHERE P_CODE IS NULL;
 ```
 
-# Full Outer Join (Not Support in MySQL)
+## Full Outer Join (Not Support in MySQL)
 
 ```sql
 SELECT column-list
@@ -711,7 +710,7 @@ FULL JOIN PRODUCT ON VENDOR.V_CODE = PRODUCT.V_CODE;
     <img src="restricted/CFig07_33.jpg" alt="">
 </div>
 
-# Cross Join
+## Cross Join
 
 - A cross join performs a relational product (also known as the Cartesian product) of two tables.
 - Despite the name, CROSS JOIN is not truly a join operation because it does not unite the rows of the tables based on a common attribute.
@@ -726,7 +725,7 @@ SELECT * FROM INVOICE CROSS JOIN LINE;
 
 ![bg right:70% w:90%](files/image/mysql_join.jpg)
 
-# Joining Tables with an Alias
+## Joining Tables with an Alias
 
 Using a table alias allows the database programmer to improve the maintainability
 
@@ -737,7 +736,7 @@ PRODUCT P
 JOIN VENDOR V ON P.V_CODE = V.V_CODE;
 ```
 
-# Recursive Joins
+## Recursive Joins
 
 A query that joins a table to itself
 
@@ -755,7 +754,7 @@ SQL provides useful aggregate functions that count, find minimum and maximum val
 - MIN and MAX
 - SUM and AVG
 
-# Count
+## Count
 
 ```sql
 SELECT COUNT(P_CODE)
@@ -777,7 +776,7 @@ SELECT COUNT(DISTINCT V_CODE) AS "COUNT DISTINCT"
 FROM PRODUCT;
 ```
 
-# MIN and MAX
+## MIN and MAX
 
 The MIN and MAX functions help you find answers to problems such as the highest and lowest (maximum and minimum) prices in the PRODUCT table.
 
@@ -786,7 +785,7 @@ SELECT MAX(P_PRICE) AS MAXPRICE, MIN(P_PRICE) as MINPRICE
 FROM PRODUCT;
 ```
 
-# SUM and AVG
+## SUM and AVG
 
 ```sql
 SELECT SUM(CUS_BALANCE) AS TOTAL_BALANCE
@@ -881,7 +880,7 @@ WHERE V_CODE NOT IN (
     SELECT V_CODE FROM PRODUCT WHERE V_CODE IS NOT NULL);
 ```
 
-# WHERE Subqueries
+## WHERE Subqueries
 
 ```sql
 -- List all customers who order a claw hammer
@@ -908,7 +907,7 @@ JOIN PRODUCT ON PRODUCT.P_CODE = LINE.P_CODE
 WHERE P_DESCRIPT = 'Claw hammer';  
 ```
 
-# IN Subqueries
+## IN Subqueries
 
 List all customers who have purchased hammers, saws, or saw blades.
 
@@ -924,7 +923,7 @@ WHERE PRODUCT.P_CODE IN
    WHERE P_DESCRIPT LIKE '%hammer%' OR P_DESCRIPT LIKE '%saw%');
 ```
 
-# HAVING Subqueries
+## HAVING Subqueries
 
 List all products with a total quantity sold greater than the average quantity sold
 
@@ -935,7 +934,7 @@ GROUP BY P_CODE
 HAVING SUM(LINE_UNITS) > (SELECT AVG(LINE_UNITS) FROM LINE);
 ```
 
-# Multirow Subquery Operators: ALL and any
+## Multirow Subquery Operators: ALL and any
 
 Which products cost more than all individual products provided by vendors from Florida
 
@@ -955,7 +954,7 @@ WHERE P_QOH * P_PRICE >
 - `<span class="small-text">` ANY operator to compare a single value to a list of values and select only the rows for which the inventory cost is greater than any value in the list
 - `<span class="small-text">` Use the equal to ANY operator, which would be the equivalent of the IN operator.
 
-# FROM Subqueries
+## FROM Subqueries
 
 List all customers who purchased both products ('13-Q2/P2', '23109-HB'), not just one.
 
@@ -976,7 +975,7 @@ JOIN
 ON CP1.CUS_CODE = CP2.CUS_CODE;
 ```
 
-# Attribute List Subqueries (1)
+## Attribute List Subqueries (1)
 
 List the difference between each product's price and the average product price
 
@@ -988,7 +987,7 @@ SELECT
 FROM PRODUCT;
 ```
 
-# Attribute List Subqueries (2)
+## Attribute List Subqueries (2)
 
 List the product code, the total sales by product, and the contribution by employee of each product's sales.
 
@@ -1009,7 +1008,7 @@ FROM (SELECT P_CODE,
       GROUP BY P_CODE) AS T;
 ```
 
-# Correlated Subqueries (Definition)
+## Correlated Subqueries (Definition)
 
 - `<span class="blue-text">`Inner subquery
 
@@ -1025,14 +1024,14 @@ FROM (SELECT P_CODE,
   1. It initiates the outer query.
   2. For each row of the outer query result set, it executes the inner query by passing the outer row to the inner query.
 
-# Correlated Subqueries (Example)
+## Correlated Subqueries (Example)
 
 List all product sales in which the units sold value is greater than the average units sold value for that product (as opposed to the average for all products).
 
 1. Compute the average units sold for a product.
 2. Compare the average computed in Step 1 to the units sold in each sale row, and then select only the rows in which the number of units sold is greater.
 
-# Correlated Subqueries (SQL)
+## Correlated Subqueries (SQL)
 
 ```sql
 SELECT INV_NUMBER, P_CODE, LINE_UNITS
@@ -1050,7 +1049,7 @@ WHERE LS.LINE_UNITS > (SELECT AVG(LINE_UNITS)
                        WHERE LA.P_CODE = LS.P_CODE);  
 ```
 
-# Correlated Subqueries (Exists)
+## Correlated Subqueries (Exists)
 
 ```sql
 -- list all vendors, but only if there are products to order.
@@ -1066,7 +1065,7 @@ WHERE EXISTS (SELECT CUS_CODE
               WHERE INVOICE.CUS_CODE = CUSTOMER.CUS_CODE);
 ```
 
-# Correlated Subqueries (Example of Exists)
+## Correlated Subqueries (Example of Exists)
 
 Suppose that you want to know what vendors you must contact to order products that are approaching the minimum quantity-on-hand value that is less than double the minimum quantity.
 
@@ -1095,7 +1094,7 @@ SELECT CURTIME();
 
 - Aggregate Functions: count(), max(), min(), sum(), avg()
 
-# MySQL String Functions
+## MySQL String Functions
 
 ```sql
 SELECT CONCAT(EMP_FNAME, " ", EMP_LNAME)
@@ -1111,26 +1110,6 @@ FROM EMP;
 -- Others: SUBSTRING, TRIM, LTRIM, RTRIM
 ```
 
-# MySQL Date/Time Functions
-
-<div class="middle-grid">
-    <img src="restricted/CTable07_10a.jpg" alt="">
-    <img src="restricted/CTable07_10b.jpg" alt="">
-</div>
-
-# MySQL Numeric Functions
-
-<div class="middle-grid">
-    <img src="restricted/CTable07_11.jpg" alt="">
-</div>
-
-# MySQL Conversion Functions
-
-<div class="middle-grid">
-    <img src="restricted/CTable07_13a.jpg" alt="">
-    <img src="restricted/CTable07_13b.jpg" alt="">
-</div>
-
 # Relational Set Operators (UNION)
 
 ```sql
@@ -1140,10 +1119,6 @@ UNION
 SELECT CUS_LNAME, CUS_FNAME, CUS_INITIAL, CUS_AREACODE, CUS_PHONE
 FROM CUSTOMER_2;
 ```
-
-<div class="middle-grid">
-    <img src="restricted/CFig07_61.jpg" alt="">
-</div>
 
 # Relational Set Operators (UNION ALL)
 
@@ -1213,9 +1188,20 @@ WHERE C2.CUS_LNAME IS NULL;
 # Review Questions
 
 - Explain the difference between an ORDER BY clause and a GROUP BY clause.
-- What three join types are included in the OUTER JOIN classification?
-- What are the four categories of SQL functions
+> `ORDER BY` 用來將查詢結果依指定欄位排序，不改變 row 數量。
+> `GROUP BY` 用來依指定欄位分群，通常搭配聚合函數，row 數可能減少。
+> `ORDER BY` 影響結果排列順序；`GROUP BY` 則改變資料的分組結構。
 
+- What three join types are included in the OUTER JOIN classification?
+>LEFT OUTER JOIN：保留左表全部 row，右表無對應補 NULL。
+>RIGHT OUTER JOIN：保留右表全部 row，左表無對應補 NULL。
+>FULL OUTER JOIN：保留左右表所有 row，無對應處以 NULL 補齊。
+
+- What are the four categories of SQL functions
+>數值函數（Numeric Functions）
+>字串函數（Character/String Functions）
+>日期時間函數（Date and Time Functions）
+>型別轉換函數（Conversion Functions）
 # Homework #C
 
 資料庫課程作業(C)
