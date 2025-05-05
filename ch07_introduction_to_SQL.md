@@ -1092,63 +1092,7 @@ FROM (SELECT P_CODE,
       GROUP BY P_CODE) AS T;
 ```
 
-# Correlated Subqueries (Definition)
-- <span class="blue-text">Inner subquery</span>
-  - Inner subqueries execute independently. 
-  - The inner sub-query executes first; its **output** is used by the outer query, which then executes until the last outer query finishes (the first SQL statement in the code).
-- <span class="blue-text">Correalted subquery</span>
-  -  A subquery that executes once for each row in the outer query.
-  -  The inner query is related to the outer query
-  -  The inner query references a column of the outer subquery.
-  1. It initiates the outer query.
-  2. For each row of the outer query result set, it executes the inner query by passing the outer row to the inner query.
 
-# Correlated Subqueries (Example)
-List all product sales in which the units sold value is greater than the average units sold value for that product (as opposed to the average for all products).
-1. Compute the average units sold for a product.
-2. Compare the average computed in Step 1 to the units sold in each sale row, and then select only the rows in which the number of units sold is greater.
-
-# Correlated Subqueries (SQL)
-```sql
-SELECT INV_NUMBER, P_CODE, LINE_UNITS
-FROM LINE LS
-WHERE LS.LINE_UNITS > (SELECT AVG(LINE_UNITS)
-                       FROM LINE LA
-                       WHERE LA.P_CODE = LS.P_CODE);
-
-SELECT INV_NUMBER, P_CODE, LINE_UNITS, (SELECT AVG(LINE_UNITS)
-                                        FROM LINE LX
-                                        WHERE LX.P_CODE = LS.P_CODE) AS AVG
-FROM LINE LS
-WHERE LS.LINE_UNITS > (SELECT AVG(LINE_UNITS)
-                       FROM LINE LA
-                       WHERE LA.P_CODE = LS.P_CODE);                            
-```
-# Correlated Subqueries (Exists)
-```sql
--- list all vendors, but only if there are products to order.
-SELECT *
-FROM VENDOR
-WHERE EXISTS (SELECT * FROM PRODUCT WHERE P_QOH <= P_MIN * 2);
-
--- list the names of all customers who have placed an order lately.
-SELECT CUS_CODE, CUS_LNAME, CUS_FNAME
-FROM CUSTOMER
-WHERE EXISTS (SELECT CUS_CODE 
-              FROM INVOICE
-              WHERE INVOICE.CUS_CODE = CUSTOMER.CUS_CODE);
-```
-
-# Correlated Subqueries (Example of Exists)
-Suppose that you want to know what vendors you must contact to order products that are approaching the minimum quantity-on-hand value that is less than double the minimum quantity.
-
-```sql
-SELECT V_CODE, V_NAME
-FROM VENDOR
-WHERE EXISTS (SELECT *
-              FROM PRODUCT
-              WHERE P_QOH < P_MIN * 2 AND VENDOR.V_CODE = PRODUCT.V_CODE);
-```
 
 # Built-in SQL Functions
 - Basic Functions
@@ -1299,3 +1243,61 @@ WHERE C2.CUS_LNAME IS NULL;
 - What three join types are included in the OUTER JOIN classification? 
 - What are the four categories of SQL functions
 
+# Backup
+# Correlated Subqueries (Definition)
+- <span class="blue-text">Inner subquery</span>
+  - Inner subqueries execute independently. 
+  - The inner sub-query executes first; its **output** is used by the outer query, which then executes until the last outer query finishes (the first SQL statement in the code).
+- <span class="blue-text">Correalted subquery</span>
+  -  A subquery that executes once for each row in the outer query.
+  -  The inner query is related to the outer query
+  -  The inner query references a column of the outer subquery.
+  1. It initiates the outer query.
+  2. For each row of the outer query result set, it executes the inner query by passing the outer row to the inner query.
+
+# Correlated Subqueries (Example)
+List all product sales in which the units sold value is greater than the average units sold value for that product (as opposed to the average for all products).
+1. Compute the average units sold for a product.
+2. Compare the average computed in Step 1 to the units sold in each sale row, and then select only the rows in which the number of units sold is greater.
+
+# Correlated Subqueries (SQL)
+```sql
+SELECT INV_NUMBER, P_CODE, LINE_UNITS
+FROM LINE LS
+WHERE LS.LINE_UNITS > (SELECT AVG(LINE_UNITS)
+                       FROM LINE LA
+                       WHERE LA.P_CODE = LS.P_CODE);
+
+SELECT INV_NUMBER, P_CODE, LINE_UNITS, (SELECT AVG(LINE_UNITS)
+                                        FROM LINE LX
+                                        WHERE LX.P_CODE = LS.P_CODE) AS AVG
+FROM LINE LS
+WHERE LS.LINE_UNITS > (SELECT AVG(LINE_UNITS)
+                       FROM LINE LA
+                       WHERE LA.P_CODE = LS.P_CODE);                            
+```
+# Correlated Subqueries (Exists)
+```sql
+-- list all vendors, but only if there are products to order.
+SELECT *
+FROM VENDOR
+WHERE EXISTS (SELECT * FROM PRODUCT WHERE P_QOH <= P_MIN * 2);
+
+-- list the names of all customers who have placed an order lately.
+SELECT CUS_CODE, CUS_LNAME, CUS_FNAME
+FROM CUSTOMER
+WHERE EXISTS (SELECT CUS_CODE 
+              FROM INVOICE
+              WHERE INVOICE.CUS_CODE = CUSTOMER.CUS_CODE);
+```
+
+# Correlated Subqueries (Example of Exists)
+Suppose that you want to know what vendors you must contact to order products that are approaching the minimum quantity-on-hand value that is less than double the minimum quantity.
+
+```sql
+SELECT V_CODE, V_NAME
+FROM VENDOR
+WHERE EXISTS (SELECT *
+              FROM PRODUCT
+              WHERE P_QOH < P_MIN * 2 AND VENDOR.V_CODE = PRODUCT.V_CODE);
+```

@@ -51,10 +51,10 @@ style: |
 - Learn how to create a table and modify columns and constrains
 - Learn how to manipulate the contents of the data, using SQL commands to insert, update, and delete rows of data 
 - Learn how to use triggers and stored procedures to perform actions when a specific event occurs.
-- Learn how SQL facilitates the application of business procedures when it is embedded in a programming language such as Visual Basic NET, C#, or COBOL.  
+- Learn how SQL facilitates the application of business procedures when it is embedded in a programming language (Python as example).  
 
 # Steps to Develop Database
-1. Design ER model (Fig 7.1 or Fig 8.1)
+1. Design ER model
 2. Create database 
 3. Create database **schema** (a logical group of database objects, like tables and indexes)
 4. Insert data
@@ -71,7 +71,7 @@ CREATE TABLE tablename (
 column1 data type [constraint] [,
 column2 data type [constraint] ] [,
 PRIMARY KEY (column1 [, column2]) ] [,
-FOREIGN KEY (column1 [, column2]) REFERENCES tablename] [,
+FOREIGN KEY (column1 [, column2]) REFERENCES tablename (column1 [, column2])] [,
 CONSTRAINT constraint ] );
 ```
 
@@ -99,7 +99,7 @@ P_MIN 		INTEGER NOT NULL,
 P_PRICE 	NUMERIC(8,2) NOT NULL,
 P_DISCOUNT 	NUMERIC(4,2) NOT NULL,
 V_CODE 		INTEGER,
-CONSTRAINT PRODUCT_V_CODE_FK FOREIGN KEY (V_CODE) REFERENCES VENDOR (V_CODE));
+FOREIGN KEY (V_CODE) REFERENCES VENDOR (V_CODE));
 ```
 
 # The Order of Related Table Creation
@@ -112,7 +112,7 @@ the “1” side. Therefore, in a 1:M relationship, you must always create the t
 - <span class="blue-text">FOREIGN KEY </span>constraint
   <span class="small-text">
   - You cannot delete a vendor from the VENDOR table if at least one product row references that vendor
-  - *CONSTRAINT PRODUCT_V_CODE_FK FOREIGN KEY (V_CODE) REFERENCES VENDOR (V_CODE) ON UPDATE CASCADE*
+  - *FOREIGN KEY (V_CODE) REFERENCES VENDOR (V_CODE) ON UPDATE CASCADE*
   - If you make a change in any VENDOR’s V_CODE that change is automatically applied to PRODUCT to maintain referential integrity
   </span>
 - <span class="blue-text">NOT NULL</span> constraint
@@ -124,22 +124,24 @@ the “1” side. Therefore, in a 1:M relationship, you must always create the t
 
 # Create Table INVOICE, LINE to Illustrate Constrains 
 ```sql
-CREATE TABLE INVOICE (
-INV_NUMBER NUMBER PRIMARY KEY,
-CUS_CODE NUMBER NOT NULL REFERENCES CUSTOMER(CUS_CODE),
-INV_DATE DATE DEFAULT NOW() NOT NULL,
-CONSTRAINT INV_CK1 CHECK (INV_DATE > ('2022-01-01'));
-
-CREATE TABLE LINE (
-INV_NUMBER 	INTEGER NOT NULL,
-LINE_NUMBER	NUMERIC(2,0) NOT NULL,
-P_CODE		VARCHAR(10) NOT NULL,
-LINE_UNITS	NUMERIC(9,2) DEFAULT 0.00 NOT NULL,
-LINE_PRICE	NUMERIC(9,2) DEFAULT 0.00 NOT NULL,
-PRIMARY KEY (INV_NUMBER,LINE_NUMBER),
-FOREIGN KEY (INV_NUMBER) REFERENCES INVOICE (INV_NUMBER) ON DELETE CASCADE,
-FOREIGN KEY (P_CODE) REFERENCES PRODUCT(P_CODE),
-CONSTRAINT LINE_UI1 UNIQUE(INV_NUMBER, P_CODE));
+CREATE TABLE IF NOT EXISTS INVOICE (
+  INV_NUMBER  INTEGER,
+  CUS_CODE	INTEGER NOT NULL,
+  INV_DATE  DATE NOT NULL,
+  PRIMARY KEY (INV_NUMBER),
+  FOREIGN KEY (CUS_CODE) REFERENCES CUSTOMER (CUS_CODE), 
+  CONSTRAINT INV_CK1 CHECK (INV_DATE > '2012-01-01'));
+  
+  CREATE TABLE LINE (
+  INV_NUMBER 	INTEGER NOT NULL,
+  LINE_NUMBER	NUMERIC(2,0) NOT NULL,
+  P_CODE		VARCHAR(10) NOT NULL,
+  LINE_UNITS	NUMERIC(9,2) DEFAULT 0.00 NOT NULL,
+  LINE_PRICE	NUMERIC(9,2) DEFAULT 0.00 NOT NULL,
+  PRIMARY KEY (INV_NUMBER,LINE_NUMBER),
+  FOREIGN KEY (INV_NUMBER) REFERENCES INVOICE (INV_NUMBER) ON DELETE CASCADE,
+  FOREIGN KEY (P_CODE) REFERENCES PRODUCT(P_CODE),
+  CONSTRAINT LINE_UI1 UNIQUE(INV_NUMBER, P_CODE));
 ```
 
 # Create a Table with a SELECT Statement
@@ -175,8 +177,11 @@ DROP INDEX PROD_PRICEX;
 ALTER TABLE PRODUCT
     MODIFY V_CODE CHAR(5);
 
+ALTER TABLE PRODUCT
+    MODIFY P_DESCRIPT VARCHAR(40);    
+
 -- if V_CODE is not a FOREIGN KEY.
--- f V_CODE contains data that cannot be converted, the query will fail.
+-- if V_CODE contains data that cannot be converted, the query will fail.
 -- Ensure no data truncation occurs.
 ```
 # Changing a Column’s Data Characteristics
@@ -208,7 +213,7 @@ ALTER TABLE PART
     ADD FOREIGN KEY (V_CODE) REFERENCES VENDOR (V_CODE);
 
 ALTER TABLE PART
-    ADD CHECK (PART_ PRICE > = 0);
+    ADD CHECK (PART_PRICE > = 0);
 
 ALTER TABLE PART
     ADD PRIMARY KEY (PART_CODE),
@@ -292,6 +297,26 @@ WHERE P_CODE = 'BRT-345';
 
 # Restoring Table Contents
 The ROLLBACK command is used to restore the database table contents to the condition that existed after the last COMMIT statements.
+
+# Transaction Example
+A transaction: Jacky transfer $100 to Andy
+```sql
+CREATE TABLE IF NOT EXISTS ACCOUNT (
+  ACCT_NUM  CHAR(5),
+  OWNER_NAME  VARCHAR(15),
+  BALANCE DECIMAL(9,2),
+  PRIMARY KEY (ACCT_NUM));
+INSERT INTO ACCOUNT VALUES ('00001','Jacky', 1000);
+INSERT INTO ACCOUNT VALUES ('00002','Andy', 500);
+SET AUTOCOMMIT = 0;
+UPDATE ACCOUNT SET BALANCE = (BALANCE - 100)
+WHERE ACCT_NUM = '00001';
+UPDATE ACCOUNT SET BALANCE = (BALANCE + 100)
+WHERE ACCT_NUM = '00002';
+ROLLBACK;
+COMMIT;
+SET AUTOCOMMIT = 1;
+```
 
 # Virtual Tables: Creating a View
 - A view is a virtual table based on a SELECT query that is saved as an object in the database
