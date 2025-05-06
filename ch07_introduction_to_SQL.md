@@ -140,11 +140,8 @@
 
 ![bg right:80% w:90%](adding_image/CTable08_02.png)
 
-## Step2: Create Database (MySQL syntax)
+## Step2: Create Database (MySQL syntax) (DDL)
 
-- Database stores database schema, a group of database objects
-
-# Step2: Create Database (MySQL syntax) (DDL)
 ```sql
 CREATE DATABASE [IF NOT EXISTS] database_name;
 ```
@@ -157,9 +154,8 @@ CREATE DATABASE IF NOT EXISTS EPPS_SALECO;
 USE EPPS_SALECO;
 ```
 
-## Step3: Create Database Tables (MySQL syntax)
+## Step3: Create Database Tables (MySQL syntax) (DDL)
 
-# Step3: Create Database Tables (MySQL syntax) (DDL)
 ```sql
 CREATE TABLE [IF NOT EXISTS] table_name (
   column_name1 data_type [column_constraints],
@@ -200,7 +196,9 @@ CREATE TABLE IF NOT EXISTS PRODUCT (
   FOREIGN KEY (V_CODE) REFERENCES VENDOR (V_CODE)
 );
 ```
-# Create CUSTOMER Table
+
+### Create CUSTOMER Table
+
 ```sql
 CREATE TABLE CUSTOMER (
   CUS_CODE	INTEGER,
@@ -214,9 +212,8 @@ CREATE TABLE CUSTOMER (
   CONSTRAINT CUS_UI1 UNIQUE(CUS_LNAME,CUS_FNAME, CUS_PHONE));
 ```
 
-## STEP4: Insert Data (MySQL Syntax)
+### Create INVOICE Table
 
-# Create INVOICE Table
 ```sql
 CREATE TABLE IF NOT EXISTS INVOICE (
   INV_NUMBER  INTEGER,
@@ -226,7 +223,9 @@ CREATE TABLE IF NOT EXISTS INVOICE (
   FOREIGN KEY (CUS_CODE) REFERENCES CUSTOMER (CUS_CODE), 
   CONSTRAINT INV_CK1 CHECK (INV_DATE > '2012-01-01'));
 ```
-# Create LINE Table
+
+### Create LINE Table
+
 ```sql
 CREATE TABLE LINE (
   INV_NUMBER 	INTEGER NOT NULL,
@@ -240,8 +239,8 @@ CREATE TABLE LINE (
   CONSTRAINT LINE_UI1 UNIQUE(INV_NUMBER, P_CODE));
 ```
 
-
 # STEP4: Insert Data (MySQL Syntax) (DML)
+
 ```sql
 /* basic syntax */
 INSERT INTO table_name (column1, column2, ..., columnN)
@@ -296,7 +295,8 @@ INSERT INTO PRODUCT VALUES('SW-23116','2.5-in. wd. screw, 50'                ,'2
 INSERT INTO PRODUCT VALUES('WR3/TT3' ,'Steel matting, 4''x8''x1/6", .5" mesh','2022-01-17', 18,  5,119.95,0.10,25595);
 ```
 
-# Insert Into CUSTOMER Table
+### Insert Into CUSTOMER Table
+
 ```sql
 /* CUSTOMER rows					*/
 INSERT INTO CUSTOMER VALUES(10010,'Ramas'   ,'Alfred','A' ,'615','844-2573',0);
@@ -311,7 +311,8 @@ INSERT INTO CUSTOMER VALUES(10018,'Farriss' ,'Anne'  ,'G' ,'713','382-7185',216.
 INSERT INTO CUSTOMER VALUES(10019,'Smith'   ,'Olette','K' ,'615','297-3809',0);
 ```
 
-# Insert Into INVOICE Table
+### Insert Into INVOICE Table
+
 ```sql
 INSERT INTO INVOICE VALUES(1001,10014,'2022-01-16');
 INSERT INTO INVOICE VALUES(1002,10011,'2022-01-16');
@@ -323,7 +324,8 @@ INSERT INTO INVOICE VALUES(1007,10015,'2022-01-17');
 INSERT INTO INVOICE VALUES(1008,10011,'2022-01-17');
 ```
 
-# Insert Into LINE Table
+### Insert Into LINE Table
+
 ```sql
 INSERT INTO LINE VALUES(1001,1,'13-Q2/P2',1,14.99);
 INSERT INTO LINE VALUES(1001,2,'23109-HB',1,9.95);
@@ -387,7 +389,8 @@ Each clause in a SELECT query performs the following functions:
 
 ## Basic SELECT Syntax
 
-# Basic SELECT Syntax (DML)
+## Basic SELECT Syntax (DML)
+
 ```sql
 SELECT column1, column2, ...
 FROM table_name
@@ -400,7 +403,8 @@ FROM table_name
 
 ## SELECT Clause
 
-# A Complete SELECT Statement
+### A Complete SELECT Statement
+
 ```sql
 SELECT department, COUNT(*) AS employee_count, AVG(salary) AS avg_salary
 FROM employees
@@ -411,24 +415,26 @@ ORDER BY avg_salary DESC
 LIMIT 5 OFFSET 10;
 ```
 
-# Explanation of SELECT Statement
+### Explanation of SELECT Statement
+
 <style scoped>
 table {
   font-size: 20px;
 }
 </style>
 
-Clause|Purpose|Explanation
-------|-------|-----------
-SELECT department, COUNT(*), AVG(salary) | Columns to retrieve | Selects the department, number of employees, and average salary
-FROM employees | Table source | Uses the employees table
-WHERE status = 'active' | Filter rows | Only include employees who are currently active
-GROUP BY department | Grouping | Groups rows by department
-HAVING AVG(salary) > 50000 | Group filter | Only show departments where the average salary is above 50,000
-ORDER BY avg_salary DESC | Sort | Sorts the result by average salary in descending order
-LIMIT 5 OFFSET 10 | Pagination | Skips the first 10 rows and returns the next 5
+| Clause                                   | Purpose             | Explanation                                                     |
+| ---------------------------------------- | ------------------- | --------------------------------------------------------------- |
+| SELECT department, COUNT(*), AVG(salary) | Columns to retrieve | Selects the department, number of employees, and average salary |
+| FROM employees                           | Table source        | Uses the employees table                                        |
+| WHERE status = 'active'                  | Filter rows         | Only include employees who are currently active                 |
+| GROUP BY department                      | Grouping            | Groups rows by department                                       |
+| HAVING AVG(salary) > 50000               | Group filter        | Only show departments where the average salary is above 50,000  |
+| ORDER BY avg_salary DESC                 | Sort                | Sorts the result by average salary in descending order          |
+| LIMIT 5 OFFSET 10                        | Pagination          | Skips the first 10 rows and returns the next 5                  |
 
 # SELECT Clause
+
 - SELECT – specifies the attributes to be returned (column name or *)
 - FROM – specifies the table(s)
 - WHERE – filters the rows of data
@@ -462,6 +468,7 @@ Table: PRODUCT
 ## Select an Entire PRODUCT Table
 
 # Select an Entire PRODUCT Table
+
 ```sql
 SELECT * 
 FROM EPPS_SALECO.PRODUCT;
@@ -575,6 +582,7 @@ SELECT EMP_LNAME, EMP_FNAME, EMP_INITIAL, EMP_PHONE
 FROM EMPLOYEE
 ORDER BY EMP_LNAME, EMP_FNAME, EMP_INITIAL;
 ```
+
 # Create EMPLOYEE Table
 
 ```sql
@@ -611,6 +619,7 @@ INSERT INTO EMPLOYEE VALUES(116,'Mr.' ,'Smith'     ,'George' ,'A' ,'1990-11-08',
 
 
 ```
+
 # WHERE Clause Options
 
 - Comparison operator: =, <, <=, >, >=, <> or !=
@@ -700,10 +709,12 @@ WHERE UPPER(V_CONTACT) NOT LIKE 'SMITH%';
 ```
 
 # Use Wildcard in Expression
+
 A wildcard character is a symbol that can be used as a general substitute for other characters or commands
-  - \* : all columns
-  - % : matches zero or more characters
-  - _ : matches exactly one character
+
+- \* : all columns
+- % : matches zero or more characters
+- _ : matches exactly one character
 
 ```sql
 SELECT * FROM PRODUCT WHERE P_CODE LIKE '15%';
@@ -782,7 +793,9 @@ FROM PRODUCT JOIN VENDOR USING (V_CODE);
 ## Example of JOIN ON
 
 # Illustrated by Relational Algebra  Natural Join
+
 PRODUCT -> SELECT -> PROJECT
+
 <style>
 .grid {
     display: grid;
@@ -802,6 +815,7 @@ PRODUCT -> SELECT -> PROJECT
 </div>
 
 # Example of JOIN ON
+
 ```sql
 /* ????? */
 SELECT INVOICE.INV_NUMBER, PRODUCT.P_CODE, P_DESCRIPT, LINE_UNITS, LINE_PRICE
@@ -866,7 +880,7 @@ Three types of outer join: Left (outer) join, Right (outer) join, Full (outer) j
 SELECT column-list
 FROM table1 LEFT[OUTER] JOIN table2 ON join-condition
 
--- ?????
+--  None表示表示從來沒有供應過的供應商
 SELECT VENDOR.V_CODE, V_NAME, P_CODE
 FROM VENDOR 
 LEFT JOIN PRODUCT ON VENDOR.V_CODE = PRODUCT.V_CODE;
@@ -877,7 +891,7 @@ LEFT JOIN PRODUCT ON VENDOR.V_CODE = PRODUCT.V_CODE;
 ```sql
 SELECT column-list
 FROM table1 RIGHT[OUTER] JOIN table2 ON join-condition
--- ?????
+-- 自製品
 SELECT VENDOR.V_CODE, V_NAME, P_CODE
 FROM VENDOR 
 RIGHT JOIN PRODUCT ON VENDOR.V_CODE = PRODUCT.V_CODE;
@@ -1380,20 +1394,24 @@ WHERE C2.CUS_LNAME IS NULL;
 # Review Questions
 
 - Explain the difference between an ORDER BY clause and a GROUP BY clause.
+
 > `ORDER BY` 用來將查詢結果依指定欄位排序，不改變 row 數量。
 > `GROUP BY` 用來依指定欄位分群，通常搭配聚合函數，row 數可能減少。
 > `ORDER BY` 影響結果排列順序；`GROUP BY` 則改變資料的分組結構。
 
 - What three join types are included in the OUTER JOIN classification?
->LEFT OUTER JOIN：保留左表全部 row，右表無對應補 NULL。
->RIGHT OUTER JOIN：保留右表全部 row，左表無對應補 NULL。
->FULL OUTER JOIN：保留左右表所有 row，無對應處以 NULL 補齊。
+
+> LEFT OUTER JOIN：保留左表全部 row，右表無對應補 NULL。
+> RIGHT OUTER JOIN：保留右表全部 row，左表無對應補 NULL。
+> FULL OUTER JOIN：保留左右表所有 row，無對應處以 NULL 補齊。
 
 - What are the four categories of SQL functions
->數值函數（Numeric Functions）
->字串函數（Character/String Functions）
->日期時間函數（Date and Time Functions）
->型別轉換函數（Conversion Functions）
+
+> 數值函數（Numeric Functions）
+> 字串函數（Character/String Functions）
+> 日期時間函數（Date and Time Functions）
+> 型別轉換函數（Conversion Functions）
+
 # Homework #C
 
 資料庫課程作業(C)
