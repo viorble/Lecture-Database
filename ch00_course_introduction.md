@@ -112,8 +112,19 @@ style: |
   - 電子與光子學程: group by 3 ~ 6 members, 資財系: group by 5 ~ 6 members
   - form team by week 3
   - hand-in progress report by week 9
-  - selective groups presentation in week 15
   - hand-in final report by week 17
+
+# Recommended TOC of Final Report
+- **Requirements** we plan to fulfill and/or **problems** we plan to solve
+- Teaming (roles and peer evaluation)
+- User requirements and business rules
+- Database design (ERD, normalization, data dictionary)
+- Database implementation (SQL script)
+- Application briefings (systems architecture, main function screen shot) 
+- Lesson learned
+- Present date (專班: 05/27,  6組, 每組10分鐘, 資財: 05/28, 12組, 每組10分鐘)
+- Report submission deadline: 06/15 (Sunday) 23:59 
+
 
 # Members in Project
 - **End user**: define business rule and function requirements 

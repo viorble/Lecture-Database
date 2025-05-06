@@ -1022,6 +1022,8 @@ FROM PRODUCT JOIN VENDOR ON PRODUCT.V_CODE = VENDOR.V_CODE
 GROUP BY V_CODE
 ORDER BY V_NAME;
 ```
+### Lab: list number of lines and average amount of each invoice
+
 
 # Grouping Data (2)
 
@@ -1089,11 +1091,19 @@ WHERE V_CODE NOT IN (
 ## WHERE Subqueries
 
 ```sql
--- List all customers who order a claw hammer
+-- what is the purpose of the SQL below
 SELECT P_CODE, P_PRICE
 FROM PRODUCT
 WHERE P_PRICE >= 
     (SELECT AVG(P_PRICE) FROM PRODUCT);
+
+-- List all customers who order a claw hammer
+SELECT DISTINCT CUSTOMER.CUS_CODE, CUS_LNAME, CUS_FNAME
+FROM CUSTOMER
+JOIN INVOICE ON CUSTOMER.CUS_CODE = INVOICE.CUS_CODE
+JOIN LINE ON INVOICE.INV_NUMBER = LINE.INV_NUMBER
+JOIN PRODUCT ON PRODUCT.P_CODE = LINE.P_CODE
+WHERE P_DESCRIPT = 'Claw hammer';
 
 SELECT DISTINCT CUS_CODE, CUS_LNAME, CUS_FNAME
 FROM CUSTOMER
@@ -1275,13 +1285,6 @@ WHERE EXISTS (SELECT CUS_CODE
 
 Suppose that you want to know what vendors you must contact to order products that are approaching the minimum quantity-on-hand value that is less than double the minimum quantity.
 
-```sql
-SELECT V_CODE, V_NAME
-FROM VENDOR
-WHERE EXISTS (SELECT *
-              FROM PRODUCT
-              WHERE P_QOH < P_MIN * 2 AND VENDOR.V_CODE = PRODUCT.V_CODE);
-```
 
 # Built-in SQL Functions
 
@@ -1304,16 +1307,44 @@ SELECT CURTIME();
 
 ```sql
 SELECT CONCAT(EMP_FNAME, " ", EMP_LNAME)
-FROM EMP;
-SELECT FORMAT(P_QOH * P_PRICE, 0) as Total_Value
-FROM PRODUCT
+FROM EMPLOYEE;
+
 -- LEFT and RIGHT
 SELECT LEFT(EMP_LNAME, 3)
-FROM EMP;
+FROM EMPLOYEE;
+
 -- UPPER and LOWER
 SELECT UPPER(LEFT(EMP_LNAME, 3))
-FROM EMP;
--- Others: SUBSTRING, TRIM, LTRIM, RTRIM
+FROM EMPLOYEE;
+
+-- SUBSTRING
+SELECT EMP_LNAME, SUBSTRING(EMP_LNAME, 2,2)
+FROM EMPLOYEE;
+
+-- Others: TRIM, LTRIM, RTRIM
+```
+
+# MySQL NUMBER FORMAT Function
+```sql
+SELECT FORMAT(P_QOH * P_PRICE, 0) as Total_Value
+FROM PRODUCT
+
+SELECT FORMAT(1234567.891, 2);
+
+SELECT
+  ROUND(12345.6789, 2) AS RoundedNumber,
+  FORMAT(12345.6789, 2) AS FormattedString;
+```
+# MySQL DATE FORMAT Function
+```sql
+SELECT DATE_FORMAT('2025-04-29', '%y/%M/%D');
+SELECT DATE_FORMAT(CURRENT_DATE, '%Y/%m/%d');
+SELECT DATE_FORMAT(NOW(), '%W, %M %d, %Y');
+SELECT P_CODE, DATE_FORMAT(P_INDATE, "%m/%d/%Y")
+FROM PRODUCT
+SELECT P_CODE, P_INDATE, DATE_ADD(P_INDATE, INTERVAL 2 YEAR)
+FROM PRODUCT
+ORDER BY DATE_ADD(P_INDATE, INTERVAL 2 YEAR);
 ```
 
 # Relational Set Operators (UNION)
@@ -1407,11 +1438,61 @@ WHERE C2.CUS_LNAME IS NULL;
 
 - What are the four categories of SQL functions
 
-> 數值函數（Numeric Functions）
-> 字串函數（Character/String Functions）
-> 日期時間函數（Date and Time Functions）
-> 型別轉換函數（Conversion Functions）
+# Backup
+# Correlated Subqueries (Definition)
+- <span class="blue-text">Inner subquery</span>
+  - Inner subqueries execute independently. 
+  - The inner sub-query executes first; its **output** is used by the outer query, which then executes until the last outer query finishes (the first SQL statement in the code).
+- <span class="blue-text">Correalted subquery</span>
+  -  A subquery that executes once for each row in the outer query.
+  -  The inner query is related to the outer query
+  -  The inner query references a column of the outer subquery.
+  1. It initiates the outer query.
+  2. For each row of the outer query result set, it executes the inner query by passing the outer row to the inner query.
 
-# Homework #C
+# Correlated Subqueries (Example)
+List all product sales in which the units sold value is greater than the average units sold value for that product (as opposed to the average for all products).
+1. Compute the average units sold for a product.
+2. Compare the average computed in Step 1 to the units sold in each sale row, and then select only the rows in which the number of units sold is greater.
 
-資料庫課程作業(C)
+# Correlated Subqueries (SQL)
+```sql
+SELECT INV_NUMBER, P_CODE, LINE_UNITS
+FROM LINE LS
+WHERE LS.LINE_UNITS > (SELECT AVG(LINE_UNITS)
+                       FROM LINE LA
+                       WHERE LA.P_CODE = LS.P_CODE);
+
+SELECT INV_NUMBER, P_CODE, LINE_UNITS, (SELECT AVG(LINE_UNITS)
+                                        FROM LINE LX
+                                        WHERE LX.P_CODE = LS.P_CODE) AS AVG
+FROM LINE LS
+WHERE LS.LINE_UNITS > (SELECT AVG(LINE_UNITS)
+                       FROM LINE LA
+                       WHERE LA.P_CODE = LS.P_CODE);                            
+```
+# Correlated Subqueries (Exists)
+```sql
+-- list all vendors, but only if there are products to order.
+SELECT *
+FROM VENDOR
+WHERE EXISTS (SELECT * FROM PRODUCT WHERE P_QOH <= P_MIN * 2);
+
+-- list the names of all customers who have placed an order lately.
+SELECT CUS_CODE, CUS_LNAME, CUS_FNAME
+FROM CUSTOMER
+WHERE EXISTS (SELECT CUS_CODE 
+              FROM INVOICE
+              WHERE INVOICE.CUS_CODE = CUSTOMER.CUS_CODE);
+```
+
+# Correlated Subqueries (Example of Exists)
+Suppose that you want to know what vendors you must contact to order products that are approaching the minimum quantity-on-hand value that is less than double the minimum quantity.
+
+```sql
+SELECT V_CODE, V_NAME
+FROM VENDOR
+WHERE EXISTS (SELECT *
+              FROM PRODUCT
+              WHERE P_QOH < P_MIN * 2 AND VENDOR.V_CODE = PRODUCT.V_CODE);
+```
