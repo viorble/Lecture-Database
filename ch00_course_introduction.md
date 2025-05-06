@@ -122,7 +122,7 @@ style: |
 - Database implementation (SQL script)
 - Application briefings (systems architecture, main function screen shot) 
 - Lesson learned
-- Present date (專班: 05/27,  6組, 每組15分鐘, 資財: 05/28, 12組, 每組10分鐘)
+- Present date (專班: 05/27,  6組, 每組10分鐘, 資財: 05/28, 12組, 每組10分鐘)
 - Report submission deadline: 06/15 (Sunday) 23:59 
 
 
