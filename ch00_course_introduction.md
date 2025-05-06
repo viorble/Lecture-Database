@@ -116,7 +116,7 @@ style: |
 
 # Recommended TOC of Final Report
 - **Requirements** we plan to fulfill and/or **problems** we plan to solve
-- Teaming (roles and peer evaluation)
+- Teaming (roles and peer evaluation (1~10 points))
 - User requirements and business rules
 - Database design (ERD, normalization, data dictionary)
 - Database implementation (SQL script)
