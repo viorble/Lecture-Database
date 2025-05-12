@@ -47,10 +47,15 @@ style: |
     font-size: 0.70rem;
   }
 ---
-# Chapter10: Transaction Management and Concurrency Control
+# Chapter10: RDBMS Advanced Topics
 - Transaction management process and four transaction properties
 - Concurrency control and locking methods
 - Database recovery management
+- Database security (access control list)
+- Performance tunning
+- No SQL 
+
+
 
 # A Transaction
 

@@ -91,7 +91,7 @@ PRIMARY KEY (V_CODE));
 # Creating PRODUCT Table
 ```sql
 CREATE TABLE PRODUCT (
-P_CODE 	VARCHAR(10) PRIMARY KEY,
+P_CODE 	        VARCHAR(10),
 P_DESCRIPT 	VARCHAR(35) NOT NULL,
 P_INDATE 	DATETIME NOT NULL,
 P_QOH 	        INTEGER NOT NULL,
@@ -99,13 +99,14 @@ P_MIN 		INTEGER NOT NULL,
 P_PRICE 	NUMERIC(8,2) NOT NULL,
 P_DISCOUNT 	NUMERIC(4,2) NOT NULL,
 V_CODE 		INTEGER,
+PRIMARY KEY (P_CODE)
 FOREIGN KEY (V_CODE) REFERENCES VENDOR (V_CODE));
 ```
 
 # The Order of Related Table Creation
 - Because the PRODUCT table contains a foreign key that references the VENDOR table, create the VENDOR table first
-- “M” side of a relationship always references
-the “1” side. Therefore, in a 1:M relationship, you must always create the table for the “1” side first.
+- “M” side of a relationship always references the “1” side. Therefore, in a 1:M relationship, we always create the table for the “1” side first.
+- Data insertion follow the same rule
 
 # Set SQL Constraints when Table Creating
 - <span class="blue-text">PRIMARY KEY </span>constraint : not null and unique
@@ -158,10 +159,27 @@ CREATE TABLE IF NOT EXISTS PART AS
 and to avoid duplicate column values
 ```sql
 CREATE INDEX P_INDATEX ON PRODUCT(P_INDATE);
+DROP INDEX P_INDATEX ON PRODUCT;
 CREATE UNIQUE INDEX P_CODEX ON PRODUCT(P_CODE);
+DROP INDEX P_CODEX ON PRODUCT;
 CREATE INDEX PROD_PRICEX ON PRODUCT(P_PRICE DESC);
-DROP INDEX PROD_PRICEX;
+DROP INDEX PROD_PRICEX ON PRODUCT;
 ```
+# MySQL Index
+- MySQL allows several types of indexes like primary key index, unique index, normal index (non-unique index, ordinary index, index without constraints) and full-text index.
+- The indexes improve SELECT queries speed tremendously. but, they do have some considerable disadvantages as well.
+- Advantage
+  - Query optimization
+  - Uniqueness help to avoid duplicate row data.
+- Disadvantage
+  - Indexes take up disk space
+  - Slow down the speed of writing queries, such as INSERT, UPDATE and DELETE
+
+# Illustrate Index
+<div class="middle-grid">
+    <img src="files/image/index_table_2.png" alt="">
+    <img src="files/image/index_table_3.png" alt="">
+</div>
 
 # Altering Table Structures
 - All changes in the table structure are made by using the ALTER TABLE command with three options: ADD, MODIFY, and DROP

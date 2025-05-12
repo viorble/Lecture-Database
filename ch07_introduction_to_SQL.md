@@ -1036,7 +1036,7 @@ HAVING SUM(LINE_UNITS) > (SELECT AVG(LINE_UNITS) FROM LINE);
 ```
 
 # Multirow Subquery Operators: ALL and any
-Which products cost more than all individual products provided by vendors from Florida
+Which products' inventory cost larger than ALL individual products (所有個別產品) provided by vendors from Florida
 ```sql
 SELECT P_CODE, P_QOH * P_PRICE AS TOTALVALUE
 FROM PRODUCT
@@ -1059,13 +1059,13 @@ List all customers who purchased both products ('13-Q2/P2', '23109-HB'), not jus
 SELECT DISTINCT CUSTOMER.CUS_CODE, CUSTOMER.CUS_LNAME
 FROM CUSTOMER
 JOIN
-    (SELECT INVOICE.CUS_CODE
+    (SELECT DISTINCT INVOICE.CUS_CODE
      FROM INVOICE
      JOIN LINE ON INVOICE.INV_NUMBER = LINE.INV_NUMBER
      WHERE P_CODE = '13-Q2/P2') CP1
 ON CUSTOMER.CUS_CODE = CP1.CUS_CODE
 JOIN
-    (SELECT INVOICE.CUS_CODE
+    (SELECT DISTINCT INVOICE.CUS_CODE
      FROM INVOICE
      JOIN LINE ON INVOICE.INV_NUMBER = LINE.INV_NUMBER
      WHERE P_CODE = '23109-HB') CP2
@@ -1200,42 +1200,6 @@ FROM CUSTOMER_2;
     <img src="restricted/CFig07_62.jpg" alt="">
 </div>
 
-# Relational Set Operators (INTERSECT)
-List the customer codes for all customers who are in area code 615 and who have made purchases. (If a customer has made a purchase, there must be an invoice record for that customer.)
-
-```sql
--- MySQL does not support INTERSECT
-SELECT CUS_CODE FROM CUSTOMER WHERE CUS_AREACODE = "615"
-INTERSECT
-SELECT DISTINCT CUS_CODE FROM INVOICE;
-
--- Use Join instead of
-SELECT DISTINCT C.CUS_CODE
-FROM CUSTOMER C
-INNER JOIN INVOICE I ON C.CUS_CODE = I.CUS_CODE
-WHERE C.CUS_AREACODE = '615';
-```
-# Relational Set Operators (MINUS / EXCEPT)
-```sql
--- MySQL does not support MINUS
-SELECT CUS_LNAME, CUS_FNAME, CUS_INITIAL, CUS_AREACODE, CUS_PHONE
-FROM CUSTOMER
-MINUS
-SELECT CUS_LNAME, CUS_FNAME, CUS_INITIAL, CUS_AREACODE, CUS_PHONE
-FROM CUSTOMER_2;
-
--- Use Join instead of
-SELECT C.CUS_LNAME, C.CUS_FNAME, C.CUS_INITIAL, C.CUS_AREACODE, C.CUS_PHONE
-FROM CUSTOMER C
-LEFT JOIN CUSTOMER_2 C2 
-ON C.CUS_LNAME = C2.CUS_LNAME 
-AND C.CUS_FNAME = C2.CUS_FNAME
-AND C.CUS_INITIAL = C2.CUS_INITIAL
-AND C.CUS_AREACODE = C2.CUS_AREACODE
-AND C.CUS_PHONE = C2.CUS_PHONE
-WHERE C2.CUS_LNAME IS NULL;
-```
-
 # Crafting SELECT Queries
 - Know Your Data: the importance of understanding the data model that you are working in cannot be overstated
 - Know the Problem: understand the question you are attempting to answer
@@ -1309,4 +1273,40 @@ FROM VENDOR
 WHERE EXISTS (SELECT *
               FROM PRODUCT
               WHERE P_QOH < P_MIN * 2 AND VENDOR.V_CODE = PRODUCT.V_CODE);
+```
+
+# Relational Set Operators (INTERSECT)
+List the customer codes for all customers who are in area code 615 and who have made purchases. (If a customer has made a purchase, there must be an invoice record for that customer.)
+
+```sql
+-- MySQL does not support INTERSECT
+SELECT CUS_CODE FROM CUSTOMER WHERE CUS_AREACODE = "615"
+INTERSECT
+SELECT DISTINCT CUS_CODE FROM INVOICE;
+
+-- Use Join instead of
+SELECT DISTINCT C.CUS_CODE
+FROM CUSTOMER C
+INNER JOIN INVOICE I ON C.CUS_CODE = I.CUS_CODE
+WHERE C.CUS_AREACODE = '615';
+```
+# Relational Set Operators (MINUS / EXCEPT)
+```sql
+-- MySQL does not support MINUS
+SELECT CUS_LNAME, CUS_FNAME, CUS_INITIAL, CUS_AREACODE, CUS_PHONE
+FROM CUSTOMER
+MINUS
+SELECT CUS_LNAME, CUS_FNAME, CUS_INITIAL, CUS_AREACODE, CUS_PHONE
+FROM CUSTOMER_2;
+
+-- Use Join instead of
+SELECT C.CUS_LNAME, C.CUS_FNAME, C.CUS_INITIAL, C.CUS_AREACODE, C.CUS_PHONE
+FROM CUSTOMER C
+LEFT JOIN CUSTOMER_2 C2 
+ON C.CUS_LNAME = C2.CUS_LNAME 
+AND C.CUS_FNAME = C2.CUS_FNAME
+AND C.CUS_INITIAL = C2.CUS_INITIAL
+AND C.CUS_AREACODE = C2.CUS_AREACODE
+AND C.CUS_PHONE = C2.CUS_PHONE
+WHERE C2.CUS_LNAME IS NULL;
 ```
