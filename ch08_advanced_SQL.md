@@ -196,25 +196,25 @@ ALTER TABLE PRODUCT
     MODIFY V_CODE CHAR(5);
 
 ALTER TABLE PRODUCT
-    MODIFY P_DESCRIPT VARCHAR(40);    
+    MODIFY P_DESCRIPT VARCHAR(10);    
 
--- if V_CODE is not a FOREIGN KEY.
--- if V_CODE contains data that cannot be converted, the query will fail.
--- Ensure no data truncation occurs.
+-- if V_CODE is a FOREIGN KEY, it will fail.
+-- if V_CODE contains data that cannot be converted, it will fail.
+-- if data truncation occurs, it will fail
 ```
 # Changing a Column’s Data Characteristics
 ```sql
 ALTER TABLE PRODUCT
-MODIFY (P_PRICE DECIMAL(9,2));
+MODIFY P_PRICE DECIMAL(9,2);
 ```
-- Some DBMSs impose limitations on when it is possible to change data type or data characteristics.
-  - Increase (but not decrease) the size of a column only
+- Some DBMSs impose limitations on changing data type or data characteristics.
+  - Increase (but not decrease) the size of a column
   - Attribute changes can be made only when there is no data in the attribute.
 
 # Adding a Column
 ```sql
 ALTER TABLE PRODUCT
-    ADD (P_SALECODE CHAR(1));
+    ADD P_SALECODE CHAR(1);
 ```
 - Do not add NOT NULL as constrain
 
@@ -231,12 +231,12 @@ ALTER TABLE PART
     ADD FOREIGN KEY (V_CODE) REFERENCES VENDOR (V_CODE);
 
 ALTER TABLE PART
-    ADD CHECK (PART_PRICE > = 0);
+    ADD CHECK (PART_PRICE >= 0);
 
 ALTER TABLE PART
     ADD PRIMARY KEY (PART_CODE),
     ADD FOREIGN KEY (V_CODE) REFERENCES VENDOR (V_CODE),    
-    ADD CHECK (PART_ PRICE > = 0);
+    ADD CHECK (PART_ PRICE >= 0);
 ```
 
 # Dropping a Column
@@ -302,6 +302,7 @@ UPDATE PRODUCT
 SET P_SALECODE = '1'
 WHERE P_CODE IN ('2232/QWE', '2232/QTY');
 
+-- SET SQL_SAFE_UPDATES = 0;
 UPDATE PRODUCT
 SET P_PRICE = P_PRICE * 1.10
 WHERE P_PRICE < 50.00
@@ -352,6 +353,22 @@ GROUP BY V_CODE;
 SELECT * 
 FROM PROD_STATS
 ```
+# MySQL View
+In MySQL, a VIEW is a virtual table based on the result of a SELECT query. It does not store data, but presents data from one or more tables in a structured way.
+<style scoped>
+table {
+  font-size: 20px;
+}
+</style>
+Rule / Feature | Description
+---------------|------------
+Virtual Table | Views do not store data — only the SQL logic is saved.
+Read-Only or Updatable | Simple views (from one table, no aggregates, no DISTINCT, no GROUP BY, etc.) are usually updatable. Complex views are read-only.
+Column Aliases Allowed | You can rename columns in the view. <br>CREATE VIEW view_name (alias1, alias2) AS SELECT col1, col2 FROM table_name;
+Nested Views | Allow to create a view based on another view.
+View Dependencies | Dropping an base table breaks the view.
+Indexed Views Not Supported | Views in MySQL cannot have indexes.
+
 
 # Auto Increment in MySQL
 - In MySQL, you may set one and only one column with the AUTO_INCREMENT property. If you set one, the column must be defined as the primary key of the table
@@ -359,18 +376,16 @@ FROM PROD_STATS
 ```sql
 -- In MySQL
 create table arena (
-    arena_id          int  primary key auto_increment,
+    arena_id          int  auto_increment,
     arena_name        varchar(100),
     location          varchar(100),
-    seating_capacity  int);
-
+    seating_capacity  int,
+    primary key (arena_id));
 -- Loading the data without having to manage arena_id column
 insert into arena (arena_name, location, seating_capacity)
 values ('Madison Square Garden', 'New York', 20000);
 insert into arena (arena_name, location, seating_capacity)
 values ('Dean Smith Center', 'North Carolina', null);
-
-select * from arena;
 ```
 
 # Sequences in Oracle
@@ -391,12 +406,6 @@ VALUES (CUS_CODE_SEQ.NEXTVAL, 'Connery', 'Sean', NULL, '615', '898-2007', 0.00);
   - Stored function (or user defined function)
   - Stored procedures
   - Triggers
-```sql
-BEGIN
-INSERT INTO VENDOR
-VALUES (25678, 'Microsoft Corp.', 'Bill Gates', '765', '546-8484', 'WA', 'N');
-END;
-```
 
 # State_Population Table
 ```sql
@@ -408,7 +417,7 @@ insert into state_population values ('Texas',			29730311);
 insert into state_population values ('California',39613493);
 insert into state_population values ('Florida', 	21944577);
 insert into state_population values ('New Jersey', 9267130);
-insert into state_population values ('Massachusetts' 6893000);
+insert into state_population values ('Massachusetts', 6893000);
 insert into state_population values ('Rhode Island', 1097379);
 ```
 
@@ -416,21 +425,22 @@ insert into state_population values ('Rhode Island', 1097379);
 ```sql
 use population;
 drop function if exists f_get_state_population;
+
 delimiter //
 create function f_get_state_population(state_param varchar(100))
-returns int  -- returns an integer: population
-deterministic reads sql data 
--- always return the same output for the same input (important for caching and optimization)
--- read data from the database, not modify it
-begin
-  declare population_var int; -- local variable to store the retrieved population.
-  select  population
-  into    population_var
-  from    state_population
-  where   state = state_param;
-  return(population_var);
-end//
+    returns int  -- returns an integer: population
+    deterministic -- always return the same output for the same input (important for caching and optimization)
+    reads sql data -- read data from the database, not modify it
+    begin
+        declare population_var int; -- local variable to store the retrieved population.
+        select  population
+            into    population_var
+            from    state_population
+            where   state = state_param;
+        return(population_var);
+    end//
 delimiter ;
+
 -- Call function
 select f_get_state_population('New York');
 
@@ -447,6 +457,7 @@ where   population > f_get_state_population('New York');
 
 # Country_Population Table
 ```sql
+use population;
 create table county_population (state char(50), county varchar(100), population int);
 
 insert into county_population values ('New York',	'Kings',		2736074);
@@ -462,26 +473,24 @@ insert into county_population values ('New York',	'Westchester',	1004457);
 ```sql
 use population;
 drop procedure if exists p_set_and_show_state_population;
+
 delimiter //
 create procedure p_set_and_show_state_population(in state_param varchar(100))
-begin
-    declare population_var int;
-    delete from state_population
-    where state = state_param;
-   
-    select sum(population)
-    into   population_var
-    from   county_population
-    where  state = state_param;
-
-    insert into state_population(state,population)
-    values(state_param, population_var);
-    
-    select concat('Setting the population for ', state_param, ' of ', population_var);
-end//
+    begin
+        declare population_var int;
+        delete from state_population where state = state_param;
+        select sum(population) into   population_var
+            from   county_population
+            where  state = state_param;
+        insert into state_population(state,population) values(state_param, population_var);
+        select concat('Setting the population for ', state_param, ' of ', population_var);
+    end//
 delimiter ;
+
 -- Call the p_set_and_show_state_population() procedure
+set SQL_SAFE_UPDATES = 0;
 call p_set_and_show_state_population('New York');
+set SQL_SAFE_UPDATES = 1;
 ```
 # Compare Stored Function and Stored Procedure
 Use Case | Stored Procedure | Stored Function
@@ -489,7 +498,7 @@ Use Case | Stored Procedure | Stored Function
 Modify data (INSERT, UPDATE, DELETE)?|Yes|No (only SELECT)
 Return value?|Out parameters|Return statement
 Use inside a SELECT statement?|No|Yes
-Handle errors with DECLARE HANDLER?|Yes|No
+DETERMINISTIC / NOT DETERMINISTIC?|Optional|Yes
 Invocation| CALL statement |within SQL statements
 
 # Conditional Execution
@@ -498,46 +507,41 @@ use population;
 drop procedure if exists p_compare_population;
 delimiter //
 create procedure p_compare_population(in state_param varchar(100))
-begin
-    declare state_population_var int;
-    declare county_population_var int;
-
-    select  population
-    into    state_population_var
-    from    state_population
-    where   state = state_param;
-    
-    select sum(population)
-    into   county_population_var
-    from   county_population
-    where  state = state_param;
-    if (state_population_var = county_population_var) then
-       select 'The population values match';
-    else
-       select 'The population values are different';
-    end if;
--- If you want to display one of THREE messages, use the if/elseif/else
-end//
+    begin
+        declare state_population_var int;
+        declare county_population_var int;
+        select  population into state_population_var
+            from    state_population
+            where   state = state_param;
+        select sum(population) into county_population_var
+            from   county_population
+            where  state = state_param;
+        if (state_population_var = county_population_var) then
+            select 'The population values match';
+        else
+            select 'The population values are different';
+        end if; -- If you want to display one of THREE messages, use the if/elseif/else
+    end//
 delimiter ;
--- Call the p_compare_population() procedure
-call p_compare_population('New York');
+call p_compare_population('New York'); -- Call the p_compare_population() procedure
 ```
 
 # Iteration or Looping
 ```sql
+use population;
+drop procedure if exists p_more_sensible_loop;
 delimiter //
 create procedure p_more_sensible_loop()
-begin
- declare cnt int default 0;
- msl: loop
-  select concat('Looping Again ', cnt);
-    set cnt = cnt + 1;
-  if cnt = 10 then 
-    leave msl;
-  end if;
-end loop msl;
-end;
-//
+    begin
+        declare cnt int default 0;
+        msl: loop
+            select concat('Looping Again ', cnt);
+            set cnt = cnt + 1;
+            if cnt = 3 then 
+                leave msl;
+            end if;
+        end loop msl;
+    end//
 delimiter ;
 
 -- Call the procedure p_more_sensible_loop()
@@ -552,40 +556,46 @@ call p_more_sensible_loop();
 
 # Cursor Example (p_split_big_ny_counties.sql)
 ```sql
+use population;
+drop procedure if exists p_split_big_ny_counties;
+delimiter //
 create procedure p_split_big_ny_counties()
-begin
-  declare  v_state       varchar(100);
-  declare  v_county      varchar(100);
-  declare  v_population  int;
-  declare done bool default false;
-  declare county_cursor cursor for 
-    select  state, county, population
-    from    county_population
-    where   state = 'New York' and population > 2000000;
-  declare continue handler for not found set done = true;   
-  open county_cursor;
-  fetch_loop: loop
-    fetch county_cursor into v_state, v_county, v_population;
-    if done then
-      leave fetch_loop;
-    end if;
-    set @cnt = 1;
-    split_loop: loop
-      insert into county_population
-      (state, county, population)
-      values
-      (v_state,concat(v_county,'-',@cnt), round(v_population/2));
-      set @cnt = @cnt + 1;
-      if @cnt > 2 then
-        leave split_loop;
-      end if;
-    end loop split_loop;
-    -- delete the original county
-    delete from county_population where state = v_state and county = v_county;
-  end loop fetch_loop;
-  close county_cursor;
-end;
-//
+    begin
+        declare  v_state       varchar(100);
+        declare  v_county      varchar(100);
+        declare  v_population  int;
+        declare done bool default false;
+        declare county_cursor cursor for select  state, county, population
+                                         from    county_population
+                                         where   state = 'New York' and population > 2000000;
+        declare continue handler for not found set done = true;   
+        open county_cursor;
+        fetch_loop: loop
+            fetch county_cursor into v_state, v_county, v_population;
+            if done then
+                leave fetch_loop;
+            end if;
+            set @cnt = 1;
+            
+            split_loop: loop
+                insert into county_population (state, county, population)
+                    values (v_state,concat(v_county,'-',@cnt), round(v_population/2));
+                set @cnt = @cnt + 1;
+                if @cnt > 2 then
+                    leave split_loop;
+                end if;
+            end loop split_loop;
+    
+            -- delete the original county
+            delete from county_population where state = v_state and county = v_county;
+        end loop fetch_loop;
+        close county_cursor;
+end//
+delimiter ;
+set SQL_SAFE_UPDATES = 0;
+call p_split_big_ny_counties;
+set SQL_SAFE_UPDATES = 1;
+
 ```
 # Stored Procedures with Parameters
 - One of the most valuable features of working with stored procedures is their ability to use parameters
