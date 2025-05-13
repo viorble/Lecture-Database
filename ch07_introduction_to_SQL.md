@@ -1004,7 +1004,9 @@ SELECT AVG(P_PRICE) AS AVG_PRICE
 FROM PRODUCT;
 ```
 
-# Grouping Data (1)
+# GROUP BY
+
+## Grouping Data (1)
 
 ```sql
 SELECT columnlist
@@ -1022,10 +1024,39 @@ FROM PRODUCT JOIN VENDOR ON PRODUCT.V_CODE = VENDOR.V_CODE
 GROUP BY V_CODE
 ORDER BY V_NAME;
 ```
+
 ### Lab: list number of lines and average amount of each invoice
 
+```sql
+SELECT 
+    INV_NUMBER,
+    COUNT(*) AS NUM_LINES,
+    AVG(LINE_UNITS * LINE_PRICE) AS AVG_AMOUNT
+FROM 
+    LINE
+GROUP BY 
+    INV_NUMBER;
+```
 
-# Grouping Data (2)
+## Lab:其他練習
+
+```sql
+# 每個週有幾個 VENDER
+SELECT V_STATE, COUNT(*) AS NUM_VENDORS
+FROM VENDOR
+GROUP BY V_STATE
+ORDER BY NUM_VENDORS DESC;
+```
+
+```sql
+# 每個客戶開幾張發票
+SELECT CUS_CODE,  COUNT(*) AS NUM_INVOICE
+FROM INVOICE
+GROUP BY CUS_CODE;
+```
+
+
+## Grouping Data (2)
 
 ```sql
 -- Get execution error
@@ -1047,7 +1078,9 @@ GROUP BY V_CODE, P_QOH
 ORDER BY V_NAME;
 ```
 
-# HAVING Clause
+## HAVING Clause
+
+> HAVING 可以視為GROUP BY 的 WHERE
 
 ```sql
 SELECT columnlist FROM tablelist
@@ -1285,7 +1318,6 @@ WHERE EXISTS (SELECT CUS_CODE
 
 Suppose that you want to know what vendors you must contact to order products that are approaching the minimum quantity-on-hand value that is less than double the minimum quantity.
 
-
 # Built-in SQL Functions
 
 - Basic Functions
@@ -1324,7 +1356,8 @@ FROM EMPLOYEE;
 -- Others: TRIM, LTRIM, RTRIM
 ```
 
-# MySQL NUMBER FORMAT Function
+## MySQL NUMBER FORMAT Function
+
 ```sql
 SELECT FORMAT(P_QOH * P_PRICE, 0) as Total_Value
 FROM PRODUCT
@@ -1335,7 +1368,9 @@ SELECT
   ROUND(12345.6789, 2) AS RoundedNumber,
   FORMAT(12345.6789, 2) AS FormattedString;
 ```
-# MySQL DATE FORMAT Function
+
+## MySQL DATE FORMAT Function
+
 ```sql
 SELECT DATE_FORMAT('2025-04-29', '%y/%M/%D');
 SELECT DATE_FORMAT(CURRENT_DATE, '%Y/%m/%d');
@@ -1347,7 +1382,7 @@ FROM PRODUCT
 ORDER BY DATE_ADD(P_INDATE, INTERVAL 2 YEAR);
 ```
 
-# Relational Set Operators (UNION)
+## Relational Set Operators (UNION)
 
 ```sql
 SELECT CUS_LNAME, CUS_FNAME, CUS_INITIAL, CUS_AREACODE, CUS_PHONE
@@ -1357,7 +1392,7 @@ SELECT CUS_LNAME, CUS_FNAME, CUS_INITIAL, CUS_AREACODE, CUS_PHONE
 FROM CUSTOMER_2;
 ```
 
-# Relational Set Operators (UNION ALL)
+## Relational Set Operators (UNION ALL)
 
 ```sql
 SELECT CUS_LNAME, CUS_FNAME, CUS_INITIAL, CUS_AREACODE, CUS_PHONE
@@ -1371,7 +1406,7 @@ FROM CUSTOMER_2;
     <img src="restricted/CFig07_62.jpg" alt="">
 </div>
 
-# Relational Set Operators (INTERSECT)
+## Relational Set Operators (INTERSECT)
 
 List the customer codes for all customers who are in area code 615 and who have made purchases. (If a customer has made a purchase, there must be an invoice record for that customer.)
 
@@ -1388,7 +1423,7 @@ INNER JOIN INVOICE I ON C.CUS_CODE = I.CUS_CODE
 WHERE C.CUS_AREACODE = '615';
 ```
 
-# Relational Set Operators (MINUS / EXCEPT)
+## Relational Set Operators (MINUS / EXCEPT)
 
 ```sql
 -- MySQL does not support MINUS
@@ -1439,23 +1474,31 @@ WHERE C2.CUS_LNAME IS NULL;
 - What are the four categories of SQL functions
 
 # Backup
-# Correlated Subqueries (Definition)
-- <span class="blue-text">Inner subquery</span>
-  - Inner subqueries execute independently. 
+
+## Correlated Subqueries (Definition)
+
+- `<span class="blue-text">`Inner subquery
+
+  - Inner subqueries execute independently.
   - The inner sub-query executes first; its **output** is used by the outer query, which then executes until the last outer query finishes (the first SQL statement in the code).
-- <span class="blue-text">Correalted subquery</span>
-  -  A subquery that executes once for each row in the outer query.
-  -  The inner query is related to the outer query
-  -  The inner query references a column of the outer subquery.
+- `<span class="blue-text">`Correalted subquery
+
+  - A subquery that executes once for each row in the outer query.
+  - The inner query is related to the outer query
+  - The inner query references a column of the outer subquery.
+
   1. It initiates the outer query.
   2. For each row of the outer query result set, it executes the inner query by passing the outer row to the inner query.
 
-# Correlated Subqueries (Example)
+## Correlated Subqueries (Example)
+
 List all product sales in which the units sold value is greater than the average units sold value for that product (as opposed to the average for all products).
+
 1. Compute the average units sold for a product.
 2. Compare the average computed in Step 1 to the units sold in each sale row, and then select only the rows in which the number of units sold is greater.
 
-# Correlated Subqueries (SQL)
+## Correlated Subqueries (SQL)
+
 ```sql
 SELECT INV_NUMBER, P_CODE, LINE_UNITS
 FROM LINE LS
@@ -1469,9 +1512,11 @@ SELECT INV_NUMBER, P_CODE, LINE_UNITS, (SELECT AVG(LINE_UNITS)
 FROM LINE LS
 WHERE LS.LINE_UNITS > (SELECT AVG(LINE_UNITS)
                        FROM LINE LA
-                       WHERE LA.P_CODE = LS.P_CODE);                            
+                       WHERE LA.P_CODE = LS.P_CODE);                          
 ```
-# Correlated Subqueries (Exists)
+
+## Correlated Subqueries (Exists)
+
 ```sql
 -- list all vendors, but only if there are products to order.
 SELECT *
@@ -1486,7 +1531,8 @@ WHERE EXISTS (SELECT CUS_CODE
               WHERE INVOICE.CUS_CODE = CUSTOMER.CUS_CODE);
 ```
 
-# Correlated Subqueries (Example of Exists)
+## Correlated Subqueries (Example of Exists)
+
 Suppose that you want to know what vendors you must contact to order products that are approaching the minimum quantity-on-hand value that is less than double the minimum quantity.
 
 ```sql
