@@ -1056,10 +1056,10 @@ FROM INVOICE
 GROUP BY CUS_CODE;
 ```
 
-
 ## Grouping Data (2)
 
 # Lab: list # of line and amount of each invoice
+
 ```sql
 SELECT INV_NUMBER, LINE_NUMBER, LINE_UNITS * LINE_PRICE as AMOUNT
 FROM LINE
@@ -1195,7 +1195,9 @@ HAVING SUM(LINE_UNITS) > (SELECT AVG(LINE_UNITS) FROM LINE);
 ```
 
 # Multirow Subquery Operators: ALL and any
+
 Which products' inventory cost larger than ALL individual products (所有個別產品) provided by vendors from Florida
+
 ```sql
 SELECT P_CODE, P_QOH * P_PRICE AS TOTALVALUE
 FROM PRODUCT
@@ -1521,7 +1523,7 @@ SELECT INV_NUMBER, P_CODE, LINE_UNITS, (SELECT AVG(LINE_UNITS)
 FROM LINE LS
 WHERE LS.LINE_UNITS > (SELECT AVG(LINE_UNITS)
                        FROM LINE LA
-                       WHERE LA.P_CODE = LS.P_CODE);                          
+                       WHERE LA.P_CODE = LS.P_CODE);                        
 ```
 
 ## Correlated Subqueries (Exists)
@@ -1553,6 +1555,7 @@ WHERE EXISTS (SELECT *
 ```
 
 # Relational Set Operators (INTERSECT)
+
 List the customer codes for all customers who are in area code 615 and who have made purchases. (If a customer has made a purchase, there must be an invoice record for that customer.)
 
 ```sql
@@ -1567,7 +1570,9 @@ FROM CUSTOMER C
 INNER JOIN INVOICE I ON C.CUS_CODE = I.CUS_CODE
 WHERE C.CUS_AREACODE = '615';
 ```
+
 # Relational Set Operators (MINUS / EXCEPT)
+
 ```sql
 -- MySQL does not support MINUS
 SELECT CUS_LNAME, CUS_FNAME, CUS_INITIAL, CUS_AREACODE, CUS_PHONE
