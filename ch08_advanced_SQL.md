@@ -615,7 +615,6 @@ call p_more_sensible_loop();
 # Cursor Example (p_split_big_ny_counties.sql)
 
 ```sql
-use population;
 drop procedure if exists p_split_big_ny_counties;
 delimiter //
 create procedure p_split_big_ny_counties()
@@ -624,6 +623,7 @@ create procedure p_split_big_ny_counties()
         declare  v_county      varchar(100);
         declare  v_population  int;
         declare done bool default false;
+        declare cnt int default 1;
         declare county_cursor cursor for select  state, county, population
                                          from    county_population
                                          where   state = 'New York' and population > 2000000;
@@ -634,13 +634,12 @@ create procedure p_split_big_ny_counties()
             if done then
                 leave fetch_loop;
             end if;
-            set @cnt = 1;
-    
+            set cnt = 1;
             split_loop: loop
                 insert into county_population (state, county, population)
-                    values (v_state,concat(v_county,'-',@cnt), round(v_population/2));
-                set @cnt = @cnt + 1;
-                if @cnt > 2 then
+                    values (v_state,concat(v_county,'-',cnt), round(v_population/2));
+                set cnt = cnt + 1;
+                if cnt > 2 then
                     leave split_loop;
                 end if;
             end loop split_loop;
@@ -654,7 +653,6 @@ delimiter ;
 set SQL_SAFE_UPDATES = 0;
 call p_split_big_ny_counties;
 set SQL_SAFE_UPDATES = 1;
-
 ```
 
 # Stored Procedures with Parameters
@@ -912,22 +910,17 @@ set sql_safe_updates = 1;
 # Before Delete Trigger
 
 ```sql
-use bank;
+drop trigger if exists tr_credit_bd;
 delimiter //
-
-create trigger tr_credit_bd
-before delete on credit
+create trigger tr_credit_bd before delete on credit
 for each row
 begin
   if (old.credit_score > 750) then
-  --- Raises a custom error to prevent deletion.
-  --- '45000' is a custom error state in MySQL, meaning “unhandled user-defined exception”.
-    signal sqlstate '45000'
-    set message_text = 'Cannot delete scores over 750';
+  -- Raises a custom error to prevent deletion.
+  -- '45000' is a custom error state in MySQL, meaning “unhandled user-defined exception”.
+    signal sqlstate '45000' set message_text = 'Cannot delete scores over 750';
   end if;
-
 end//
-
 delimiter ;
 ```
 
@@ -947,27 +940,31 @@ set sql_safe_updates = 1;
 - Embedded SQL are SQL statements contained within an application programming language like Python, C, COBOL
 
 ```python
-connection = mysql.connector.connect(host_name, user_name, password)
-cursor = connection.cursor()
-
-query = '''
-SELECT P_CODE, P_DESCRIPT, P_PRICE FROM PRODUCT
-WHERE V_CODE IN (25595, 23118, 21225);'''
+# install package mysql-connector-python from PyPI
+import mysql.connector
+conn = mysql.connector.connect(
+    host = '127.0.0.1',
+    user = 'dbms_demo',
+    password = '12345',
+    database= 'EPPS_SALECO')
+cursor = conn.cursor()
+query = '''SELECT P_CODE, P_DESCRIPT FROM PRODUCT;'''
 cursor.execute(query)
-
 results = cursor.fetchall()
 for result in results:
     print(result)
 ```
 
 # Python Embedded SQL
-
-- Install library: `<u>`pip3 install mysql-connector-python `</u>`
-- Append library path
-- Import library
+- Install library: <u>pip3 install mysql-connector-python</u>
+- Import library (mysql.connector)
 - Build connection
-- Create tables
-- Create / Read / Update / Delete rows
+- Create cursor object to interacts with the database
+  -  Execute SQL queries
+  -  Fetch query results
+  -  Manage result sets
+- Execute DDL (CREATE TABLE..) and DML (INSERT, SELECT, UPDATE, DELETE)
+- Operate return result sets
 - Close connection
   [Score manipulate](../Lecture-Database/files/ipynb/scores.ipynb)
 
@@ -987,6 +984,29 @@ name_list = [('Smith', 'John'), ('Johnson', 'Jane'), ('Lee', 'Samantha'),
 ('Patel', 'Raj'), ('Hernandez', 'Maria')]
 
 cur.executemany(""" INSERT INTO Name (first_name, last_name) VALUES (%s, %s)""", name_list)
+```
+# Create Friend Table and Insert Data
+```python
+# install package mysql-connector-python from PyPI
+import mysql.connector
+conn = mysql.connector.connect(
+    host = '127.0.0.1',
+    user = 'dbms_demo',
+    password = '12345',
+    database= 'demo')
+cursor = conn.cursor()
+# static SQL
+create_table = """
+               CREATE TABLE IF NOT EXISTS friends (first_name TEXT, last_name TEXT)
+               """
+cursor.execute(create_table)
+
+name_list = [('Smith', 'John'), ('Johnson', 'Jane'), ('Lee', 'Samantha'), 
+('Patel', 'Raj'), ('Hernandez', 'Maria')]
+# Dynamic SQL
+cursor.executemany(""" INSERT INTO friends (first_name, last_name) VALUES (%s, %s)""", name_list)
+
+conn.commit()
 ```
 
 # Python MySQL Connector Error Types
