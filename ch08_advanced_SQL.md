@@ -956,13 +956,14 @@ for result in results:
 ```
 
 # Python Embedded SQL
-- Install library: <u>pip3 install mysql-connector-python</u>
+
+- Install library: `<u>`pip3 install mysql-connector-python`</u>`
 - Import library (mysql.connector)
 - Build connection
 - Create cursor object to interacts with the database
-  -  Execute SQL queries
-  -  Fetch query results
-  -  Manage result sets
+  - Execute SQL queries
+  - Fetch query results
+  - Manage result sets
 - Execute DDL (CREATE TABLE..) and DML (INSERT, SELECT, UPDATE, DELETE)
 - Operate return result sets
 - Close connection
@@ -985,7 +986,9 @@ name_list = [('Smith', 'John'), ('Johnson', 'Jane'), ('Lee', 'Samantha'),
 
 cur.executemany(""" INSERT INTO Name (first_name, last_name) VALUES (%s, %s)""", name_list)
 ```
+
 # Create Friend Table and Insert Data
+
 ```python
 # install package mysql-connector-python from PyPI
 import mysql.connector
@@ -1104,6 +1107,7 @@ Looking at a Ford Focus on the lot, you notice that you have it listed a green, 
 update inventory
 set color = 'blue'
 where mfg = 'Ford' and model = 'Focus';
+#不管什麼顏色的車都被改成藍色了
 ```
 
 ```sql
@@ -1111,6 +1115,7 @@ where mfg = 'Ford' and model = 'Focus';
 select * 
 from inventory
 where mfg = 'Ford' and model = 'Focus' and color='green';
+--先 select 出來看看資料是不是自己要改的
 -- step2: create update statement using correct where clause
 update inventory
 set color = 'blue'
